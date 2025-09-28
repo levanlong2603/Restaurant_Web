@@ -135,10 +135,10 @@ export default {
         showCancelButton: true,
         confirmButtonText: 'Đăng xuất',
         cancelButtonText: 'Hủy',
-        background: '#1a1a1a',
-        color: '#ffffff',
-        confirmButtonColor: '#ae9a64',
-        cancelButtonColor: '#ff4d4d',
+        background: '#f8f8f8',
+        color: '#333333',
+        confirmButtonColor: '#c62828',
+        cancelButtonColor: '#757575',
       });
 
       if (result.isConfirmed) {
@@ -159,28 +159,23 @@ export default {
   display: flex;
   min-height: 100vh;
   background-color: transparent;
-  color: #ffffff;
+  color: #333333;
 }
 
 /* Sidebar */
 .sidebar {
   width: 225px;
-  background-color: #1a1a1a;
+  background-color: #ffffff;
   padding: 20px;
   position: fixed;
-  /* Cố định sidebar */
   top: 0;
-  /* Đặt ở đầu trang */
   left: 0;
-  /* Đặt ở bên trái */
   height: 100vh;
-  /* Chiều cao toàn màn hình */
   overflow-y: auto;
-  /* Cho phép cuộn nếu nội dung dài */
   transition: width 0.3s ease;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
   z-index: 100;
-  /* Đảm bảo sidebar nằm trên các thành phần khác */
+  border-right: 1px solid #e0e0e0;
 }
 
 .sidebar-header {
@@ -188,6 +183,8 @@ export default {
   align-items: center;
   gap: 10px;
   margin-bottom: 30px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid #c62828;
 }
 
 .sidebar-logo {
@@ -196,14 +193,20 @@ export default {
 
 .sidebar-header h2 {
   font-size: 18px;
-  color: #ae9a64;
+  color: #c62828;
   flex-grow: 1;
+  font-weight: bold;
 }
 
 .sidebar-header i {
   cursor: pointer;
-  color: #ae9a64;
+  color: #c62828;
   font-size: 18px;
+  transition: transform 0.3s ease;
+}
+
+.sidebar-header i:hover {
+  transform: rotate(90deg);
 }
 
 .sidebar nav ul {
@@ -212,27 +215,33 @@ export default {
 }
 
 .sidebar nav ul li {
-  padding: 10px 0;
+  padding: 12px 0;
   cursor: pointer;
   transition: all 0.3s ease;
-  color: #bac9d3;
-}
-
-.sidebar nav ul li:hover,
-.sidebar nav ul li.active {
-  background-color: #ae9a64;
-  color: #ffffff;
+  color: #555555;
+  margin-bottom: 5px;
   border-radius: 5px;
 }
 
-.sidebar nav ul li a {
+.sidebar nav ul li:hover {
+  background-color: #ffebee;
+  color: #c62828;
+}
+
+.sidebar nav ul li.active {
+  background-color: #c62828;
   color: #ffffff;
+}
+
+.sidebar nav ul li a {
+  color: inherit;
   text-decoration: none;
   font-size: 16px;
   padding-left: 10px;
   display: flex;
   align-items: center;
   gap: 8px;
+  font-weight: 500;
 }
 
 .sidebar nav ul li span {
@@ -241,6 +250,7 @@ export default {
   display: flex;
   align-items: center;
   gap: 8px;
+  font-weight: 500;
 }
 
 /* Nút mở lại sidebar */
@@ -248,13 +258,19 @@ export default {
   position: fixed;
   left: 10px;
   top: 20px;
-  background-color: #ae9a64;
+  background-color: #c62828;
   color: #ffffff;
-  padding: 8px;
+  padding: 10px;
   border-radius: 5px;
   cursor: pointer;
   z-index: 20;
-  transition: left 0.3s ease;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.sidebar-toggle:hover {
+  background-color: #b71c1c;
+  transform: scale(1.05);
 }
 
 .sidebar-toggle i {
@@ -266,19 +282,22 @@ export default {
   position: fixed;
   left: 0;
   top: 60px;
-  background-color: #ae9a64;
+  background-color: #c62828;
   color: #ffffff;
-  padding: 5px 15px;
+  padding: 8px 15px;
   border-radius: 0 5px 5px 0;
   font-size: 14px;
   font-weight: bold;
   z-index: 10;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 
 /* Icon Styles */
 i {
   font-family: "FontAwesome" !important;
-  color: #bac9d3;
+  color: inherit;
+  width: 20px;
+  text-align: center;
 }
 
 .fa-chart-line,
@@ -286,26 +305,32 @@ i {
 .fa-bars,
 .fa-notifications,
 .fa-power-off {
-  color: #bac9d3;
-  font-size: 20px;
-  transition: transform 0.3s ease, color 0.3s ease;
+  font-size: 18px;
+  transition: transform 0.3s ease;
+}
+
+.sidebar nav ul li:hover i {
+  transform: scale(1.1);
 }
 
 @media (max-width: 768px) {
   .sidebar {
     display: none;
-    /* Ẩn sidebar trên màn hình nhỏ */
   }
 
   .main-layout,
   .main-container {
     margin-left: 0;
-    /* Không cần margin trên màn hình nhỏ */
   }
 
   .sidebar-toggle {
     display: block;
-    /* Hiển thị nút mở sidebar */
+  }
+  
+  .page-tab {
+    top: 70px;
+    font-size: 12px;
+    padding: 6px 12px;
   }
 }
 </style>

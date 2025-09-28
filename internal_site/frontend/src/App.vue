@@ -12,7 +12,7 @@ html, body {
   padding: 0;
   width: 100%;
   height: 100%;
-  background-color: #2a2a2a; 
+  background-color: #f3f2f2; 
   overflow-x: hidden; 
   font-family: Arial, sans-serif;
 }
@@ -22,7 +22,7 @@ html, body {
   height: 100%;
   margin: 0;
   padding: 0;
-  background-color: #2a2a2a;
+  background-color: #f3efef;
 }
 </style>
 
