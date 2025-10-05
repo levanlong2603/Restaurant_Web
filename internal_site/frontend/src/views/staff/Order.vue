@@ -1,0 +1,239 @@
+<template>
+    <div class="main-container">
+    <Navigation @sidebar-toggle="handleSidebarToggle" />
+    <div class="reservation-management" :class="{ 'sidebar-collapsed': isSidebarCollapsed }">
+      <div class="header">
+        <h1>Table</h1>
+        <div class="select-table">
+          <select v-model="table_id" class="cart" Chọn bàn>
+            <option :value="''" disabled>Chọn bàn</option>
+            <option v-for="table in tables" :key="table.id" :value="table.id">Bàn {{ table.id }}</option>
+          </select>
+          <button @click="refresh">Refresh</button>
+        </div>
+      </div>
+      <div class="container">
+        <div class="menu">
+          <MenuDetail 
+          :reservation="reservation"
+          @update:cartItems="updateCartItems"
+          :localCartItems="cartItems"
+          />
+        </div>
+        <div class="order">
+          <OrderDetail 
+          :reservation="reservation"
+          :cartItems="cartItems"
+          @update:cartItems="updateCartItems"
+          />
+        </div>
+          
+      </div>
+    </div>
+  </div>
+</template>
+  
+<script>
+import axios from 'axios';
+import MenuDetail from '../../components/MenuDetail.vue';
+import OrderDetail from '../../components/OrderDetail.vue';
+import Navigation from '../../components/Navigation.vue';
+
+  
+  export default {
+  components: {
+    MenuDetail,
+    OrderDetail,
+    Navigation,
+  },
+    data() {
+      return {
+        tables: [],
+        table_id: '',
+        reservation_id: '',
+        cartItems: [],
+        reservation: null,
+      };
+    },
+    mounted() {
+      document.documentElement.style.backgroundColor = '#1a1a1a';
+      this.fetchTables();
+      this.fetchReservation();
+      console.log("fetch table:",this.tables);
+    },
+    methods: {
+      handleSidebarToggle(isCollapsed) {
+        console.log('Sidebar is collapsed:', isCollapsed);
+        this.isSidebarCollapsed = isCollapsed;
+      },
+      async fetchTables() {
+        try {
+          this.reservation_id = '';
+          this.table_id = '';
+          const response = await axios.get('http://localhost:3000/table/served',{
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`,
+              },
+          });
+          console.log(response.data);
+          this.tables = response.data['servedTables'];
+        } catch (error) {
+          console.log('Lỗi khi tải danh sách bàn', 'error');
+        }
+      },
+      async refresh(){
+        window.location.reload();
+      },
+      async fetchReservationId() {
+        try {
+            const response = await axios.get(`http://localhost:3000/reservation/table/${this.table_id}`, {
+                headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`,
+                },
+            });
+            this.reservation = {
+              ...response.data,
+              customerName: response.data.customer?.name || 'Khách hàng không xác định',
+              tableNumber: response.data.details?.length
+                ? response.data.details.map((detail) => detail.table_id).join(', ')
+                : 'Chưa xác định',
+            };
+            this.$emit('update:reservation_id', this.reservation.id);
+            this.$emit('update:reservation', this.reservation);
+        } catch (error) {
+          console.log('Lỗi khi tải danh sách đặt bàn', 'error');
+        }
+      },
+      updateCartItems(cartItems) {
+        this.cartItems = cartItems;
+      },
+      async fetchReservation(){
+        if (localStorage.getItem('selectedReservation')) {
+          const reservation_storage = JSON.parse(localStorage.getItem('selectedReservation'));
+          this.reservation = {
+            ...reservation_storage,
+            customerName: reservation_storage.customer?.name || 'Khách hàng không xác định',
+            tableNumber: reservation_storage.details?.length
+              ? reservation_storage.details.map((detail) => detail.table_id).join(', ')
+              : 'Chưa xác định',
+          };
+          this.reservation_id = this.reservation.id;
+          if (this.reservation && this.reservation.details.length > 0) {
+            this.table_id = reservation_storage.details[0].table_id;
+          } else {
+            this.table_id = null;
+          }
+          this.$emit('update:reservation_id', this.reservation_id);
+          this.$emit('update:reservation', this.reservation);
+          localStorage.removeItem('selectedReservation');
+        } else {
+          this.reservation_id = null;
+        }
+      }
+    },
+    watch: {
+      table_id: {
+            handler(new_table_id) {
+              console.log("table id", new_table_id);
+              this.fetchReservationId();
+              console.log("reservation_id", this.reservation_id);
+            },
+            immediate: true,
+            deep: true
+        }
+
+    },
+  };
+  </script>
+
+<style scoped>
+.main-container {
+  display: flex;
+  background: #1a1a1a;
+}
+
+.reservation-management {
+  flex: 1;
+  margin: 0;
+  padding: 0;
+  background-color: #1a1a1a;
+  color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  padding-right: 20px; /* Cho khoảng trống bên phải bảng */
+  transition: margin-left 0.3s ease; /* Hiệu ứng mượt mà khi sidebar thay đổi */
+  margin: 0 50px;
+}
+
+.header{
+  background-color: #1a1a1a;
+  align-items: center;
+}
+.header h1{
+  color: white;
+  text-align: center;
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+
+.select-table{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+  margin-bottom: 10px;
+  outline: none;
+}
+
+
+.header select{
+  width: 100px;
+  height: 30px;
+  background-color: #1a1a1a;
+  border: 1px solid #555;
+  color: white;
+  border-radius: 5px;
+  outline: none;
+}
+
+.header button{
+  width: 100px;
+  height: 35px;
+  background-color: #ae9a64;
+  box-shadow: 10px 10px 20px rgba(0,0,0,0.2);
+  color: white;
+  border-radius: 5px;
+  margin-left: 30px;
+}
+
+.header button:hover{
+  background-color: #dbbb64;
+  cursor: pointer;
+}
+
+.container {
+  display: flex;
+  /* justify-content: center; */
+  gap: 40px;
+  margin-top: 20px;
+}
+
+.cart{
+  color: white;
+}
+
+.menu {
+  width: 50%;
+  display: flex;
+  /* justify-content: ; */
+
+}
+
+.order {
+  width: 50%;
+  /* display: flex;
+  justify-content: center; */
+}
+
+</style>

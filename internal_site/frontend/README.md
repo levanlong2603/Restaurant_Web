@@ -1,0 +1,2 @@
+- Sử dụng thư viện *sweetalert2* để hiển thị thông báo đẹp mắt khi thêm, sửa, hoặc xóa món ăn thành công.
+- Sử dụng *npm install apexcharts vue3-apexcharts* để hiển thị các biểu đồ thống kê.
