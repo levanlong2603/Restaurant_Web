@@ -4,7 +4,6 @@
     <Header />
     <Hero />
     <About/>
-    <ReservationForm/>
     <Chatbot />
     <Footer />
   </div>

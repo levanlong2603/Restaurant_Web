@@ -1,23 +1,54 @@
 <template>
   <footer class="footer">
     <div class="footer-content">
-      <!-- Logo và bản quyền -->
-      <div class="footer-brand">
-        <img src="@/assets/images/Logo.png" alt="Logo Nhà hàng Tinh Hoa Việt" class="footer-logo" />
-        <p class="copyright">&copy; 2025 Tinh Hoa Việt. Mọi quyền được bảo lưu.</p>
+      <!-- Thông tin nhà hàng -->
+      <div class="restaurant-info">
+        <h2 class="restaurant-name">TINH HOA VIỆT - ẨM THỰC TINH TÚY</h2>
+        
+        <div class="contact-info">
+          <div class="location">
+            <h3>Địa chỉ : 8386 Đường Trần phú, Hà Đông, Hà Nội</h3>
+            <p>Hotline: 0928 892 424</p>
+          </div>
+        </div>
+        
+        <p class="email">Email: nhahangtinhhoaviet@gmail.com</p>
+        <p class="parking">(Quý khách có chỗ để xe ô tô)</p>
       </div>
 
-      <!-- Liên kết mạng xã hội -->
-      <div class="footer-social">
-        <p class="social-title">Theo dõi chúng tôi:</p>
-        <div class="social-links">
+      <div class="divider"></div>
+
+      <!-- Giờ mở cửa -->
+      <div class="opening-hours">
+        <h3>Giờ mở cửa</h3>
+        <p>Sáng: 10h - 14h</p>
+        <p>Chiều: 18h - 22h</p>
+        <p>Tất cả các ngày trong tuần</p>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- Mạng xã hội -->
+      <div class="social-media">
+        <h3>Mạng xã hội</h3>
+        <div class="social-icons">
           <a href="https://www.facebook.com/codai2004" target="_blank" aria-label="Facebook" class="social-icon">
             <i class="fab fa-facebook-f"></i>
           </a>
-          <a href="" target="_blank" aria-label="Instagram" class="social-icon">
+          <a href="#" target="_blank" aria-label="Instagram" class="social-icon">
             <i class="fab fa-instagram"></i>
           </a>
         </div>
+      </div>
+    </div>
+
+    <!-- Bản quyền và liên kết -->
+    <div class="footer-bottom">
+      <p class="copyright">Copyright © 2025 <strong>TINH HOA VIỆT - Ẩm thực tinh túy</strong> All rights reserved.</p>
+      <div class="footer-links">
+        <a href="#">Bảo mật thông tin</a>
+        <span class="separator">|</span>
+        <a href="#">Liên hệ</a>
       </div>
     </div>
   </footer>
@@ -25,10 +56,9 @@
 
 <style scoped>
 .footer {
-  background: #2c2c2c; /* Màu nền tối sang trọng */
+  background: #2c2c2c;
   color: #fff;
-  padding: 40px 20px;
-  text-align: center;
+  padding: 40px 20px 20px;
   font-family: 'Arial', sans-serif;
   box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.3);
 }
@@ -39,17 +69,106 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
   gap: 30px;
+  padding-bottom: 30px;
 }
 
-.footer-brand {
-  text-align: center;
+.restaurant-info {
+  flex: 1;
+  min-width: 300px;
 }
 
-.footer-logo {
-  max-width: 100px;
-  margin-bottom: 10px;
+.restaurant-name {
+  font-size: 24px;
+  color: #fbcf67;
+  margin-bottom: 20px;
+  text-transform: uppercase;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.contact-info {
+  margin-bottom: 15px;
+}
+
+.location {
+  margin-bottom: 15px;
+}
+
+.location h3 {
+  font-size: 16px;
+  margin-bottom: 5px;
+  font-weight: 600;
+}
+
+.location p, .email, .parking {
+  font-size: 14px;
+  opacity: 0.8;
+  margin-bottom: 5px;
+}
+
+.divider {
+  width: 1px;
+  background: #444;
+  margin: 0 20px;
+}
+
+.opening-hours {
+  flex: 0 0 200px;
+}
+
+.opening-hours h3, .social-media h3 {
+  font-size: 18px;
+  margin-bottom: 15px;
+  color: #fbcf67;
+  font-weight: 600;
+}
+
+.opening-hours p {
+  font-size: 14px;
+  margin-bottom: 8px;
+  opacity: 0.8;
+}
+
+.social-media {
+  flex: 0 0 200px;
+}
+
+.social-icons {
+  display: flex;
+  gap: 15px;
+}
+
+.social-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background: #333;
+  border-radius: 50%;
+  color: #fff;
+  font-size: 18px;
+  transition: all 0.3s ease;
+}
+
+.social-icon:hover {
+  background: #fbcf67;
+  color: #2c2c2c;
+  transform: scale(1.1);
+}
+
+.footer-bottom {
+  max-width: 1100px;
+  margin: 20px auto 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 15px;
+  padding-top: 20px;
+  border-top: 1px solid #444;
 }
 
 .copyright {
@@ -57,34 +176,27 @@
   opacity: 0.7;
 }
 
-.footer-social {
-  flex-grow: 1; /* Nav vẫn chiếm không gian chính giữa */
-  /* display: flex; */
-  text-align: center;
-}
-
-.social-title {
-  font-size: 16px;
-  margin-bottom: 10px;
-  font-weight: 600;
-  text-align: center; /* Căn giữa */
-}
-
-.social-links {
+.footer-links {
   display: flex;
-  gap: 15px;
-  justify-content: center;
+  gap: 10px;
+  align-items: center;
 }
 
-.social-icon {
+.footer-links a {
   color: #fff;
-  font-size: 20px;
-  transition: transform 0.3s ease, color 0.3s ease;
+  text-decoration: none;
+  font-size: 14px;
+  opacity: 0.7;
+  transition: opacity 0.3s ease;
 }
 
-.social-icon:hover {
-  color: #fbcf67; /* Màu vàng sang trọng */
-  transform: scale(1.2);
+.footer-links a:hover {
+  opacity: 1;
+  color: #fbcf67;
+}
+
+.separator {
+  opacity: 0.5;
 }
 
 /* Responsive */
@@ -92,6 +204,26 @@
   .footer-content {
     flex-direction: column;
     text-align: center;
+    gap: 30px;
+  }
+  
+  .divider {
+    width: 100%;
+    height: 1px;
+    margin: 10px 0;
+  }
+  
+  .footer-bottom {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .restaurant-name {
+    font-size: 20px;
+  }
+  
+  .social-icons {
+    justify-content: center;
   }
 }
 </style>
