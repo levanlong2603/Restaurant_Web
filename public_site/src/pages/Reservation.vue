@@ -116,10 +116,10 @@
           <p>Cảm ơn quý khách <strong>{{ form.name }}</strong> đã đặt bàn tại nhà hàng chúng tôi.</p>
           <div class="reservation-details">
             <p><strong>Thông tin đặt bàn:</strong></p>
-            <p>📅 Ngày: {{ formatDate(form.date) }}</p>
-            <p>⏰ Giờ: {{ form.time }}</p>
-            <p>👥 Số lượng: {{ form.num_people }} người</p>
-            <p>📞 Liên hệ: {{ form.phoneNumber }}</p>
+            <p>Ngày: {{ formatDate(form.date) }}</p>
+            <p>Giờ: {{ form.time }}</p>
+            <p>Số lượng: {{ form.num_people }} người</p>
+            <p>Liên hệ: {{ form.phoneNumber }}</p>
           </div>
           <p>Chúng tôi sẽ liên hệ với quý khách trong thời gian sớm nhất để xác nhận.</p>
           <button class="close-modal-button" @click="closeSuccessModal">
@@ -147,7 +147,7 @@ export default {
   data() {
     const today = new Date()
     const tomorrow = new Date(today)
-    tomorrow.setDate(tomorrow.getDate() + 1)
+    tomorrow.setDate(tomorrow.getDate())
     
     return {
       form: {
