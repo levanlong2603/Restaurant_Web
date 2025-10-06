@@ -294,7 +294,7 @@ export default {
 
 <style scoped>
 .reservation-page {
-  background-color: #1a1a1a;
+  background-color: #c2aa77;
   min-height: 100vh;
   color: #ffffff;
 }
@@ -364,13 +364,14 @@ export default {
 .form-field textarea {
   width: 100%;
   padding: 12px;
-  background-color: #f6f6f3;
-  border: 1px solid #444;
+  background-color: #ffffff;
+  border: 1px solid #ddd;
   color: #333;
   border-radius: 5px;
   font-size: 14px;
   box-sizing: border-box;
   transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .form-field input:focus,
@@ -384,7 +385,8 @@ export default {
 .form-field input:disabled,
 .form-field select:disabled,
 .form-field textarea:disabled {
-  background-color: #e0e0e0;
+  background-color: #f5f5f5;
+  color: #888;
   cursor: not-allowed;
 }
 
@@ -398,11 +400,13 @@ export default {
 }
 
 .reservation-note {
-  background-color: rgba(255, 255, 255, 0.05);
+  background-color: rgba(255, 255, 255, 0.1);
   padding: 20px;
   border-radius: 8px;
   margin-bottom: 30px;
   text-align: left;
+  border-left: 4px solid #fbcf67;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .reservation-note p {
@@ -420,7 +424,7 @@ export default {
 
 .reserve-button {
   background-color: #fbcf67;
-  color: #1a1a1a;
+  color: #2d2d2d;
   border: none;
   padding: 15px 40px;
   border-radius: 5px;
@@ -435,11 +439,18 @@ export default {
   justify-content: center;
   gap: 8px;
   margin-bottom: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .reserve-button:hover:not(:disabled) {
   background-color: #ffd700;
   transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25);
+}
+
+.reserve-button:active:not(:disabled) {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .reserve-button:disabled {
@@ -462,7 +473,7 @@ export default {
   width: 18px;
   height: 18px;
   border: 2px solid transparent;
-  border-top: 2px solid #1a1a1a;
+  border-top: 2px solid #2d2d2d;
   border-radius: 50%;
   animation: spin 1s linear infinite;
 }
@@ -494,7 +505,7 @@ export default {
 }
 
 .success-modal {
-  background: linear-gradient(135deg, #1a1a1a, #2d2d2d);
+  background: linear-gradient(135deg, #c2aa77, #2d2d2d);
   border-radius: 15px;
   padding: 40px;
   max-width: 500px;
@@ -530,7 +541,7 @@ export default {
 }
 
 .reservation-details {
-  background-color: rgba(255, 255, 255, 0.05);
+  background-color: rgba(255, 255, 255, 0.1);
   padding: 20px;
   border-radius: 10px;
   margin: 20px 0;
@@ -548,7 +559,7 @@ export default {
 
 .close-modal-button {
   background-color: #fbcf67;
-  color: #1a1a1a;
+  color: #2d2d2d;
   border: none;
   padding: 12px 30px;
   border-radius: 5px;
@@ -557,11 +568,13 @@ export default {
   cursor: pointer;
   margin-top: 20px;
   transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .close-modal-button:hover {
   background-color: #ffd700;
   transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25);
 }
 
 @keyframes fadeIn {

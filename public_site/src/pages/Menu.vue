@@ -238,7 +238,7 @@ export default {
 
 <style scoped>
 .menu-page {
-  background-color: #1a1a1a;
+  background-color: #c2aa77;
   min-height: 100vh;
   color: #ffffff;
 }

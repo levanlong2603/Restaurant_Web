@@ -42,13 +42,15 @@
       </div>
     </div>
 
-    <!-- Bản quyền và liên kết -->
+    <!-- Bản quyền và liên kết - ĐÃ ĐƯA VÀO GIỮA -->
     <div class="footer-bottom">
-      <p class="copyright">Copyright © 2025 <strong>TINH HOA VIỆT - Ẩm thực tinh túy</strong> All rights reserved.</p>
-      <div class="footer-links">
-        <a href="#">Bảo mật thông tin</a>
-        <span class="separator">|</span>
-        <a href="#">Liên hệ</a>
+      <div class="footer-bottom-content">
+        <p class="copyright">Copyright © 2025 <strong>TINH HOA VIỆT - Ẩm thực tinh túy</strong> All rights reserved.</p>
+        <div class="footer-links">
+          <a href="#">Bảo mật thông tin</a>
+          <span class="separator">|</span>
+          <a href="#">Liên hệ</a>
+        </div>
       </div>
     </div>
   </footer>
@@ -56,7 +58,7 @@
 
 <style scoped>
 .footer {
-  background: #2c2c2c;
+  background: #ae8346;
   color: #fff;
   padding: 40px 20px 20px;
   font-family: 'Arial', sans-serif;
@@ -146,15 +148,16 @@
   justify-content: center;
   width: 40px;
   height: 40px;
-  background: #333;
+  background: #fbcf67;
   border-radius: 50%;
-  color: #fff;
+  color: #2c2c2c;
   font-size: 18px;
   transition: all 0.3s ease;
+  text-decoration: none; /* Bỏ gạch chân */
 }
 
 .social-icon:hover {
-  background: #fbcf67;
+  background: #fff;
   color: #2c2c2c;
   transform: scale(1.1);
 }
@@ -162,18 +165,22 @@
 .footer-bottom {
   max-width: 1100px;
   margin: 20px auto 0;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 15px;
   padding-top: 20px;
   border-top: 1px solid #444;
+}
+
+.footer-bottom-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+  text-align: center;
 }
 
 .copyright {
   font-size: 14px;
   opacity: 0.7;
+  margin: 0;
 }
 
 .footer-links {
@@ -184,7 +191,7 @@
 
 .footer-links a {
   color: #fff;
-  text-decoration: none;
+  text-decoration: none; /* Bỏ gạch chân */
   font-size: 14px;
   opacity: 0.7;
   transition: opacity 0.3s ease;
@@ -213,16 +220,16 @@
     margin: 10px 0;
   }
   
-  .footer-bottom {
-    flex-direction: column;
-    text-align: center;
-  }
-  
   .restaurant-name {
     font-size: 20px;
   }
   
   .social-icons {
+    justify-content: center;
+  }
+  
+  .footer-links {
+    flex-wrap: wrap;
     justify-content: center;
   }
 }
