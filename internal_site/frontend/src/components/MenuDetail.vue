@@ -264,7 +264,7 @@ export default {
   padding: 5px;
   border: 1px solid #464646;
   border-radius: 4px;
-  background-color: #2a2a2a;
+  background-color: #c2aa77;
   color: #ffffff;
   outline: none;
 }

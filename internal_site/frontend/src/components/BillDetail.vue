@@ -117,7 +117,7 @@ export default {
 }
 
 .bill-table th {
-  background-color: #464646;
+  background-color: #c2aa77;
   border: 1px solid #ccc;
   padding: 5px;
   text-align: center;
