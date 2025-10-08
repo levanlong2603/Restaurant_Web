@@ -129,8 +129,22 @@ function extractJsonString(rawText) {
 // Gemini LLM Class
 class GeminiLLM {
   constructor() {
-    const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY);
-    this.model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+    try {
+      const apiKey = process.env.GOOGLE_API_KEY;
+      if (!apiKey || apiKey.length < 10) {
+        console.warn('GOOGLE_API_KEY not configured or seems invalid — Gemini will not be available');
+        this.model = null;
+        return;
+      }
+
+      const genAI = new GoogleGenerativeAI(apiKey);
+      const defaultModel = process.env.GENERATIVE_MODEL || 'gemini-2.5-flash';
+      console.log('Initializing Gemini model:', defaultModel);
+      this.model = genAI.getGenerativeModel({ model: defaultModel });
+    } catch (err) {
+      console.error('Error initializing GeminiLLM:', err && err.message ? err.message : err);
+      this.model = null;
+    }
   }
 
   async generate(messages, { functions }) {
@@ -279,11 +293,11 @@ class GeminiLLM {
             "arguments": {
               "infoType": "all",
               "value": {
-                "address": "8386 Đường Trần Phú, Hà Đông, Hà Nội",
+                "address": "8386 Đường Trần phú, Hà Đông, Hà Nội",
                 "phoneNumber": "0928 892 424",
                 "email": "contact@tinhhoaViet.com",
                 "openingHours": "10:00 - 24:00",
-                "mapLink": "https://www.google.com/maps/embed?pb=!1m18!m12!1m3!1d3725.2922764180553!2d105.78484157449498!3d20.980917989421535!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3135accdd8a1ad71%3A0xa2f9b16036648187!2zSOG7jWMgdmnhu4duIEPDtG5nIG5naOG7hyBCxrB1IGNow61uaCB2aeG7hW4 gdGjDtG5n!5e0!3m2!1svi!2s!4v1746953082341!5m2!1svi!2s"
+                "mapLink": "https://www.google.com/maps/place/16+%C4%90%C6%B0%E1%BB%9Dng+V%E1%BA%A1n+Ph%C3%BAc,+V%E1%BA%A1n+Ph%C3%BAc,+H%C3%A0+%C4%90%C3%B4ng,+H%C3%A0+N%E1%BB%99i,+Vi%E1%BB%87t+Nam/@20.9765074,105.7735008,17z/data=!3m1!4b1!4m6!3m5!1s0x3134532e7d623f29:0x488c919ade0516d0!8m2!3d20.9765074!4d105.7760757!16s%2Fg%2F11h_ttbykj?entry=ttu&g_ep=EgoyMDI1MTAwNi4wIKXMDSoASAFQAw%3D%3D"
               }
             }
           }
@@ -295,11 +309,11 @@ class GeminiLLM {
       }
 
       Thông tin nhà hàng:
-      - Địa chỉ: 8386 Đường Trần Phú, Hà Đông, Hà Nội
+      - Địa chỉ:  8386 Đường Trần phú, Hà Đông, Hà Nội
       - Số điện thoại: 0928 892 424
       - Email: contact@tinhhoaViet.com
       - Giờ mở cửa: 10:00 - 24:00
-      - Bản đồ: https://www.google.com/maps/embed?pb=!1m18!m12!1m3!1d3725.2922764180553!2d105.78484157449498!3d20.980917989421535!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3135accdd8a1ad71%3A0xa2f9b16036648187!2zSOG7jWMgdmnhu4duIEPDtG5nIG5naOG7hyBCxrB1IGNow61uaCB2aeG7hW4 gdGjDtG5n!5e0!3m2!1svi!2s!4v1746953082341!5m2!1svi!2s
+      - Bản đồ: https://www.google.com/maps/place/16+%C4%90%C6%B0%E1%BB%9Dng+V%E1%BA%A1n+Ph%C3%BAc,+V%E1%BA%A1n+Ph%C3%BAc,+H%C3%A0+%C4%90%C3%B4ng,+H%C3%A0+N%E1%BB%99i,+Vi%E1%BB%87t+Nam/@20.9765074,105.7735008,17z/data=!3m1!4b1!4m6!3m5!1s0x3134532e7d623f29:0x488c919ade0516d0!8m2!3d20.9765074!4d105.7760757!16s%2Fg%2F11h_ttbykj?entry=ttu&g_ep=EgoyMDI1MTAwNi4wIKXMDSoASAFQAw%3D%3D
 
       Lưu ý:
       - Thời gian phải ở định dạng ISO 8601 (VD: "2025-05-11T19:00:00") cho đặt bàn.
@@ -424,39 +438,39 @@ exports.processChat = async (req, res) => {
     console.log('Phản hồi từ Gemini:', response);
 
     if (response.function_call) {
-      const { name, arguments } = response.function_call;
-      console.log('Function call:', name, arguments);
+      const { name, arguments: functionArgs } = response.function_call;
+      console.log('Function call:', name, functionArgs);
 
       if (name === 'bookTable') {
-        if (!arguments.phoneNumber || !arguments.name || !arguments.time || !arguments.people) {
+        if (!functionArgs.phoneNumber || !functionArgs.name || !functionArgs.time || !functionArgs.people) {
           return res.status(400).json({ message: 'Vui lòng cung cấp đầy đủ số điện thoại, tên, thời gian và số người.' });
         }
 
         req.body = {
-          phoneNumber: arguments.phoneNumber,
-          name: arguments.name,
-          reservation_time: arguments.time,
-          num_people: arguments.people,
+          phoneNumber: functionArgs.phoneNumber,
+          name: functionArgs.name,
+          reservation_time: functionArgs.time,
+          num_people: functionArgs.people,
         };
         console.log('Thông tin đặt bàn:', req.body);
 
         const bookTableResult = await reservationController.bookTable(req, res);
         if (bookTableResult && bookTableResult.reservationId) {
           return res.status(200).json({
-            message: `Đặt bàn thành công! Nhân viên của chúng tôi sẽ liên hệ với bạn qua số điện thoại ${arguments.phoneNumber} để xác nhận.`,
+            message: `Đặt bàn thành công! Nhân viên của chúng tôi sẽ liên hệ với bạn qua số điện thoại ${functionArgs.phoneNumber} để xác nhận.`,
           });
         }
         return res.status(bookTableResult.status || 500).json({
           message: bookTableResult.message || 'Lỗi khi đặt bàn, vui lòng thử lại.',
         });
       } else if (name === 'getRestaurantInfo') {
-        return handleRestaurantInfo(arguments, res);
+        return handleRestaurantInfo(functionArgs, res);
       } else if (name === 'getMenu') {
-        return handleMenuRequest(arguments, res);
+        return handleMenuRequest(functionArgs, res);
       } else if (name === 'getDishDetails') {
-        return handleDishDetails(arguments, res);
+        return handleDishDetails(functionArgs, res);
       } else if (name === 'suggestDish') {
-        return handleDishSuggestion(arguments, res);
+        return handleDishSuggestion(functionArgs, res);
       } else {
         return res.status(400).json({ message: 'Chức năng không được hỗ trợ.' });
       }
@@ -472,8 +486,8 @@ exports.processChat = async (req, res) => {
 };
 
 // Helper function to handle restaurant info requests
-async function handleRestaurantInfo(arguments, res) {
-  const { infoType, value } = arguments;
+async function handleRestaurantInfo(functionArgs, res) {
+  const { infoType, value } = functionArgs;
   if (infoType === 'all') {
     const infoMessage = [
       'Thông tin nhà hàng:',
@@ -499,8 +513,8 @@ async function handleRestaurantInfo(arguments, res) {
 }
 
 // Helper function to handle menu requests
-async function handleMenuRequest(arguments, res) {
-  const { category, maxPrice, lightDish, region, keyword } = arguments;
+async function handleMenuRequest(functionArgs, res) {
+  const { category, maxPrice, lightDish, region, keyword } = functionArgs;
   try {
     const menuItems = await fetchAllMenuItems(category, maxPrice, lightDish, region, keyword);
 
@@ -531,8 +545,8 @@ async function handleMenuRequest(arguments, res) {
 }
 
 // Helper function to handle dish details requests
-async function handleDishDetails(arguments, res) {
-  const { dishName, detailType } = arguments;
+async function handleDishDetails(functionArgs, res) {
+  const { dishName, detailType } = functionArgs;
   try {
     const menuItems = await fetchAllMenuItems();
     const item = menuItems.find(item => item.name.toLowerCase() === dishName.toLowerCase());
@@ -550,8 +564,8 @@ async function handleDishDetails(arguments, res) {
 }
 
 // Helper function to handle dish suggestion requests
-async function handleDishSuggestion(arguments, res) {
-    const { category, maxPrice, lightDish, region, keyword } = arguments;
+async function handleDishSuggestion(functionArgs, res) {
+  const { category, maxPrice, lightDish, region, keyword } = functionArgs;
     try {
         const menuItems = await fetchAllMenuItems(category, maxPrice, lightDish, region, keyword);
         if (menuItems.length === 0) {
@@ -578,3 +592,26 @@ async function handleDishSuggestion(arguments, res) {
         return res.status(500).json({ message: 'Lỗi khi gợi ý món ăn.' });
     }
 }
+
+// Diagnostic handler to test LLM connectivity
+exports.testLLM = async (req, res) => {
+  try {
+    const keyPresent = !!process.env.GOOGLE_API_KEY;
+    const modelEnv = process.env.GENERATIVE_MODEL || 'gemini-2.5-flash';
+    if (!llm || !llm.model) {
+      return res.status(500).json({ ok: false, message: 'LLM not initialized or model missing', keyPresent, model: modelEnv });
+    }
+
+    // Try a minimal call
+    try {
+      const sample = await llm.generate(['Ping: kiểm tra kết nối'], { functions: [] });
+      return res.status(200).json({ ok: true, message: 'LLM reachable', keyPresent, model: modelEnv, sample });
+    } catch (callErr) {
+      console.error('LLM call error (diagnostic):', callErr && callErr.message ? callErr.message : callErr);
+      return res.status(502).json({ ok: false, message: 'LLM call failed', error: String(callErr), keyPresent, model: modelEnv });
+    }
+  } catch (err) {
+    console.error('Error in testLLM:', err);
+    return res.status(500).json({ ok: false, error: String(err) });
+  }
+};
