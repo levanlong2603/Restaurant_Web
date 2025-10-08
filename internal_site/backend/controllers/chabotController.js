@@ -1,9 +1,12 @@
 const { GoogleGenerativeAI } = require('@google/generative-ai');
 const axios = require('axios');
 const reservationController = require('./reservationController');
-// Import models for realtime availability checks
-const { Reservation, ReservationDetail, Table } = require('../models');
-const { Op } = require('sequelize');
+// Import models for realtime availability checks (guarded so module loads even if DB config is invalid)
+// We'll require models lazily at runtime to avoid forcing DB init during module load.
+let Reservation = null;
+let ReservationDetail = null;
+let Table = null;
+let Op = null;
 require('dotenv').config();
 
 // Reservation window (minutes) used to check conflicts around the requested time
@@ -130,6 +133,87 @@ function extractJsonString(rawText) {
 
   console.log('Không tìm thấy JSON, trả về raw text:', rawText);
   return rawText;
+}
+
+// Parse common Vietnamese natural date/time phrases into a Date object.
+// Supports formats like: "18h", "18:30", "19 giờ", "18h 10/8", "10/8 18h", "10-08-2025 19:00", "hôm nay 18h", "ngày mai 7h"
+function parseVietnameseDateTime(text) {
+  if (!text || typeof text !== 'string') return null;
+  const s = text.trim().toLowerCase();
+
+  // If already ISO or full date recognized by Date, try direct parse first
+  const direct = new Date(s);
+  if (!isNaN(direct.getTime())) return direct;
+
+  const now = new Date();
+  let day = null, month = null, year = null, hour = 0, minute = 0;
+
+  // Handle relative words
+  if (s.includes('hôm nay') || s.includes('hom nay')) {
+    day = now.getDate(); month = now.getMonth() + 1; year = now.getFullYear();
+  } else if (s.includes('ngày mai') || s.includes('mai')) {
+    const d = new Date(now.getTime() + 24 * 3600 * 1000);
+    day = d.getDate(); month = d.getMonth() + 1; year = d.getFullYear();
+  } else if (s.includes('ngày kia')) {
+    const d = new Date(now.getTime() + 2 * 24 * 3600 * 1000);
+    day = d.getDate(); month = d.getMonth() + 1; year = d.getFullYear();
+  }
+
+  // Extract time like 18h, 18:30, 19 giờ, 19:00
+  // Try HH:MM or HHMM
+  let timeMatch = s.match(/(\d{1,2})[:](\d{2})/);
+  if (timeMatch) {
+    hour = parseInt(timeMatch[1], 10);
+    minute = parseInt(timeMatch[2], 10);
+  } else {
+    // Try patterns like '18h', '18 h', '18 giờ', '18g', optionally with minutes '18h30' or '18 giờ 30'
+    timeMatch = s.match(/(\d{1,2})\s*(?:h|giờ|g)\s*(\d{1,2})?/);
+    if (timeMatch) {
+      hour = parseInt(timeMatch[1], 10);
+      if (timeMatch[2]) minute = parseInt(timeMatch[2].padEnd(2, '0'), 10);
+    } else {
+      // Last resort: standalone hour like '18' (but be careful)
+      const loneHour = s.match(/\b(\d{1,2})\b/);
+      if (loneHour) {
+        hour = parseInt(loneHour[1], 10);
+      }
+    }
+  }
+
+  // Extract date like 10/8 or 10-08-2025 or 10/08
+  const dateMatch = s.match(/(\b\d{1,2})[\/\-](\d{1,2})(?:[\/\-](\d{2,4}))?/);
+  if (dateMatch) {
+    day = parseInt(dateMatch[1], 10);
+    month = parseInt(dateMatch[2], 10);
+    if (dateMatch[3]) {
+      let y = parseInt(dateMatch[3], 10);
+      if (y < 100) y += 2000;
+      year = y;
+    }
+  }
+
+  // If no explicit date but user wrote only time, assume today or tomorrow if time already passed
+  if (day === null) {
+    const candidate = new Date(now.getFullYear(), now.getMonth(), now.getDate(), hour, minute, 0);
+    if (candidate.getTime() <= now.getTime() - 5 * 60 * 1000) {
+      // If time already passed, assume next day
+      candidate.setDate(candidate.getDate() + 1);
+    }
+    return candidate;
+  }
+
+  // If we have a date but no year, assume current year, unless date already passed -> next year
+  if (!year) year = now.getFullYear();
+  let result = new Date(year, month - 1, day, hour, minute, 0);
+  if (result.getTime() <= now.getTime() - 5 * 60 * 1000) {
+    // If this date-time is in the past, and year was implicit, bump year
+    if (!dateMatch[3]) {
+      result.setFullYear(result.getFullYear() + 1);
+    }
+  }
+
+  if (isNaN(result.getTime())) return null;
+  return result;
 }
 
 // Gemini LLM Class
@@ -444,7 +528,16 @@ exports.processChat = async (req, res) => {
     console.log('Phản hồi từ Gemini:', response);
 
     if (response.function_call) {
-      const { name, arguments: functionArgs } = response.function_call;
+      const { name } = response.function_call;
+      let functionArgs = response.function_call.arguments;
+      // If arguments comes back as a JSON string, parse it
+      if (typeof functionArgs === 'string') {
+        try {
+          functionArgs = JSON.parse(functionArgs);
+        } catch (e) {
+          console.warn('Không parse được function arguments JSON:', e.message);
+        }
+      }
       console.log('Function call:', name, functionArgs);
 
       if (name === 'bookTable') {
@@ -453,13 +546,74 @@ exports.processChat = async (req, res) => {
         }
 
         // Realtime time validation
-        const requestedTime = new Date(functionArgs.time);
+        // Try direct ISO parse first, then Vietnamese natural language parser
+        let requestedTime = new Date(functionArgs.time);
         if (isNaN(requestedTime.getTime())) {
-          return res.status(400).json({ message: 'Thời gian đặt bàn không hợp lệ. Vui lòng sử dụng định dạng ISO 8601.' });
+          const parsed = parseVietnameseDateTime(functionArgs.time);
+          if (!parsed) {
+            return res.status(400).json({ message: 'Thời gian đặt bàn không hợp lệ. Vui lòng cung cấp thời gian (ví dụ: "2025-10-09T19:00" hoặc "19h ngày mai").' });
+          }
+          requestedTime = parsed;
         }
         const now = new Date();
+        console.log('Raw time input:', functionArgs.time);
+        console.log('Parsed requestedTime:', requestedTime.toString(), requestedTime.toISOString());
+        console.log('Server now:', now.toString(), now.toISOString());
+
         if (requestedTime.getTime() < now.getTime() - 5 * 60 * 1000) {
-          return res.status(400).json({ message: 'Thời gian đặt bàn phải là thời gian trong tương lai.' });
+          // If the parsed time is in the past, try to recover in multiple ways:
+          // 1) If the user's message contains relative words (mai, hôm nay), re-parse from the message.
+          // 2) Otherwise try a numeric day/month swap for ambiguous dates like 11/5.
+          // 3) As a last resort, bump +1 day.
+          const userLower = (typeof message === 'string') ? message.toLowerCase() : '';
+          const hasRelative = userLower.includes('mai') || userLower.includes('ngày mai') || userLower.includes('hôm nay');
+
+          if (hasRelative) {
+            console.log('Parsed time is past but user message contains relative words; re-parsing from user message:', message);
+            const parsedFromUser = parseVietnameseDateTime(message);
+            if (parsedFromUser && parsedFromUser.getTime() > now.getTime() - 5 * 60 * 1000) {
+              requestedTime = parsedFromUser;
+              console.log('Re-parsed requestedTime from user message:', requestedTime.toString(), requestedTime.toISOString());
+            } else {
+              console.log('Re-parsing failed or still past; attempting tolerant bump +1 day');
+              requestedTime.setDate(requestedTime.getDate() + 1);
+              console.log('Bumped requestedTime:', requestedTime.toString(), requestedTime.toISOString());
+            }
+          } else {
+            // Try numeric date swap fallback (e.g., user wrote "11/5" but parser treated it as 11 May while user meant 5 Nov)
+            const numericDateMatch = (typeof message === 'string') ? message.match(/(\b\d{1,2})[\/\-](\d{1,2})(?:[\/\-](\d{2,4}))?/) : null;
+            if (numericDateMatch) {
+              try {
+                const a = parseInt(numericDateMatch[1], 10);
+                const b = parseInt(numericDateMatch[2], 10);
+                let y = requestedTime.getFullYear();
+                if (numericDateMatch[3]) {
+                  let yr = parseInt(numericDateMatch[3], 10);
+                  if (yr < 100) yr += 2000;
+                  y = yr;
+                }
+                // swapped: interpret message as day = b, month = a
+                const swapped = new Date(y, a - 1, b, requestedTime.getHours(), requestedTime.getMinutes(), 0);
+                console.log('Detected numeric date in message, attempting swapped date:', swapped.toString(), swapped.toISOString());
+                if (swapped.getTime() > now.getTime() - 5 * 60 * 1000) {
+                  requestedTime = swapped;
+                } else {
+                  // as last resort, try bumping one day
+                  requestedTime.setDate(requestedTime.getDate() + 1);
+                }
+              } catch (swapErr) {
+                console.warn('Error while attempting numeric date swap fallback:', swapErr.message || swapErr);
+                requestedTime.setDate(requestedTime.getDate() + 1);
+              }
+            } else {
+              return res.status(400).json({ message: 'Thời gian đặt bàn phải là thời gian trong tương lai.' });
+            }
+          }
+
+          // Final sanity check after fallback attempts
+          if (requestedTime.getTime() < now.getTime() - 5 * 60 * 1000) {
+            return res.status(400).json({ message: 'Thời gian đặt bàn phải là thời gian trong tương lai.' });
+          }
         }
 
         // Compute conflict window
@@ -468,8 +622,15 @@ exports.processChat = async (req, res) => {
         const windowStart = new Date(requestedTime.getTime() - windowMs / 2);
         const windowEnd = new Date(requestedTime.getTime() + windowMs / 2);
 
-        // Find overlapping reservations
+        // Find overlapping reservations (lazy-load models if needed)
         try {
+          if (!Reservation || !ReservationDetail || !Table || !Op) {
+            const models = require('../models');
+            Reservation = models.Reservation;
+            ReservationDetail = models.ReservationDetail;
+            Table = models.Table;
+            Op = require('sequelize').Op;
+          }
           const overlapping = await Reservation.findAll({
             where: {
               reservation_time: { [Op.between]: [windowStart, windowEnd] },
@@ -496,8 +657,9 @@ exports.processChat = async (req, res) => {
         req.body = {
           phoneNumber: functionArgs.phoneNumber,
           name: functionArgs.name,
-          reservation_time: functionArgs.time,
-          num_people: functionArgs.people,
+          // pass the parsed Date so Reservation.create receives a proper Date object
+          reservation_time: requestedTime,
+          num_people: parseInt(functionArgs.people, 10),
         };
         console.log('Thông tin đặt bàn (after realtime checks):', req.body);
 
