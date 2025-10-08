@@ -1,7 +1,13 @@
 const { GoogleGenerativeAI } = require('@google/generative-ai');
 const axios = require('axios');
 const reservationController = require('./reservationController');
+// Import models for realtime availability checks
+const { Reservation, ReservationDetail, Table } = require('../models');
+const { Op } = require('sequelize');
 require('dotenv').config();
+
+// Reservation window (minutes) used to check conflicts around the requested time
+const RESERVATION_DURATION_MINUTES = parseInt(process.env.RESERVATION_DURATION_MINUTES, 10) || 120;
 
 // Define functions for LLM
 const functions = [
@@ -296,7 +302,7 @@ class GeminiLLM {
                 "address": "8386 Đường Trần phú, Hà Đông, Hà Nội",
                 "phoneNumber": "0928 892 424",
                 "email": "contact@tinhhoaViet.com",
-                "openingHours": "10:00 - 24:00",
+                "openingHours": "Sáng 10:00 - 14:00, Chiều 17:00 - 22:00",
                 "mapLink": "https://www.google.com/maps/place/16+%C4%90%C6%B0%E1%BB%9Dng+V%E1%BA%A1n+Ph%C3%BAc,+V%E1%BA%A1n+Ph%C3%BAc,+H%C3%A0+%C4%90%C3%B4ng,+H%C3%A0+N%E1%BB%99i,+Vi%E1%BB%87t+Nam/@20.9765074,105.7735008,17z/data=!3m1!4b1!4m6!3m5!1s0x3134532e7d623f29:0x488c919ade0516d0!8m2!3d20.9765074!4d105.7760757!16s%2Fg%2F11h_ttbykj?entry=ttu&g_ep=EgoyMDI1MTAwNi4wIKXMDSoASAFQAw%3D%3D"
               }
             }
@@ -312,7 +318,7 @@ class GeminiLLM {
       - Địa chỉ:  8386 Đường Trần phú, Hà Đông, Hà Nội
       - Số điện thoại: 0928 892 424
       - Email: contact@tinhhoaViet.com
-      - Giờ mở cửa: 10:00 - 24:00
+      - Giờ mở cửa: Sáng 10:00 - 14:00, Chiều 17:00 - 22:00
       - Bản đồ: https://www.google.com/maps/place/16+%C4%90%C6%B0%E1%BB%9Dng+V%E1%BA%A1n+Ph%C3%BAc,+V%E1%BA%A1n+Ph%C3%BAc,+H%C3%A0+%C4%90%C3%B4ng,+H%C3%A0+N%E1%BB%99i,+Vi%E1%BB%87t+Nam/@20.9765074,105.7735008,17z/data=!3m1!4b1!4m6!3m5!1s0x3134532e7d623f29:0x488c919ade0516d0!8m2!3d20.9765074!4d105.7760757!16s%2Fg%2F11h_ttbykj?entry=ttu&g_ep=EgoyMDI1MTAwNi4wIKXMDSoASAFQAw%3D%3D
 
       Lưu ý:
@@ -446,13 +452,54 @@ exports.processChat = async (req, res) => {
           return res.status(400).json({ message: 'Vui lòng cung cấp đầy đủ số điện thoại, tên, thời gian và số người.' });
         }
 
+        // Realtime time validation
+        const requestedTime = new Date(functionArgs.time);
+        if (isNaN(requestedTime.getTime())) {
+          return res.status(400).json({ message: 'Thời gian đặt bàn không hợp lệ. Vui lòng sử dụng định dạng ISO 8601.' });
+        }
+        const now = new Date();
+        if (requestedTime.getTime() < now.getTime() - 5 * 60 * 1000) {
+          return res.status(400).json({ message: 'Thời gian đặt bàn phải là thời gian trong tương lai.' });
+        }
+
+        // Compute conflict window
+        const durationMinutes = parseInt(process.env.RESERVATION_DURATION_MINUTES, 10) || 120;
+        const windowMs = durationMinutes * 60 * 1000;
+        const windowStart = new Date(requestedTime.getTime() - windowMs / 2);
+        const windowEnd = new Date(requestedTime.getTime() + windowMs / 2);
+
+        // Find overlapping reservations
+        try {
+          const overlapping = await Reservation.findAll({
+            where: {
+              reservation_time: { [Op.between]: [windowStart, windowEnd] },
+              status: { [Op.ne]: 'cancelled' }
+            }
+          });
+
+          const overlappingIds = overlapping.map(r => r.id);
+          let reservedCount = 0;
+          if (overlappingIds.length > 0) {
+            reservedCount = await ReservationDetail.count({ where: { reservation_id: overlappingIds } });
+          }
+
+          const totalTables = await Table.count({ where: { deleted: false } });
+          console.log('Realtime check: reservedCount=', reservedCount, 'totalTables=', totalTables);
+          if (reservedCount >= totalTables) {
+            return res.status(409).json({ message: 'Hiện không có bàn trống vào thời gian này. Vui lòng chọn thời gian khác.' });
+          }
+        } catch (checkErr) {
+          console.error('Lỗi khi kiểm tra trạng thái bàn:', checkErr);
+          // don't block booking on check failure; proceed to controller which may have its own checks
+        }
+
         req.body = {
           phoneNumber: functionArgs.phoneNumber,
           name: functionArgs.name,
           reservation_time: functionArgs.time,
           num_people: functionArgs.people,
         };
-        console.log('Thông tin đặt bàn:', req.body);
+        console.log('Thông tin đặt bàn (after realtime checks):', req.body);
 
         const bookTableResult = await reservationController.bookTable(req, res);
         if (bookTableResult && bookTableResult.reservationId) {

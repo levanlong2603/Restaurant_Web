@@ -34,10 +34,17 @@
               </template>
             </div>
           </div>
+          <!-- Loading indicator -->
+          <div v-if="loading" class="bot loading">
+            <div class="message-bubble">
+              <div class="spinner"></div>
+            </div>
+          </div>
         </div>
         <input
           v-model="userInput"
           @keyup.enter="sendMessage"
+          :disabled="loading"
           placeholder="Nhập câu hỏi..."
         />
       </div>
@@ -55,6 +62,7 @@ export default {
       messages: [],
       userInput: '',
       isChatOpen: false,
+      loading: false,
     };
   },
   methods: {
@@ -67,7 +75,9 @@ export default {
       // Thêm tin nhắn người dùng
       this.messages.push({ role: 'user', content: { message: this.userInput } });
 
-      // Gọi API
+      // Gọi API với loading state
+      this.loading = true;
+      this.$nextTick(() => this.scrollToBottom());
       try {
         const response = await axios.post('http://localhost:3000/chatbot/chat', {
           message: this.userInput,
@@ -82,6 +92,8 @@ export default {
             message: error.response?.data?.message || 'Lỗi kết nối server, vui lòng thử lại!',
           },
         });
+      } finally {
+        this.loading = false;
       }
 
       this.userInput = '';
@@ -89,6 +101,12 @@ export default {
       this.$nextTick(() => {
         const chatWindow = this.$refs.chatWindow;
         chatWindow.scrollTop = chatWindow.scrollHeight;
+      });
+    },
+    scrollToBottom() {
+      this.$nextTick(() => {
+        const chatWindow = this.$refs.chatWindow;
+        if (chatWindow) chatWindow.scrollTop = chatWindow.scrollHeight;
       });
     },
     formatMessage(message) {
@@ -262,5 +280,20 @@ input {
 .fade-leave-to {
   opacity: 0;
   transform: translateY(20px);
+}
+
+/* Spinner */
+.spinner {
+  width: 28px;
+  height: 28px;
+  border: 4px solid rgba(0,0,0,0.1);
+  border-left-color: #ae9a64;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 0 auto;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
 }
 </style>
