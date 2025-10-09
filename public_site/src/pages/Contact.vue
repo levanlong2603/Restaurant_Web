@@ -18,7 +18,7 @@
           <a class="open-map-btn" href="https://www.google.com/maps/search/?api=1&query=S%E1%BB%91%2033%2C%20%C4%91%C6%B0%E1%BB%9Dng%20%C4%90%E1%BA%A1i%20M%E1%BB%93%2C%20ph%C6%B0%E1%BB%9Dng%20%C4%90%E1%BA%A1i%20M%E1%BB%93%2C%20Qu%E1%BA%ADn%20Nam%20T%E1%BB%AB%20Li%C3%AAm%2C%20H%C3%A0%20N%E1%BB%99i" target="_blank" rel="noopener">Mở bản đồ</a>
         </div>
       </div>
-      <p>Email: <a href="mailto:contact@tinhhoaViet.com">nhahangtinhhoaviet@gmail.com</a></p>
+      <p>Email: <a href="mailto:nhahanglongquanan@gmail.com">nhahanglongquanan@gmail.com</a></p>
     </main>
     <Footer />
     <Chatbot />

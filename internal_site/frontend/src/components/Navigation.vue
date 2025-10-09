@@ -3,7 +3,7 @@
     <aside class="sidebar">
       <div class="sidebar-header">
         <img src="@/assets/images/Logo.png" alt="Logo Nhà hàng Tinh Hoa Việt" class="sidebar-logo" />
-        <h2>Quản lý <br> Tinh Hoa Việt</h2>
+        <h2>Quản lý <br> Long Quân An</h2>
         <i class="fas fa-sliders" @click="toggleSidebar"></i>
       </div>
       <nav>

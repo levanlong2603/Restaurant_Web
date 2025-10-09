@@ -4,6 +4,10 @@
     <Header />
     <Hero />
     <About/>
+    <!-- Image gallery -->
+    <section class="about-gallery">
+      <img v-for="(img, idx) in galleryImages" :key="idx" :src="require(`@/assets/images/${img}`)" :alt="`Gallery ${idx+1}`" />
+    </section>
     <Chatbot />
     <Footer />
   </div>
@@ -30,6 +34,17 @@ export default {
     Footer,
     Chatbot,
   },
+  data() {
+    return {
+      galleryImages: [
+        'image1.png',
+        'image2.png',
+        'image3.png',
+        'image4.png',
+        'image5.png',
+      ],
+    };
+  },
 };
 </script>
 
@@ -38,6 +53,23 @@ export default {
   background-color:  #c2aa77;
   min-height: 100vh;
   color: #444;
+}
+
+/* Gallery styles */
+.about-gallery {
+  max-width: 1100px;
+  margin: 30px auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+  padding: 0 20px 40px;
+}
+.about-gallery img {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
 }
 
 /* main {

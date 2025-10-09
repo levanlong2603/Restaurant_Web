@@ -29,7 +29,7 @@
     display: flex;
     justify-content: space-around;
     padding: 60px 20px;
-    background-image: url('../assets/images/about.jpg'); /* Đường dẫn đến ảnh nền */
+    background-image: url('../assets/images/image1.png'); /* Đường dẫn đến ảnh nền */
     background-size: cover; /* Ảnh phủ toàn bộ section */
     background-position: center; /* Căn giữa ảnh */
     background-repeat: no-repeat; /* Không lặp lại ảnh */

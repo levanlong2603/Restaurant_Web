@@ -3,7 +3,7 @@
     <div class="footer-content">
       <!-- Thông tin nhà hàng -->
       <div class="restaurant-info">
-        <h2 class="restaurant-name">TINH HOA VIỆT - ẨM THỰC TINH TÚY</h2>
+  <h2 class="restaurant-name">LONG QUÂN AN - ẨM THỰC TINH TÚY</h2>
         
         <div class="contact-info">
           <div class="location">
@@ -12,8 +12,7 @@
           </div>
         </div>
         
-        <p class="email">Email: nhahangtinhhoaviet@gmail.com</p>
-        <p class="parking">(Quý khách có chỗ để xe ô tô)</p>
+        <p class="email">Email: nhahanglongquanan@gmail.com</p>
       </div>
 
       <div class="divider"></div>
@@ -35,8 +34,12 @@
           <a href="https://www.facebook.com/codai2004" target="_blank" aria-label="Facebook" class="social-icon">
             <i class="fab fa-facebook-f"></i>
           </a>
-          <a href="#" target="_blank" aria-label="Instagram" class="social-icon">
+          <a href="https://www.instagram.com/co3d_ok/" target="_blank" aria-label="Instagram" class="social-icon">
             <i class="fab fa-instagram"></i>
+          </a>
+          <!-- TikTok: placeholder URL — change to your TikTok profile if available -->
+          <a href="https://www.tiktok.com/@red.chicken.ptit" target="_blank" aria-label="TikTok" class="social-icon">
+            <i class="fab fa-tiktok"></i>
           </a>
         </div>
       </div>
@@ -45,11 +48,11 @@
     <!-- Bản quyền và liên kết - ĐÃ ĐƯA VÀO GIỮA -->
     <div class="footer-bottom">
       <div class="footer-bottom-content">
-        <p class="copyright">Copyright © 2025 <strong>TINH HOA VIỆT - Ẩm thực tinh túy</strong> All rights reserved.</p>
+  <p class="copyright">Copyright © 2025 <strong>LONG QUÂN AN - Ẩm thực tinh túy</strong> All rights reserved.</p>
         <div class="footer-links">
           <a href="#">Bảo mật thông tin</a>
           <span class="separator">|</span>
-          <a href="#">Liên hệ</a>
+          <a href="http://localhost:8082/contact">Liên hệ</a>
         </div>
       </div>
     </div>
