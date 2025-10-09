@@ -52,7 +52,7 @@
         <div class="footer-links">
           <a href="#">Bảo mật thông tin</a>
           <span class="separator">|</span>
-          <a href="http://localhost:8082/contact">Liên hệ</a>
+          <router-link to="/contact">Liên hệ</router-link>
         </div>
       </div>
     </div>
