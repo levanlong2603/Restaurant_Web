@@ -6,14 +6,19 @@
       <h1>Liên hệ</h1>
       <!-- <h3>Các chi nhánh</h3> -->
       <div class="branch">
-        <p>Địa chỉ : 8386 Đường Trần phú, Hà Đông, Hà Nội - 0928 892 424</p>
-        <!-- <div id="map1" class="map"></div> -->
-        <iframe
-          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d10536.785171582975!2d105.79011425679107!3d20.979961545318396!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3135accdd8a1ad71%3A0xa2f9b16036648187!2sPosts%20and%20Telecommunications%20Institute%20of%20Technology%20(PTIT)!5e0!3m2!1sen!2s!4v1743467363037!5m2!1sen!2s"
-          width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"
-          referrerpolicy="no-referrer-when-downgrade"></iframe>
+        <p>Địa chỉ : Số 33, đường Đại Mỗ, phường Đại Mỗ, quận Nam Từ Liêm, TP. Hà Nội</p>
+        <!-- Embedded Google Map for the exact address -->
+        <div class="map-embed">
+          <iframe
+            title="Bản đồ - Số 33 Đại Mỗ"
+            src="https://www.google.com/maps?q=S%E1%BB%91%2033,%20%C4%91%C6%B0%E1%BB%9Dng%20%C4%90%E1%BA%A1i%20M%E1%BB%93,%20ph%C6%B0%E1%BB%9Dng%20%C4%90%E1%BA%A1i%20M%E1%BB%93,%20Qu%E1%BA%ADn%20Nam%20T%E1%BB%AB%20Li%C3%AAm,%20H%C3%A0%20N%E1%BB%99i&output=embed"
+            width="100%" height="450" style="border:0;" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        </div>
+        <div style="margin-top:12px;">
+          <a class="open-map-btn" href="https://www.google.com/maps/search/?api=1&query=S%E1%BB%91%2033%2C%20%C4%91%C6%B0%E1%BB%9Dng%20%C4%90%E1%BA%A1i%20M%E1%BB%93%2C%20ph%C6%B0%E1%BB%9Dng%20%C4%90%E1%BA%A1i%20M%E1%BB%93%2C%20Qu%E1%BA%ADn%20Nam%20T%E1%BB%AB%20Li%C3%AAm%2C%20H%C3%A0%20N%E1%BB%99i" target="_blank" rel="noopener">Mở bản đồ</a>
+        </div>
       </div>
-      <p>Email: <a href="mailto:contact@tinhhoaViet.com">contact@tinhhoaViet.com</a></p>
+      <p>Email: <a href="mailto:contact@tinhhoaViet.com">nhahangtinhhoaviet@gmail.com</a></p>
     </main>
     <Footer />
     <Chatbot />
@@ -32,43 +37,8 @@ export default {
     Footer,
     Chatbot,
   },
-  mounted() {
-    // Tải Google Maps API
-    const script = document.createElement('script');
-    script.src = 'https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap'; // Thay YOUR_API_KEY
-    script.async = true;
-    document.head.appendChild(script);
-
-    // Định nghĩa hàm initMap toàn cục
-    window.initMap = this.initMap;
-  },
-  methods: {
-    initMap() {
-      // Chi nhánh 1: TP.HCM
-      const branch1 = { lat: 10.7769, lng: 106.7009 }; // Tọa độ TP.HCM
-      const map1 = new google.maps.Map(document.getElementById('map1'), {
-        zoom: 15,
-        center: branch1,
-      });
-      new google.maps.Marker({
-        position: branch1,
-        map: map1,
-        title: 'Chi nhánh 1 - TP.HCM',
-      });
-
-      // Chi nhánh 2: Hà Nội
-      const branch2 = { lat: 21.0278, lng: 105.8342 }; // Tọa độ Hà Nội
-      const map2 = new google.maps.Map(document.getElementById('map2'), {
-        zoom: 15,
-        center: branch2,
-      });
-      new google.maps.Marker({
-        position: branch2,
-        map: map2,
-        title: 'Chi nhánh 2 - Hà Nội',
-      });
-    },
-  },
+  // No mounted/initMap needed because we use an embedded iframe for the map
+  methods: {},
 };
 </script>
 
@@ -119,6 +89,17 @@ a {
 a:hover {
   text-decoration: underline;
 }
+
+.open-map-btn {
+  display: inline-block;
+  background: #fbcf67;
+  color: #2b2b2b;
+  padding: 8px 14px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: 600;
+}
+.open-map-btn:hover { opacity: 0.9; }
 
 .map {
   width: 100%;

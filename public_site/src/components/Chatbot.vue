@@ -21,13 +21,13 @@
               <!-- Tin nhắn bot -->
               <template v-else>
                 <span v-html="formatMessage(msg.content.message)"></span>
-                <!-- Hiển thị iframe bản đồ nếu message chứa từ khóa "Bản đồ" -->
+                <!-- Hiển thị iframe bản đồ nếu bot trả về link bản đồ hoặc chứa từ khóa 'Bản đồ' -->
                 <iframe
-                  v-if="msg.content.message && msg.content.message.includes('Bản đồ')"
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3725.2922764180553!2d105.78484157449498!3d20.980917989421535!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3135accdd8a1ad71%3A0xa2f9b16036648187!2zSOG7jWMgdmnhu4duIEPDtG5nIG5gaOG7hyBCxrB1IGNow61uaCB2aeG7hW4gdGjDtG5n!5e0!3m2!1svi!2s!4v1746953082341!5m2!1svi!2s"
+                  v-if="getMapEmbedUrl(msg.content.message)"
+                  :src="getMapEmbedUrl(msg.content.message)"
                   class="map-iframe"
                   style="border:0;"
-                  allowfullscreen=""
+                  allowfullscreen
                   loading="lazy"
                   referrerpolicy="no-referrer-when-downgrade"
                 ></iframe>
@@ -130,6 +130,35 @@ export default {
           );
         })
         .join('');
+    },
+    // Try to extract a Google Maps link from the bot message and return an embeddable URL
+    getMapEmbedUrl(message) {
+      if (!message || typeof message !== 'string') return null;
+      // First look for explicit Google Maps URL
+      const urlMatch = message.match(/https?:\/\/(www\.)?google\.com\/maps[^\s<]*/i);
+      if (urlMatch) {
+        const url = urlMatch[0];
+        // If it's already an embed URL (contains /embed or output=embed), return as-is
+        if (url.includes('/embed') || url.includes('output=embed')) return url;
+        // If it's a search link, convert to embed search
+        if (url.includes('/search') || url.includes('query=')) {
+          // Extract query param if present
+          const q = (url.match(/query=([^&]+)/) || [null, null])[1];
+          if (q) return `https://www.google.com/maps?q=${q}&output=embed`;
+          return `https://www.google.com/maps${url.split('google.com/maps')[1]}&output=embed`;
+        }
+        // If it's a place URL, try to use as embed by replacing /place/ with /embed?pb=/place/
+        if (url.includes('/place/')) {
+          return url.replace('/place/', '/embed?pb=/place/');
+        }
+        // Fallback: return a search embed for the whole URL encoded string
+        return `https://www.google.com/maps?q=${encodeURIComponent(url)}&output=embed`;
+      }
+      // As fallback: if message contains the word 'Bản đồ' but no URL, embed Số 33 Đại Mỗ
+      if (message.includes('Bản đồ')) {
+        return 'https://www.google.com/maps?q=S%E1%BB%91%2033,%20%C4%91%C6%B0%E1%BB%9Dng%20%C4%90%E1%BA%A1i%20M%E1%BB%93,%20ph%C6%B0%E1%BB%9Dng%20%C4%90%E1%BA%A1i%20M%E1%BB%93,%20Qu%E1%BA%ADn%20Nam%20T%E1%BB%AB%20Li%C3%AAm,%20H%C3%A0%20N%E1%BB%99i&output=embed';
+      }
+      return null;
     },
   },
 };
@@ -236,6 +265,13 @@ export default {
   background: #ae9a64;
   color: white;
   border-bottom-right-radius: 5px;
+}
+
+.map-iframe {
+  width: 220px;
+  height: 160px;
+  margin-top: 8px;
+  border-radius: 6px;
 }
 
 .bot .message-bubble {

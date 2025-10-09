@@ -7,8 +7,8 @@
         
         <div class="contact-info">
           <div class="location">
-            <h3>Địa chỉ : 8386 Đường Trần phú, Hà Đông, Hà Nội</h3>
-            <p>Hotline: 0928 892 424</p>
+            <h3>Địa chỉ : Số 33, đường Đại Mỗ, phường Đại Mỗ, quận Nam Từ Liêm, TP. Hà Nội</h3>
+            <p>Hotline: 0348 047 350</p>
           </div>
         </div>
         

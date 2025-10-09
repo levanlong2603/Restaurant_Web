@@ -360,8 +360,8 @@ class GeminiLLM {
             "arguments": {
               "infoType": "address",
               "value": {
-                "address": "8386 Đường Trần Phú, Hà Đông, Hà Nội",
-                "mapLink": "https://www.google.com/maps/embed?pb=!1m18!m12!1m3!1d3725.2922764180553!2d105.78484157449498!3d20.980917989421535!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3135accdd8a1ad71%3A0xa2f9b16036648187!2zSOG7jWMgdmnhu4duIEPDtG5nIG5naOG7hyBCxrB1IGNow61uaCB2aeG7hW4 gdGjDtG5n!5e0!3m2!1svi!2s!4v1746953082341!5m2!1svi!2s"
+                "address": "Số 33, đường Đại Mỗ, phường Đại Mỗ, quận Nam Từ Liêm, TP. Hà Nội",
+                "mapLink": "https://www.google.com/maps/search/?api=1&query=S%E1%BB%91%2033%2C%20%C4%91%C6%B0%E1%BB%9Dng%20%C4%90%E1%BA%A1i%20M%E1%BB%93%2C%20ph%C6%B0%E1%BB%9Dng%20%C4%90%E1%BA%A1i%20M%E1%BB%93%2C%20Qu%E1%BA%ADn%20Nam%20T%E1%BB%AB%20Li%C3%AAm%2C%20H%C3%A0%20N%E1%BB%99i"
               }
             }
           }
@@ -383,11 +383,11 @@ class GeminiLLM {
             "arguments": {
               "infoType": "all",
               "value": {
-                "address": "8386 Đường Trần phú, Hà Đông, Hà Nội",
-                "phoneNumber": "0928 892 424",
+                "address": "Số 33, đường Đại Mỗ, phường Đại Mỗ, quận Nam Từ Liêm, TP. Hà Nội",
+                "phoneNumber": "0348 047 350",
                 "email": "contact@tinhhoaViet.com",
                 "openingHours": "Sáng 10:00 - 14:00, Chiều 17:00 - 22:00",
-                "mapLink": "https://www.google.com/maps/place/16+%C4%90%C6%B0%E1%BB%9Dng+V%E1%BA%A1n+Ph%C3%BAc,+V%E1%BA%A1n+Ph%C3%BAc,+H%C3%A0+%C4%90%C3%B4ng,+H%C3%A0+N%E1%BB%99i,+Vi%E1%BB%87t+Nam/@20.9765074,105.7735008,17z/data=!3m1!4b1!4m6!3m5!1s0x3134532e7d623f29:0x488c919ade0516d0!8m2!3d20.9765074!4d105.7760757!16s%2Fg%2F11h_ttbykj?entry=ttu&g_ep=EgoyMDI1MTAwNi4wIKXMDSoASAFQAw%3D%3D"
+                "mapLink": "https://www.google.com/maps/search/?api=1&query=S%E1%BB%91%2033%2C%20%C4%91%C6%B0%E1%BB%9Dng%20%C4%90%E1%BA%A1i%20M%E1%BB%93%2C%20ph%C6%B0%E1%BB%9Dng%20%C4%90%E1%BA%A1i%20M%E1%BB%93%2C%20Qu%E1%BA%ADn%20Nam%20T%E1%BB%AB%20Li%C3%AAm%2C%20H%C3%A0%20N%E1%BB%99i"
               }
             }
           }
@@ -399,11 +399,11 @@ class GeminiLLM {
       }
 
       Thông tin nhà hàng:
-      - Địa chỉ:  8386 Đường Trần phú, Hà Đông, Hà Nội
-      - Số điện thoại: 0928 892 424
+      - Địa chỉ:  Số 33, đường Đại Mỗ, phường Đại Mỗ, quận Nam Từ Liêm, TP. Hà Nội
+      - Số điện thoại: 0348 047 350
       - Email: contact@tinhhoaViet.com
       - Giờ mở cửa: Sáng 10:00 - 14:00, Chiều 17:00 - 22:00
-      - Bản đồ: https://www.google.com/maps/place/16+%C4%90%C6%B0%E1%BB%9Dng+V%E1%BA%A1n+Ph%C3%BAc,+V%E1%BA%A1n+Ph%C3%BAc,+H%C3%A0+%C4%90%C3%B4ng,+H%C3%A0+N%E1%BB%99i,+Vi%E1%BB%87t+Nam/@20.9765074,105.7735008,17z/data=!3m1!4b1!4m6!3m5!1s0x3134532e7d623f29:0x488c919ade0516d0!8m2!3d20.9765074!4d105.7760757!16s%2Fg%2F11h_ttbykj?entry=ttu&g_ep=EgoyMDI1MTAwNi4wIKXMDSoASAFQAw%3D%3D
+  - Bản đồ: https://www.google.com/maps/search/?api=1&query=S%E1%BB%91%2033%2C%20%C4%91%C6%B0%E1%BB%9Dng%20%C4%90%E1%BA%A1i%20M%E1%BB%93%2C%20ph%C6%B0%E1%BB%9Dng%20%C4%90%E1%BA%A1i%20M%E1%BB%93%2C%20Qu%E1%BA%ADn%20Nam%20T%E1%BB%AB%20Li%C3%AAm%2C%20H%C3%A0%20N%E1%BB%99i
 
       Lưu ý:
       - Thời gian phải ở định dạng ISO 8601 (VD: "2025-05-11T19:00:00") cho đặt bàn.
@@ -698,17 +698,19 @@ exports.processChat = async (req, res) => {
 async function handleRestaurantInfo(functionArgs, res) {
   const { infoType, value } = functionArgs;
   if (infoType === 'all') {
+    const mapLink = value && value.mapLink ? value.mapLink : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(value.address || 'Số 33, đường Đại Mỗ, phường Đại Mỗ, quận Nam Từ Liêm, Hà Nội')}`;
     const infoMessage = [
       'Thông tin nhà hàng:',
       `Địa chỉ: ${value.address}`,
       `Số điện thoại: ${value.phoneNumber}`,
       `Email: ${value.email}`,
       `Giờ mở cửa: ${value.openingHours}`,
-      `Bản đồ: Xem bản đồ`,
+      `Bản đồ: ${mapLink}`,
     ].join('\n');
     return res.status(200).json({ message: infoMessage });
   } else if (infoType === 'address') {
-    const addressMessage = `Địa chỉ: ${value.address}\nBản đồ: Xem bản đồ`;
+    const mapLink = value && value.mapLink ? value.mapLink : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(value.address || 'Số 33, đường Đại Mỗ, phường Đại Mỗ, quận Nam Từ Liêm, Hà Nội')}`;
+    const addressMessage = `Địa chỉ: ${value.address}\nBản đồ: ${mapLink}`;
     return res.status(200).json({ message: addressMessage });
   } else {
     const infoTypeMap = {
