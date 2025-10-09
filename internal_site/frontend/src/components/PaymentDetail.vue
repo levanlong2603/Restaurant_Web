@@ -20,11 +20,21 @@
           <option value="" disabled>Chọn phương thức</option>
           <option value="bank_transfer">Quét mã QR</option>
           <option value="cash">Tiền mặt</option>
-          <option value="credit_card">Thẻ ngân hàng</option>
+          <option value="credit_card">Thẻ tín dụng</option>
         </select>
         <p class="timeout-warning" v-if="paymentMethod === 'credit_card' || paymentMethod === 'bank_transfer'">
           Lưu ý: Vui lòng hoàn tất thanh toán trong vòng 15 phút.
         </p>
+        <!-- Hiển thị QR / thông tin chuyển khoản khi chọn Quét mã QR -->
+        <div class="qr-code" v-if="paymentMethod === 'bank_transfer'">
+          <!-- The QR image should be placed at the public root: /vietqr.png -->
+          <img src="/vietqr.png" alt="VietQR" v-if="true"/>
+          <div class="account-info">
+            <p><strong>Chủ tài khoản:</strong> LE VAN LONG</p>
+            <p><strong>Số tài khoản:</strong> <span id="acct">3388826032004</span></p>
+            <p style="font-size:13px;color:#ddd;">Bạn có thể quét mã QR ở trên hoặc sao chép số tài khoản để chuyển khoản.</p>
+          </div>
+        </div>
       </div>
       <label class="checkbox-label" v-if="billDetails.status !== 'paid'">
         <input 
@@ -143,19 +153,19 @@ export default {
     async processPayment() {
       try {
         this.errorMessage = '';
-        if (this.paymentMethod === 'cash') {
+        // Treat all payment methods as immediate-confirm (like cash) — emit the same event
+        if (['cash', 'credit_card', 'bank_transfer'].includes(this.paymentMethod)) {
           this.$emit('update:paymentStatus', {
             method: this.paymentMethod,
             status: this.reservation_status,
           });
-        } else if (this.paymentMethod === 'credit_card' || this.paymentMethod === 'bank_transfer') {
-          await this.initiatePayment();
         }
       } catch (error) {
         console.error('Lỗi khi xử lý thanh toán:', error.response?.data || error.message);
         this.errorMessage = `Lỗi khi xử lý thanh toán: ${error.response?.data?.message || error.message}`;
       }
     },
+    
     retryPayment() {
       this.errorMessage = '';
       this.initiatePayment();
@@ -288,6 +298,10 @@ export default {
   max-width: 200px;
   border-radius: 8px;
 }
+
+.account-info { color: #fff; margin-top: 8px; }
+.btn-copy { margin-left: 8px; padding: 4px 8px; border-radius: 6px; border: none; background: #fbcf67; cursor: pointer; }
+.btn-copy:hover { opacity: 0.9; }
 
 .payment-actions {
   display: flex;
