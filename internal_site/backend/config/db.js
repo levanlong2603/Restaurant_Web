@@ -5,6 +5,7 @@ const sequelizeTemp = new Sequelize({
     username: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
     host: process.env.DB_HOST,
+    port: process.env.DB_PORT,
     dialect: process.env.DB_DIALECT,
     timezone: '+07:00',
     logging: false
@@ -15,6 +16,7 @@ const sequelize = new Sequelize({
     username: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
     host: process.env.DB_HOST,  
+    port: process.env.DB_PORT,
     dialect: process.env.DB_DIALECT,
     timezone: '+07:00',
     logging: process.env.DB_LOGGING === 'true',
