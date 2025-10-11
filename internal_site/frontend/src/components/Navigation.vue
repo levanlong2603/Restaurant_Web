@@ -129,28 +129,71 @@ export default {
     },
     async confirmLogout() {
       const result = await Swal.fire({
-        title: 'Xác nhận đăng xuất',
-        text: 'Bạn có chắc chắn muốn đăng xuất không?',
+        title: '<span style="color: #2b2b2b; font-size: 1.3rem; font-weight: 600;">Xác nhận đăng xuất</span>',
+        html: '<div style="color: #2b2b2b; font-size: 1rem; margin: 15px 0; font-weight: 500;">Bạn có chắc chắn muốn đăng xuất khỏi hệ thống?</div>',
         icon: 'question',
+        iconColor: '#2b2b2b',
         showCancelButton: true,
-        confirmButtonText: 'Đăng xuất',
-        cancelButtonText: 'Hủy',
-        background: '#1a1a1a',
-        color: '#ffffff',
-        confirmButtonColor: '#ae9a64',
-        cancelButtonColor: '#ff4d4d',
+        confirmButtonText: '<i class="fas fa-sign-out-alt" style="margin-right: 8px;"></i> Đăng xuất',
+        cancelButtonText: '<i class="fas fa-times" style="margin-right: 8px;"></i> Hủy bỏ',
+        background: 'linear-gradient(135deg, #c2aa77, #b29a67)',
+        color: '#2b2b2b',
+        confirmButtonColor: '#2b2b2b',
+        cancelButtonColor: '#8b7a4d',
+        width: '400px',
+        padding: '1.5rem',
+        backdrop: 'rgba(194, 170, 119, 0.1)'
       });
 
       if (result.isConfirmed) {
-        this.logout();
+        // Hiệu ứng loading
+        Swal.fire({
+          title: 'Đang đăng xuất...',
+          text: 'Vui lòng chờ trong giây lát',
+          icon: 'info',
+          iconColor: '#2b2b2b',
+          background: 'linear-gradient(135deg, #c2aa77, #b29a67)',
+          color: '#2b2b2b',
+          showConfirmButton: false,
+          allowOutsideClick: false,
+          didOpen: () => {
+            Swal.showLoading();
+          },
+          timer: 1500
+        });
+
+        // Đợi một chút cho hiệu ứng
+        setTimeout(() => {
+          this.logout();
+        }, 1500);
       }
     },
     logout() {
+      // Xóa dữ liệu đăng nhập
       localStorage.removeItem('user');
       localStorage.removeItem('token');
-      this.$router.push('/login');
-    },
-  },
+      localStorage.removeItem('rememberMe');
+      
+      // Thông báo thành công và chuyển hướng
+      Swal.fire({
+        title: '<span style="color: #2b2b2b; font-weight: 600;">Đăng xuất thành công!</span>',
+        text: 'Chuyển đến trang đăng nhập...',
+        icon: 'success',
+        iconColor: '#2b2b2b',
+        background: 'linear-gradient(135deg, #c2aa77, #b29a67)',
+        color: '#2b2b2b',
+        confirmButtonColor: '#2b2b2b',
+        confirmButtonText: '<span style="color: #c2aa77;">OK</span>',
+        showConfirmButton: false,
+        timer: 1000,
+        didClose: () => {
+          this.$router.push('/login');
+        }
+      }).then(() => {
+        this.$router.push('/login');
+      });
+    }
+  }
 };
 </script>
 

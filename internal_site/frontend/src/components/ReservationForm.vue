@@ -40,7 +40,6 @@
             <option value="completed">Hoàn thành</option>
             <option value="cancelled">Đã hủy</option>
           </select>
-          <button @click="searchTables">Tìm bàn</button>
           <button @click="updateReservation">Xác nhận</button>
         </div>
       </div>
@@ -452,11 +451,11 @@ option:checked {
 }
 
 .reserve-content button { 
-  background: #28a745; 
+  background: #fbcf67; 
   color: white;
 }
 
 .reserve-content button:hover { 
-  background: #218838; 
+  background: #e5b756; 
 }
 </style>

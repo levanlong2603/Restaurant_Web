@@ -4,24 +4,30 @@
         <div class="login-box">
             <form @submit.prevent="login">
                 <div class="light"></div>
-                <h2>Login</h2>
+                <h2>Đăng Nhập</h2>
                 <div class="input-box">
                     <input type="email" v-model="user.email" placeholder="" required>
                     <label>Email</label>
                     <div class="input-line"></div>
                 </div>
                 <div class="input-box">
-                    <input type="password" v-model="user.password" placeholder="" required>
-                    <label>Password</label>
+                    <input :type="passwordFieldType" v-model="user.password" placeholder="" required>
+                    <label>Mật khẩu</label>
                     <div class="input-line"></div>
+                    <span class="toggle-password" @click="togglePasswordVisibility">
+                        <i :class="passwordIcon"></i>
+                    </span>
                 </div>
                 <div class="remember-forgot">
-                    <label><input type="checkbox"> Remember me</label>
-                    <a href="#">Forgot Password?</a>
+                    <label><input type="checkbox"> Ghi nhớ đăng nhập</label>
+                    <a href="#">Quên mật khẩu?</a>
                 </div>
-                <button type="submit">Login</button>
+                <button type="submit" :disabled="loading">
+                    <span v-if="loading" class="loading-spinner"></span>
+                    {{ loading ? 'Đang đăng nhập...' : 'Đăng Nhập' }}
+                </button>
                 <div class="register-link">
-                    <p>Don't have an account? <router-link to="/register">Register</router-link></p>
+                    <p>Chưa có tài khoản? <router-link to="/register">Đăng ký ngay</router-link></p>
                 </div>
             </form>
         </div>
@@ -29,7 +35,7 @@
 </template>
 
 <script>
-import api from '../../src/services/api.js' ; // Import api.js
+import api from '../../src/services/api.js';
 
 export default {
     mounted() {
@@ -40,17 +46,43 @@ export default {
             user: {
                 email: '',
                 password: ''
-            }
+            },
+            passwordFieldType: 'password',
+            passwordIcon: 'fas fa-eye',
+            loading: false
         };
     },
     methods: {
+        togglePasswordVisibility() {
+            this.passwordFieldType = this.passwordFieldType === 'password' ? 'text' : 'password';
+            this.passwordIcon = this.passwordFieldType === 'password' ? 'fas fa-eye' : 'fas fa-eye-slash';
+        },
         async login() {
+            // Reset trạng thái
+            this.loading = true;
+            
+            // Kiểm tra dữ liệu đầu vào
+            if (!this.user.email || !this.user.password) {
+                alert("Vui lòng nhập đầy đủ email và mật khẩu!");
+                this.loading = false;
+                return;
+            }
+            
+            // Kiểm tra định dạng email
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(this.user.email)) {
+                alert("Vui lòng nhập địa chỉ email hợp lệ!");
+                this.loading = false;
+                return;
+            }
+            
             try {
                 const response = await api.login(this.user);
                 console.log("API Response:", response.data);
 
                 if (response.status === 200) {
                     alert("Đăng nhập thành công!");
+                    
                     // Lưu token và thông tin user vào localStorage
                     localStorage.setItem("token", response.data.token);
                     localStorage.setItem("user", JSON.stringify(response.data.user));
@@ -76,10 +108,16 @@ export default {
                         alert(errorMessages);
                     } else if (error.response.data.message) {
                         alert(error.response.data.message);
+                    } else {
+                        alert("Đăng nhập thất bại! Vui lòng kiểm tra lại thông tin đăng nhập.");
                     }
+                } else if (error.request) {
+                    alert("Không thể kết nối đến máy chủ. Vui lòng kiểm tra kết nối internet của bạn.");
                 } else {
-                    alert("Đăng nhập thất bại! Kiểm tra lại dữ liệu.");
+                    alert("Đã xảy ra lỗi không xác định. Vui lòng thử lại sau.");
                 }
+            } finally {
+                this.loading = false;
             }
         }
     }
@@ -94,27 +132,34 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
+    padding: 20px;
+    box-sizing: border-box;
 }
 
 .login-box {
     position: relative;
-    width: 400px;
-    height: 450px;
+    width: 100%;
+    max-width: 380px; /* Giảm width cho login */
+    height: auto;
+    min-height: 420px; /* Giảm chiều cao tối thiểu */
     background: linear-gradient(135deg, #c2aa77, #b29a67);
-    border-radius: 20px;
+    border-radius: 18px;
     display: flex;
     justify-content: center;
     align-items: center;
     border: 1px solid rgba(251, 207, 103, 0.3);
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    padding: 30px 25px; /* Điều chỉnh padding */
+    box-sizing: border-box;
 }
 
 h2 {
-    font-size: 2em;
+    font-size: 1.8em; /* Giảm cỡ chữ tiêu đề */
     color: #2b2b2b;
     text-align: center;
     transition: .5s ease;
     font-weight: bold;
+    margin-bottom: 25px; /* Tăng khoảng cách dưới */
 }
 
 .login-box:has(.input-box input:focus) h2 {
@@ -126,8 +171,9 @@ h2 {
 
 .input-box {
     position: relative;
-    width: 310px;
-    margin: 30px 0;
+    width: 100%;
+    max-width: 300px; /* Giảm width input */
+    margin: 25px 0; /* Giảm margin */
 }
 
 .input-box .input-line {
@@ -150,16 +196,19 @@ h2 {
     top: 50%;
     left: 5px;
     transform: translateY(-50%);
-    font-size: 1em;
+    font-size: 0.95em; /* Giảm cỡ chữ label */
     color: #2b2b2b;
     pointer-events: none;
     transition: .5s ease;
     font-weight: 500;
+    background-color: transparent;
+    padding: 0 5px;
 }
 
 .input-box input:focus~label,
 .input-box input:not(:placeholder-shown)~label {
-    top: -5px;
+    top: -8px; /* Điều chỉnh vị trí */
+    font-size: 0.85em; /* Giảm cỡ chữ khi focus */
 }
 
 .login-box:has(.input-box input:focus) label,
@@ -171,16 +220,17 @@ h2 {
 
 .input-box input {
     width: 100%;
-    height: 40px;
+    height: 42px; /* Giảm chiều cao input */
     background: rgba(255, 255, 255, 0.2);
     border: 1px solid #fbcf67;
     outline: none;
-    font-size: 1em;
+    font-size: 0.95em; /* Giảm cỡ chữ input */
     color: #2b2b2b;
-    padding: 0 35px 0 15px;
+    padding: 0 40px 0 15px;
     transition: .5s ease;
     border-radius: 8px;
     font-weight: 500;
+    box-sizing: border-box;
 }
 
 .input-box input:focus {
@@ -188,34 +238,49 @@ h2 {
     border-color: #e5b756;
 }
 
-.input-box .icon {
+.toggle-password {
     position: absolute;
-    right: 15px;
+    right: 12px; /* Điều chỉnh vị trí */
+    top: 50%;
+    transform: translateY(-50%);
     color: #2b2b2b;
-    font-size: 1.2em;
-    line-height: 57px;
-    transition: .5s ease;
-}
-
-.login-box:has(.input-box input:valid) .input-box .icon,
-.login-box:has(.input-box input:focus) .input-box .icon {
-    color: #2b2b2b;
-    filter: drop-shadow(0 0 5px #fbcf67);
-}
-
-.remember-forgot {
-    color: #2b2b2b;
-    font-size: .9em;
-    margin: -15px 0 15px;
-    display: flex;
-    justify-content: space-between;
+    cursor: pointer;
+    font-size: 0.9em; /* Giảm cỡ chữ */
     transition: .5s ease;
     font-weight: 500;
 }
 
+.toggle-password:hover {
+    color: #fbcf67;
+}
+
+.remember-forgot {
+    color: #2b2b2b;
+    font-size: .85em; /* Giảm cỡ chữ */
+    margin: -10px 0 20px; /* Điều chỉnh margin */
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    transition: .5s ease;
+    font-weight: 500;
+    gap: 8px;
+    width: 100%;
+    max-width: 300px;
+}
+
+.remember-forgot label {
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+    position: relative;
+    top: 0;
+    transform: none;
+    font-size: 0.85em;
+}
+
 .remember-forgot label input {
     accent-color: #fbcf67;
-    margin-right: 3px;
+    margin-right: 6px;
     transition: .5s ease;
 }
 
@@ -241,37 +306,63 @@ h2 {
 
 button {
     width: 100%;
-    height: 40px;
+    max-width: 300px; /* Giảm width button */
+    height: 42px; /* Giảm chiều cao button */
     background: #fbcf67;
     border: none;
     outline: none;
     border-radius: 40px;
     cursor: pointer;
-    font-size: 1em;
+    font-size: 0.95em; /* Giảm cỡ chữ */
     color: #2b2b2b;
     font-weight: 600;
     transition: .5s ease;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
 }
 
-.login-box:has(.input-box input:focus) button {
+button:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+.login-box:has(.input-box input:focus) button:not(:disabled) {
     background: #e5b756;
     box-shadow: 0 0 15px #fbcf67, 0 0 15px #fbcf67;
     transform: translateY(-2px);
 }
 
-button:hover {
+button:not(:disabled):hover {
     background: #e5b756;
     transform: translateY(-2px);
 }
 
+.loading-spinner {
+    width: 16px;
+    height: 16px;
+    border: 2px solid transparent;
+    border-top: 2px solid #2b2b2b;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
 .register-link {
     color: #2b2b2b;
-    font-size: .9em;
+    font-size: .85em; /* Giảm cỡ chữ */
     text-align: center;
-    margin: 25px 0 10px;
+    margin: 20px 0 5px; /* Điều chỉnh margin */
     transition: .5s ease;
     font-weight: 500;
+    width: 100%;
+    max-width: 300px;
 }
 
 .login-box:has(.input-box input:focus) .register-link {
@@ -300,8 +391,8 @@ button:hover {
     top: 0;
     left: 50%;
     transform: translateX(-50%);
-    width: 500px;
-    height: 10px;
+    width: 400px; /* Giảm width cho phù hợp */
+    height: 8px; /* Giảm height */
     background: #fbcf67;
     border-radius: 20px;
 }
@@ -311,7 +402,7 @@ button:hover {
     top: -200%;
     left: 0;
     width: 100%;
-    height: 950px;
+    height: 800px; /* Giảm height */
     background: linear-gradient(to bottom, rgba(251, 207, 103, 0.3) -50%, rgba(251, 207, 103, 0) 90%);
     clip-path: polygon(20% 0, 80% 0, 100% 100%, 0 100%);
     pointer-events: none;
@@ -320,5 +411,62 @@ button:hover {
 
 .login-box:has(.input-box input:focus) .light {
     top: -90%;
+}
+
+/* Responsive design */
+@media (max-width: 480px) {
+    .login-box {
+        padding: 25px 20px;
+        border-radius: 16px;
+        max-width: 340px;
+        min-height: 380px;
+    }
+    
+    h2 {
+        font-size: 1.6em;
+        margin-bottom: 20px;
+    }
+    
+    .input-box {
+        margin: 20px 0;
+        max-width: 280px;
+    }
+    
+    .remember-forgot {
+        max-width: 280px;
+        font-size: 0.8em;
+    }
+    
+    button {
+        max-width: 280px;
+    }
+    
+    .register-link {
+        max-width: 280px;
+        font-size: 0.8em;
+    }
+}
+
+@media (max-width: 360px) {
+    .login-box {
+        max-width: 320px;
+        padding: 20px 15px;
+    }
+    
+    .input-box {
+        max-width: 260px;
+    }
+    
+    .remember-forgot {
+        max-width: 260px;
+    }
+    
+    button {
+        max-width: 260px;
+    }
+    
+    .register-link {
+        max-width: 260px;
+    }
 }
 </style>

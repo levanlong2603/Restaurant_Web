@@ -5,7 +5,6 @@ import DashboardManagement from "../views/admin/DashboardManagement.vue";
 import UsersManagement from "../views/admin/UsersManagement.vue";
 import MenuManagement from "../views/admin/MenuManagement.vue";
 import Table from "../components/Table.vue";
-import Header from "../components/Header.vue";
 import Reserve from "../views/staff/Reserve.vue";
 import Order from "../views/staff/Order.vue";
 import ReserverNotification from "../views/staff/ReserveNotification.vue";
@@ -54,10 +53,6 @@ const routes = [
         component: Notification,
       }
     ],
-  },
-  {
-    path: "/header",
-    component: Header,
   },
   {
     path: "/reserve",

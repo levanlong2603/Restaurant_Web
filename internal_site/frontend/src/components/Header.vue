@@ -2,7 +2,7 @@
   <header>
     <div class="header-container">
       <!-- Logo -->
-      <div class="logo">TINH HOA VIỆT</div>
+      <div class="logo">LONG QUÂN AN</div>
 
       <!-- Navigation -->
       <nav>
