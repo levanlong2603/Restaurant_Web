@@ -543,15 +543,15 @@ export default {
 <style scoped>
 .main-layout {
   display: flex;
-  background: #1a1a1a;
+  background: #c2aa77;
 }
 
 .menu-management {
   flex: 1;
   margin: 0;
   padding: 0;
-  background-color: #1a1a1a;
-  color: #ffffff;
+  background-color: #c2aa77;
+  color: #2b2b2b;
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -564,7 +564,7 @@ export default {
 .menu-management h1 {
   font-size: 1.8rem;
   font-weight: 600;
-  color: #d4af37;
+  color: #2b2b2b;
   margin-bottom: 20px;
   margin-top: 30px;
   text-align: center;
@@ -576,17 +576,17 @@ export default {
   height: calc(100vh - 150px);
   margin-left: 0;
   margin-top: 30px;
-  /* Đẩy hai panel xuống một chút */
   z-index: 1;
-  /* Nằm dưới sidebar */
 }
 
 .left-panel,
 .right-panel {
   flex: 1;
-  border: 1px solid #ccc;
-  border-radius: 8px;
+  border: 1px solid #fbcf67;
+  border-radius: 12px;
   overflow: hidden;
+  background: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
 .left-panel {
@@ -604,8 +604,9 @@ export default {
 .right-panel h2 {
   margin-bottom: 15px;
   font-size: 25px;
-  color: #ae9a64;
+  color: #2b2b2b;
   text-align: center;
+  font-weight: bold;
 }
 
 .add-form,
@@ -631,27 +632,29 @@ export default {
 .form-group label {
   font-size: 14px;
   font-weight: bold;
-  color: #ae9a64;
-
+  color: #2b2b2b;
 }
 
 .form-group input,
 .form-group select,
 .form-group textarea {
   padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+  border: 1px solid #fbcf67;
+  border-radius: 8px;
   font-size: 14px;
-  background-color: #f9f9f9;
-  transition: border-color 0.3s, box-shadow 0.3s;
+  background: rgba(255, 255, 255, 0.2);
+  color: #2b2b2b;
+  transition: all 0.3s;
+  font-weight: 500;
 }
 
 .form-group input:focus,
 .form-group select:focus,
 .form-group textarea:focus {
-  border-color: #ae9a64;
-  box-shadow: 0 0 5px rgba(174, 154, 100, 0.3);
+  border-color: #e5b756;
+  box-shadow: 0 0 5px rgba(251, 207, 103, 0.5);
   outline: none;
+  background: rgba(255, 255, 255, 0.3);
 }
 
 .form-group textarea {
@@ -675,7 +678,9 @@ export default {
 .current-image p,
 .preview-image-container p {
   font-size: 14px;
-  color: #666;
+  color: #2b2b2b;
+  opacity: 0.8;
+  font-weight: 500;
 }
 
 .preview-image {
@@ -683,37 +688,43 @@ export default {
   height: 100px;
   object-fit: cover;
   border-radius: 8px;
-  border: 1px solid #ccc;
+  border: 1px solid #fbcf67;
 }
 
 .remove-preview {
   padding: 5px 10px;
-  background-color: #d33;
+  background: #d84315;
   color: white;
   border: none;
-  border-radius: 4px;
+  border-radius: 6px;
   cursor: pointer;
   font-size: 12px;
   width: fit-content;
+  font-weight: 500;
+  transition: all 0.3s;
 }
 
 .remove-preview:hover {
-  background-color: #b32d2d;
+  background: #c62828;
+  transform: scale(1.05);
 }
 
 .submit-button {
-  padding: 10px;
-  background-color: #ae9a64;
-  color: white;
+  padding: 12px;
+  background: #fbcf67;
+  color: #2b2b2b;
   border: none;
-  border-radius: 4px;
+  border-radius: 8px;
   cursor: pointer;
   font-size: 16px;
-  transition: background-color 0.3s;
+  font-weight: 600;
+  transition: all 0.3s;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .submit-button:hover {
-  background-color: #8e7a4e;
+  background: #e5b756;
+  transform: translateY(-2px);
 }
 
 .recent-items-wrapper {
@@ -731,33 +742,34 @@ export default {
   flex-direction: column;
   gap: 5px;
   padding: 10px;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid rgba(251, 207, 103, 0.3);
 }
 
 .filter-search.fixed {
   position: sticky;
   top: 0;
   z-index: 10;
-  background-color: #fff;
+  background: rgba(255, 255, 255, 0.1);
   padding: 20px;
-  border-bottom: 1px solid #ccc;
+  border-bottom: 1px solid #fbcf67;
   display: flex;
   gap: 10px;
   align-items: center;
-  /* Canh giữa các phần tử trong filter-search */
 }
 
 .filter-search select,
 .filter-search input {
   padding: 8px;
   font-size: 16px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+  border: 1px solid #fbcf67;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.2);
+  color: #2b2b2b;
+  font-weight: 500;
 }
 
 .checkbox-label {
-  color: #ae9a64;
-  /* Đổi màu chữ của label chứa checkbox thành vàng nhạt */
+  color: #2b2b2b;
   font-weight: 500;
   display: flex;
   align-items: center;
@@ -768,25 +780,25 @@ export default {
   appearance: none;
   width: 16px;
   height: 16px;
-  border: 2px solid #ae9a64;
+  border: 2px solid #fbcf67;
   border-radius: 4px;
-  background-color: #fff;
+  background-color: rgba(255, 255, 255, 0.2);
   cursor: pointer;
+  transition: all 0.3s;
 }
 
 .checkbox-label input[type="checkbox"]:checked {
-  background-color: #ae9a64;
+  background-color: #fbcf67;
   position: relative;
 }
 
 .checkbox-label input[type="checkbox"]:checked::after {
   content: '\2713';
-  /* Ký hiệu checkmark */
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  color: #1a1a1a;
+  color: #2b2b2b;
   font-size: 12px;
   font-weight: bold;
 }
@@ -805,7 +817,10 @@ export default {
   font-size: 18px;
   font-weight: bold;
   margin-bottom: 10px;
-  color: #ae9a64;
+  color: #2b2b2b;
+  background: rgba(251, 207, 103, 0.3);
+  padding: 10px;
+  border-radius: 8px;
 }
 
 ul {
@@ -818,50 +833,63 @@ ul {
   justify-content: space-between;
   align-items: center;
   gap: 10px;
-  padding: 10px;
-  border-bottom: 1px solid #ccc;
+  padding: 15px;
+  border-bottom: 1px solid rgba(251, 207, 103, 0.3);
+  transition: all 0.3s;
+}
+
+.menu-item:hover {
+  background: rgba(255, 255, 255, 0.1);
 }
 
 .item-info {
   display: flex;
   flex-direction: column;
   gap: 5px;
-  color: #ccc;
+  color: #2b2b2b;
 }
 
 .item-actions {
   display: flex;
-  gap: 5px;
+  gap: 8px;
 }
 
 .action-button {
-  padding: 4px 8px;
+  padding: 6px 12px;
   font-size: 14px;
-  background-color: #ae9a64;
-  color: white;
+  background: #fbcf67;
+  color: #2b2b2b;
   border: none;
-  border-radius: 4px;
+  border-radius: 6px;
   cursor: pointer;
+  font-weight: 500;
+  transition: all 0.3s;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .delete-button {
-  background-color: #d33;
+  background: #d84315;
+  color: white;
 }
 
 .restore-button {
-  background-color: #4caf50;
+  background: #4caf50;
+  color: white;
 }
 
 .action-button:hover {
-  background-color: #8e7a4e;
+  background: #e5b756;
+  transform: scale(1.05);
 }
 
 .delete-button:hover {
-  background-color: #b32d2d;
+  background: #c62828;
+  transform: scale(1.05);
 }
 
 .restore-button:hover {
-  background-color: #45a049;
+  background: #45a049;
+  transform: scale(1.05);
 }
 
 .pagination {
@@ -873,31 +901,42 @@ ul {
 
 .pagination button {
   padding: 8px 16px;
-  background-color: #ae9a64;
-  color: white;
+  background: #fbcf67;
+  color: #2b2b2b;
   border: none;
-  border-radius: 4px;
+  border-radius: 8px;
   cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.pagination button:hover:not(:disabled) {
+  background: #e5b756;
+  transform: translateY(-2px);
 }
 
 .pagination button:disabled {
-  background-color: #ccc;
+  background: rgba(255, 255, 255, 0.2);
   cursor: not-allowed;
+  opacity: 0.6;
 }
 
 .popup {
-  background: white;
-  padding: 20px;
-  border-radius: 8px;
+  background: linear-gradient(135deg, #c2aa77, #b29a67);
+  padding: 25px;
+  border-radius: 12px;
   width: 450px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(251, 207, 103, 0.3);
 }
 
 .popup h2 {
   margin-bottom: 20px;
   font-size: 25px;
   text-align: center;
-  color: #ae9a64;
+  color: #2b2b2b;
+  font-weight: bold;
 }
 
 .popup-buttons {
@@ -907,18 +946,20 @@ ul {
 }
 
 .cancel-button {
-  padding: 10px;
-  background-color: #ccc;
-  color: #2a2a2a;
+  padding: 10px 20px;
+  background: rgba(255, 255, 255, 0.3);
+  color: #2b2b2b;
   border: none;
-  border-radius: 4px;
+  border-radius: 8px;
   cursor: pointer;
   font-size: 16px;
-  transition: background-color 0.3s;
+  font-weight: 600;
+  transition: all 0.3s;
 }
 
 .cancel-button:hover {
-  background-color: #b3b3b3;
+  background: rgba(255, 255, 255, 0.4);
+  transform: scale(1.05);
 }
 
 .popup-overlay {
@@ -927,7 +968,7 @@ ul {
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.7);
   display: flex;
   justify-content: center;
   align-items: center;

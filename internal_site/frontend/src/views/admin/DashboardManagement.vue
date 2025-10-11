@@ -1059,26 +1059,26 @@ export default defineComponent({
 .main-container {
     display: flex;
     min-height: 100vh;
-    background-color: #1e1e1e;
+    background-color: #c2aa77;
     font-family: 'Arial', sans-serif;
 }
 
 .dashboard {
     flex: 1;
     padding: 2rem;
-    background-color: #2a2a2a;
-    /* color: #e0e0e0; */
+    background-color: #c2aa77;
     transition: margin-left 0.3s ease;
 }
 
 .dashboard-header {
     position: sticky;
     top: 0;
-    background-color: #2a2a2a;
+    background: linear-gradient(135deg, #c2aa77, #b29a67);
     z-index: 3;
     padding-bottom: 1rem;
     margin-bottom: 2rem;
-    border-bottom: 1px solid #444;
+    border-bottom: 1px solid #fbcf67;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
 .header-top {
@@ -1091,13 +1091,14 @@ export default defineComponent({
 .header-top h2 {
     font-size: 1.8rem;
     font-weight: 600;
-    color: #d4af37;
+    color: #2b2b2b;
     margin-left: 350px;
 }
 
 .header-top span {
     font-size: 1rem;
-    color: #b0b0b0;
+    color: #2b2b2b;
+    opacity: 0.8;
 }
 
 .header-actions {
@@ -1112,19 +1113,21 @@ export default defineComponent({
 .date-filter select,
 .date-filter input {
     padding: 0.5rem;
-    border: 1px solid #444;
-    border-radius: 5px;
-    background-color: #333;
-    color: #e0e0e0;
+    border: 1px solid #fbcf67;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.2);
+    color: #2b2b2b;
     font-size: 0.9rem;
-    transition: border-color 0.3s ease;
+    transition: all 0.3s ease;
+    font-weight: 500;
 }
 
 .filter-section select:focus,
 .date-filter select:focus,
 .date-filter input:focus {
-    border-color: #d4af37;
+    border-color: #e5b756;
     outline: none;
+    background: rgba(255, 255, 255, 0.3);
 }
 
 .date-filter {
@@ -1135,7 +1138,8 @@ export default defineComponent({
 
 .date-filter label {
     font-size: 0.9rem;
-    color: #b0b0b0;
+    color: #2b2b2b;
+    font-weight: 500;
 }
 
 .custom-date-range {
@@ -1145,38 +1149,41 @@ export default defineComponent({
 }
 
 .custom-date-range span {
-    color: #b0b0b0;
+    color: #2b2b2b;
+    opacity: 0.8;
 }
 
 .action-button {
     padding: 0.5rem 1rem;
     border: none;
-    border-radius: 5px;
+    border-radius: 8px;
     font-size: 0.9rem;
     cursor: pointer;
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    transition: background-color 0.3s ease, transform 0.2s ease;
+    transition: all 0.3s ease;
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .refresh-button {
-    background-color: #4a90e2;
-    color: white;
+    background: #fbcf67;
+    color: #2b2b2b;
 }
 
 .refresh-button:hover {
-    background-color: #357abd;
+    background: #e5b756;
     transform: translateY(-2px);
 }
 
 .export-button {
-    background-color: #d4af37;
-    color: #1e1e1e;
+    background: #fbcf67;
+    color: #2b2b2b;
 }
 
 .export-button:hover {
-    background-color: #b8972e;
+    background: #e5b756;
     transform: translateY(-2px);
 }
 
@@ -1197,31 +1204,32 @@ export default defineComponent({
 }
 
 .stat-card {
-    background-color: #333;
+    background: rgba(255, 255, 255, 0.1);
     padding: 1.5rem;
-    border-radius: 10px;
+    border-radius: 12px;
     position: relative;
-    transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
-    border: 1px solid #444;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+    border: 1px solid rgba(251, 207, 103, 0.3);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
 .stat-card:hover {
     transform: scale(1.03);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
-    background: linear-gradient(145deg, #3a3a3a, #444);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    background: rgba(255, 255, 255, 0.15);
 }
 
 .stat-card h3 {
     font-size: 1.2rem;
     margin-bottom: 0.5rem;
-    color: #d4af37;
+    color: #2b2b2b;
+    font-weight: bold;
 }
 
 .stat-card p {
     font-size: 1.5rem;
     font-weight: 600;
-    color: #e0e0e0;
+    color: #2b2b2b;
     margin: 0.5rem 0;
 }
 
@@ -1232,62 +1240,69 @@ export default defineComponent({
     font-size: 1.5rem;
     opacity: 0.7;
     z-index: 1;
+    color: #2b2b2b;
 }
 
 .revenue-icon {
-    color: #d4af37;
+    color: #2b2b2b;
 }
 
 .booking-icon {
-    color: #4a90e2;
+    color: #2b2b2b;
 }
 
 .customer-icon {
-    color: #f7d794;
+    color: #2b2b2b;
 }
 
 .time-icon {
-    color: #e94e77;
+    color: #2b2b2b;
 }
 
 .serving-icon {
-    color: #2ecc71;
+    color: #2b2b2b;
 }
 
 .cancel-icon {
-    color: #e74c3c;
+    color: #2b2b2b;
 }
 
 .sub-text {
     font-size: 0.9rem;
-    color: #b0b0b0;
+    color: #2b2b2b;
+    opacity: 0.8;
     margin-top: 0.3rem;
     display: block;
+    font-weight: 500;
 }
 
 .trend {
     font-size: 0.9rem;
     margin-top: 0.5rem;
     display: inline-block;
+    font-weight: 500;
 }
 
 .trend-up {
-    color: #2ecc71;
+    color: #4caf50;
 }
 
 .trend-down {
-    color: #e74c3c;
+    color: #d84315;
 }
 
 .trend-neutral {
-    color: #b0b0b0;
+    color: #2b2b2b;
+    opacity: 0.6;
 }
 
 .trend-text {
     font-size: 0.9rem;
-    color: #b0b0b0;
+    color: #2b2b2b;
+    opacity: 0.8;
     margin-top: 1rem;
     display: block;
+    font-weight: 500;
 }
 
 .top-dishes-grid {
@@ -1300,8 +1315,10 @@ export default defineComponent({
 .dish-item {
     text-align: center;
     padding: 0.5rem;
-    border-radius: 5px;
-    transition: background-color 0.3s ease;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(251, 207, 103, 0.3);
 }
 
 .dish-image,
@@ -1311,6 +1328,7 @@ export default defineComponent({
     object-fit: cover;
     border-radius: 8px;
     margin-bottom: 0.5rem;
+    border: 2px solid #fbcf67;
 }
 
 .dish-image-small {
@@ -1320,31 +1338,35 @@ export default defineComponent({
 
 .dish-item span {
     font-size: 1rem;
-    color: #e0e0e0;
+    color: #2b2b2b;
     display: block;
     margin-bottom: 0.3rem;
+    font-weight: 500;
 }
 
 .dish-item.gold {
-    background-color: rgba(212, 175, 55, 0.2);
+    background: rgba(251, 207, 103, 0.3);
 }
 
 .dish-item.silver {
-    background-color: rgba(189, 195, 199, 0.2);
+    background: rgba(189, 195, 199, 0.3);
 }
 
 .dish-item.bronze {
-    background-color: rgba(205, 127, 50, 0.2);
+    background: rgba(205, 127, 50, 0.3);
 }
 
 .dish-item:hover {
-    background: linear-gradient(145deg, rgba(212, 175, 55, 0.3), rgba(189, 195, 199, 0.3));
+    background: rgba(251, 207, 103, 0.4);
+    transform: translateY(-2px);
 }
 
 .avg-revenue,
 .sold-count {
     font-size: 0.9rem;
-    color: #b0b0b0;
+    color: #2b2b2b;
+    opacity: 0.8;
+    font-weight: 500;
 }
 
 .category-details {
@@ -1357,21 +1379,23 @@ export default defineComponent({
 
 .category-item span {
     font-size: 1rem;
-    color: #e0e0e0;
+    color: #2b2b2b;
+    font-weight: 500;
 }
 
 .category-item button {
-    background-color: #444;
-    border: none;
+    background: rgba(255, 255, 255, 0.2);
+    border: 1px solid #fbcf67;
     padding: 0.5rem 1rem;
-    border-radius: 5px;
-    color: #e0e0e0;
+    border-radius: 8px;
+    color: #2b2b2b;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    transition: all 0.3s ease;
+    font-weight: 500;
 }
 
 .category-item button:hover {
-    background-color: #555;
+    background: rgba(255, 255, 255, 0.3);
 }
 
 .category-table {
@@ -1381,24 +1405,28 @@ export default defineComponent({
     display: block;
     max-height: 300px;
     overflow-y: auto;
-    color: #e0e0e0;
+    color: #2b2b2b;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
 }
 
 .category-table th,
 .category-table td {
     padding: 0.5rem;
     text-align: left;
-    border-bottom: 1px solid #444;
+    border-bottom: 1px solid rgba(251, 207, 103, 0.3);
     word-wrap: break-word;
     min-width: 100px;
+    font-weight: 500;
 }
 
 .category-table th {
-    background-color: #3a3a3a;
-    color: #d4af37;
+    background: rgba(251, 207, 103, 0.3);
+    color: #2b2b2b;
     position: sticky;
     top: 0;
     z-index: 1;
+    font-weight: bold;
 }
 
 .leastSoldDish img {
@@ -1408,13 +1436,16 @@ export default defineComponent({
     border-radius: 8px;
     margin: 0.5rem auto;
     display: block;
+    border: 2px solid #fbcf67;
 }
 
 .leastSoldDish .no-data {
     text-align: center;
-    color: #b0b0b0;
+    color: #2b2b2b;
+    opacity: 0.6;
     font-style: italic;
     padding: 1rem;
+    font-weight: 500;
 }
 
 .top-customers-list {
@@ -1430,31 +1461,33 @@ export default defineComponent({
     justify-content: space-between;
     padding: 0.8rem;
     margin-bottom: 0.5rem;
-    border-radius: 5px;
-    background-color: #3a3a3a;
-    transition: background-color 0.3s ease;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+    border: 1px solid rgba(251, 207, 103, 0.3);
 }
 
 .customer-item.gold {
-    background-color: rgba(212, 175, 55, 0.2);
+    background: rgba(251, 207, 103, 0.3);
 }
 
 .customer-item.silver {
-    background-color: rgba(189, 195, 199, 0.2);
+    background: rgba(189, 195, 199, 0.3);
 }
 
 .customer-item.bronze {
-    background-color: rgba(205, 127, 50, 0.2);
+    background: rgba(205, 127, 50, 0.3);
 }
 
 .customer-item:hover {
-    background: linear-gradient(145deg, rgba(212, 175, 55, 0.3), rgba(189, 195, 199, 0.3));
+    background: rgba(251, 207, 103, 0.4);
+    transform: translateY(-2px);
 }
 
 .customer-name {
     font-size: 1.1rem;
     font-weight: 500;
-    color: #e0e0e0;
+    color: #2b2b2b;
     flex: 1 1 40%;
 }
 
@@ -1467,36 +1500,41 @@ export default defineComponent({
 
 .total-bill {
     font-size: 1rem;
-    color: #d4af37;
+    color: #2b2b2b;
     font-weight: 600;
 }
 
 .visits {
     font-size: 1rem;
-    color: #b0b0b0;
+    color: #2b2b2b;
+    opacity: 0.8;
     font-weight: 400;
 }
 
 .details-button {
     padding: 0.3rem 0.8rem;
-    background-color: #4a90e2;
+    background: #fbcf67;
     border: none;
-    border-radius: 3px;
-    color: white;
+    border-radius: 6px;
+    color: #2b2b2b;
     font-size: 0.9rem;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    transition: all 0.3s ease;
+    font-weight: 500;
 }
 
 .details-button:hover {
-    background-color: #357abd;
+    background: #e5b756;
+    transform: scale(1.05);
 }
 
 .no-data {
     text-align: center;
-    color: #b0b0b0;
+    color: #2b2b2b;
+    opacity: 0.6;
     font-style: italic;
     padding: 1rem;
+    font-weight: 500;
 }
 
 .loading-overlay {
@@ -1513,7 +1551,7 @@ export default defineComponent({
 }
 
 .spinner {
-    border: 4px solid #d4af37;
+    border: 4px solid #fbcf67;
     border-top: 4px solid transparent;
     border-radius: 50%;
     width: 40px;
@@ -1532,34 +1570,36 @@ export default defineComponent({
 }
 
 .error-message {
-    background-color: #e74c3c;
+    background: #d84315;
     color: white;
     padding: 1rem;
-    border-radius: 5px;
+    border-radius: 8px;
     margin-bottom: 1rem;
     text-align: center;
+    font-weight: 500;
 }
 
 .export-image-button {
     position: absolute;
     top: 0.5rem;
     right: 0.5rem;
-    background-color: #555;
+    background: rgba(255, 255, 255, 0.3);
     border: none;
-    border-radius: 5px;
+    border-radius: 6px;
     padding: 0.3rem 0.6rem;
-    color: #e0e0e0;
+    color: #2b2b2b;
     cursor: pointer;
     display: flex;
     align-items: center;
     gap: 0.3rem;
     font-size: 0.8rem;
     z-index: 2;
-    transition: background-color 0.3s ease, transform 0.2s ease;
+    transition: all 0.3s ease;
+    font-weight: 500;
 }
 
 .export-image-button:hover {
-    background-color: #666;
+    background: rgba(255, 255, 255, 0.4);
     transform: translateY(-1px);
 }
 
@@ -1578,27 +1618,31 @@ export default defineComponent({
 }
 
 .modal-content {
-    background-color: #333;
+    background: linear-gradient(135deg, #c2aa77, #b29a67);
     padding: 2rem;
-    border-radius: 10px;
-    color: #e0e0e0;
+    border-radius: 12px;
+    color: #2b2b2b;
     text-align: center;
     width: 90%;
     max-width: 400px;
     max-height: 80vh;
     overflow-y: auto;
+    border: 1px solid rgba(251, 207, 103, 0.3);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
 }
 
 .modal-content h3 {
     font-size: 1.5rem;
     margin-bottom: 1rem;
-    color: #d4af37;
+    color: #2b2b2b;
+    font-weight: bold;
 }
 
 .modal-content p {
     font-size: 1rem;
     margin: 0.5rem 0;
-    color: #e0e0e0;
+    color: #2b2b2b;
+    font-weight: 500;
 }
 
 .modal-content img {
@@ -1608,58 +1652,63 @@ export default defineComponent({
     border-radius: 8px;
     margin: 1rem auto;
     display: block;
+    border: 2px solid #fbcf67;
 }
 
 .modal-content input[type="file"] {
     margin: 1rem auto;
     display: block;
-    color: #e0e0e0;
+    color: #2b2b2b;
 }
 
 .modal-content button {
     margin-top: 1rem;
     padding: 0.5rem 1rem;
-    background-color: #4a90e2;
+    background: #fbcf67;
     border: none;
-    border-radius: 5px;
-    color: white;
+    border-radius: 8px;
+    color: #2b2b2b;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    transition: all 0.3s ease;
+    font-weight: 600;
 }
 
 .modal-content button:hover {
-    background-color: #357abd;
+    background: #e5b756;
 }
 
 .customer-details-modal .modal-content {
     width: 90%;
     max-width: 500px;
     padding: 2rem;
-    background-color: #333;
-    border-radius: 10px;
-    color: #e0e0e0;
+    background: linear-gradient(135deg, #c2aa77, #b29a67);
+    border-radius: 12px;
+    color: #2b2b2b;
     text-align: left;
     overflow-y: auto;
+    border: 1px solid rgba(251, 207, 103, 0.3);
 }
 
 .customer-details-modal .modal-content p {
     margin: 0.8rem 0;
     font-size: 1.1rem;
+    font-weight: 500;
 }
 
 .customer-details-modal .modal-content button {
     margin-top: 1.5rem;
     padding: 0.6rem 1.2rem;
-    background-color: #4a90e2;
+    background: #fbcf67;
     border: none;
-    border-radius: 5px;
-    color: white;
+    border-radius: 8px;
+    color: #2b2b2b;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    transition: all 0.3s ease;
+    font-weight: 600;
 }
 
 .customer-details-modal .modal-content button:hover {
-    background-color: #357abd;
+    background: #e5b756;
 }
 
 .dish-details-modal .modal-content,
@@ -1718,6 +1767,5 @@ export default defineComponent({
         max-width: 400px;
         padding: 1.5rem;
     }
-    
 }
 </style>

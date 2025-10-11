@@ -12,7 +12,7 @@ html, body {
   padding: 0;
   width: 100%;
   height: 100%;
-  background-color: #2a2a2a; 
+  background-color: #c2aa77; 
   overflow-x: hidden; 
   font-family: Arial, sans-serif;
 }
@@ -22,10 +22,9 @@ html, body {
   height: 100%;
   margin: 0;
   padding: 0;
-  background-color: #2a2a2a;
+  background-color: #c2aa77;
 }
 </style>
-
 <script>
 export default {
   name: 'App'

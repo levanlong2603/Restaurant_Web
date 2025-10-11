@@ -239,11 +239,13 @@ export default {
 
 <style scoped>
 .menu-page {
-  background: linear-gradient(180deg, #2b2b2b, #1f2020);
+  background: linear-gradient(180deg, #c2aa77, #b29a67);
   padding: 20px 30px;
   border-radius: 20px;
-  color: #ffffff;
+  color: #2b2b2b;
   width: 100%;
+  border: 1px solid rgba(251, 207, 103, 0.3);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
 .menu {
@@ -261,68 +263,83 @@ export default {
 
 .filter-search select,
 .filter-search input {
-  padding: 5px;
-  border: 1px solid #464646;
-  border-radius: 4px;
-  background-color: #c2aa77;
-  color: #ffffff;
+  padding: 8px;
+  border: 1px solid #fbcf67;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.2);
+  color: #2b2b2b;
   outline: none;
+  font-weight: 500;
+}
+
+.filter-search select option {
+  background: #c2aa77;
+  color: #2b2b2b;
 }
 
 .filter-search .refresh-button {
   padding: 8px 16px;
-  background-color: #ae9a64;
-  color: white;
+  background: #fbcf67;
+  color: #2b2b2b;
   border: none;
-  border-radius: 4px;
+  border-radius: 8px;
   cursor: pointer;
+  font-weight: bold;
+  transition: all 0.3s ease;
 }
 
 .filter-search .refresh-button:hover {
-  background-color: #8e7a4e;
+  background: #e5b756;
+  transform: translateY(-2px);
 }
 
 .menu h2 {
-  color: #ae9a64;
+  color: #2b2b2b;
   margin-bottom: 10px;
   margin-top: 0;
   text-align: center;
+  font-weight: bold;
 }
 
 /* Tiêu đề danh mục */
 .category {
-  color: #ae9a64;
+  color: #2b2b2b;
   font-size: 24px;
   margin: 20px 0 10px;
   text-align: center;
+  font-weight: bold;
+  background: rgba(251, 207, 103, 0.3);
+  padding: 10px;
+  border-radius: 8px;
 }
 
 .menu-item {
   display: flex;
   justify-content: space-between;
-  background-color: #2a2a2a;
-  padding: 10px;
-  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 15px;
+  border-radius: 12px;
   margin-bottom: 20px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   width: 95%;
   height: auto;
   min-height: 180px;
+  border: 1px solid rgba(251, 207, 103, 0.3);
+  transition: all 0.3s ease;
 }
 
 .menu-item:hover {
-  transform: scale(1.02);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+  background: rgba(255, 255, 255, 0.15);
 }
 
 .item-details {
   flex: 1;
   display: flex;
   flex-direction: row;
-  /* Thay đổi từ column sang row để hiển thị ngang */
   justify-content: center;
-  /* Căn giữa theo chiều ngang */
   align-items: center;
-  /* Căn giữa theo chiều dọc */
   padding: 0 10px;
   max-width: 40%;
   text-align: center;
@@ -332,18 +349,16 @@ export default {
   font-size: 18px;
   font-weight: bold;
   margin-right: 10px;
-  /* Khoảng cách giữa tên và mô tả */
+  color: #2b2b2b;
 }
 
 .item-details p {
   font-size: 14px;
-  color: #bcbcbc;
+  color: #2b2b2b;
   margin: 0;
-  /* Loại bỏ margin để căn chỉnh tốt hơn */
   max-width: 70%;
-  /* Giới hạn chiều rộng mô tả để tránh tràn */
   word-wrap: break-word;
-  /* Chuyển dòng nếu mô tả quá dài */
+  opacity: 0.8;
 }
 
 .item-detail2 {
@@ -359,6 +374,7 @@ export default {
   height: 100px;
   object-fit: cover;
   border-radius: 8px;
+  border: 2px solid #fbcf67;
 }
 
 .item-detail3 {
@@ -378,8 +394,9 @@ export default {
 
 .item-detail4 .price {
   font-size: 16px;
-  color: #ae9a64;
+  color: #2b2b2b;
   flex: 1;
+  font-weight: bold;
 }
 
 .item-quantity {
@@ -390,35 +407,47 @@ export default {
 }
 
 .item-quantity p {
-  color: #fffafa;
+  color: #2b2b2b;
   margin-bottom: 8px;
   margin-top: 0;
   text-align: center;
+  font-weight: 500;
 }
 
 .item-quantity input {
-  background-color: #2a2a2a;
-  width: 50px;
+  background: rgba(255, 255, 255, 0.2);
+  width: 60px;
   padding: 8px;
-  border: 1px solid #6c6c6c;
-  border-radius: 4px;
+  border: 1px solid #fbcf67;
+  border-radius: 6px;
   text-align: center;
-  color: #ffffff;
+  color: #2b2b2b;
   outline: none;
+  font-weight: 500;
 }
 
 .add-to-cart {
-  background-color: #ae9a64;
+  background: #fbcf67;
   border: none;
-  border-radius: 5px;
-  padding: 5px;
+  border-radius: 8px;
+  padding: 8px 12px;
   cursor: pointer;
   flex: 0;
+  color: #2b2b2b;
+  font-weight: bold;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.add-to-cart:hover:not(:disabled) {
+  background: #e5b756;
+  transform: scale(1.05);
 }
 
 .add-to-cart:disabled {
-  background-color: #555;
+  background: #a0a0a0;
   cursor: not-allowed;
+  transform: none;
 }
 
 .item-detail5 {
@@ -430,16 +459,18 @@ export default {
 
 .item-detail5 img {
   cursor: pointer;
+  filter: brightness(0.3);
 }
 
 .item-detail5 input {
-  background-color: #2a2a2a;
-  padding: 5px;
+  background: rgba(255, 255, 255, 0.2);
+  padding: 8px;
   width: 180px;
-  border: 1px solid #6c6c6c;
-  border-radius: 4px;
-  color: #ffffff;
+  border: 1px solid #fbcf67;
+  border-radius: 6px;
+  color: #2b2b2b;
   outline: none;
+  font-weight: 500;
 }
 
 .pagination {
@@ -451,20 +482,30 @@ export default {
 
 .pagination button {
   padding: 8px 16px;
-  background-color: #ae9a64;
-  color: white;
+  background: #fbcf67;
+  color: #2b2b2b;
   border: none;
-  border-radius: 4px;
+  border-radius: 8px;
   cursor: pointer;
+  font-weight: bold;
+  transition: all 0.3s ease;
+}
+
+.pagination button:hover:not(:disabled) {
+  background: #e5b756;
+  transform: translateY(-2px);
 }
 
 .pagination button:disabled {
-  background-color: #ccc;
+  background: #a0a0a0;
   cursor: not-allowed;
+  transform: none;
 }
 
 .pagination span {
   font-size: 16px;
   line-height: 40px;
+  color: #2b2b2b;
+  font-weight: 500;
 }
 </style>

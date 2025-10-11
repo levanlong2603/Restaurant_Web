@@ -149,32 +149,33 @@ import Navigation from '../../components/Navigation.vue';
 <style scoped>
 .main-container {
   display: flex;
-  background: #1a1a1a;
+  background: #c2aa77;
 }
 
 .reservation-management {
   flex: 1;
   margin: 0;
   padding: 0;
-  background-color: #1a1a1a;
-  color: #ffffff;
+  background-color: #c2aa77;
+  color: #2b2b2b;
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  padding-right: 20px; /* Cho khoảng trống bên phải bảng */
-  transition: margin-left 0.3s ease; /* Hiệu ứng mượt mà khi sidebar thay đổi */
+  padding-right: 20px;
+  transition: margin-left 0.3s ease;
   margin: 0 50px;
 }
 
 .header{
-  background-color: #1a1a1a;
+  background-color: #c2aa77;
   align-items: center;
 }
 .header h1{
-  color: white;
+  color: #2b2b2b;
   text-align: center;
   margin-top: 20px;
   margin-bottom: 10px;
+  font-weight: bold;
 }
 
 .select-table{
@@ -190,50 +191,57 @@ import Navigation from '../../components/Navigation.vue';
 .header select{
   width: 100px;
   height: 30px;
-  background-color: #1a1a1a;
-  border: 1px solid #555;
-  color: white;
-  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid #fbcf67;
+  color: #2b2b2b;
+  border-radius: 8px;
   outline: none;
+  padding: 0 8px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.header select:focus {
+  border-color: #e5b756;
+  background: rgba(255, 255, 255, 0.3);
 }
 
 .header button{
   width: 100px;
   height: 35px;
-  background-color: #ae9a64;
-  box-shadow: 10px 10px 20px rgba(0,0,0,0.2);
-  color: white;
-  border-radius: 5px;
+  background: #fbcf67;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  color: #2b2b2b;
+  border-radius: 8px;
   margin-left: 30px;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
 }
 
 .header button:hover{
-  background-color: #dbbb64;
-  cursor: pointer;
+  background: #e5b756;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.15);
 }
 
 .container {
   display: flex;
-  /* justify-content: center; */
   gap: 40px;
   margin-top: 20px;
 }
 
 .cart{
-  color: white;
+  color: #2b2b2b;
 }
 
 .menu {
   width: 50%;
   display: flex;
-  /* justify-content: ; */
-
 }
 
 .order {
   width: 50%;
-  /* display: flex;
-  justify-content: center; */
 }
-
 </style>

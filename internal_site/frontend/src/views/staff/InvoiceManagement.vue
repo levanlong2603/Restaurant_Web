@@ -189,7 +189,7 @@ export default {
 <style scoped>
 .main-container {
   display: flex;
-  background: #1a1a1a;
+  background: #c2aa77;
   height: 100vh;
   overflow: hidden;
 }
@@ -198,8 +198,8 @@ export default {
   flex: 1;
   margin: 0;
   padding: 0;
-  background-color: #1a1a1a;
-  color: #ffffff;
+  background-color: #c2aa77;
+  color: #2b2b2b;
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -212,15 +212,16 @@ export default {
 }
 
 .header {
-  background-color: #1a1a1a;
+  background-color: #c2aa77;
   padding: 20px;
-  border-bottom: 1px solid #444;
+  border-bottom: 1px solid #fbcf67;
 }
 
 .header h1 {
   text-align: center;
-  color: #ffffff;
+  color: #2b2b2b;
   margin: 0 0 20px 0;
+  font-weight: bold;
 }
 
 .actions {
@@ -232,19 +233,28 @@ export default {
 .actions input,
 .actions select {
   padding: 10px;
-  border: 1px solid #555;
-  border-radius: 5px;
-  background-color: #444;
-  color: #fff;
+  border: 1px solid #fbcf67;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.2);
+  color: #2b2b2b;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.actions input:focus,
+.actions select:focus {
+  border-color: #e5b756;
+  background: rgba(255, 255, 255, 0.3);
+  outline: none;
 }
 
 .actions input[type="date"] {
-  background-color: #444;
+  background: rgba(255, 255, 255, 0.2);
   cursor: pointer;
 }
 
 .actions select {
-  background-color: #444;
+  background: rgba(255, 255, 255, 0.2);
 }
 
 .reservation-list-wrapper {
@@ -257,13 +267,15 @@ export default {
 .reservation-table {
   width: 100%;
   border-collapse: collapse;
-  background-color: #333;
-  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
   overflow: hidden;
+  border: 1px solid rgba(251, 207, 103, 0.3);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
 .reservation-table thead {
-  background-color: #444;
+  background: rgba(251, 207, 103, 0.3);
   top: 0;
   z-index: 5;
 }
@@ -273,8 +285,9 @@ export default {
   padding: 10px 15px;
   height: 35px;
   text-align: center;
-  border-bottom: 1px solid #555;
-  border-right: 1px solid #555;
+  border-bottom: 1px solid rgba(251, 207, 103, 0.3);
+  border-right: 1px solid rgba(251, 207, 103, 0.3);
+  font-weight: 500;
 }
 
 .reservation-table th:last-child,
@@ -284,6 +297,7 @@ export default {
 
 .reservation-table th {
   font-weight: bold;
+  color: #2b2b2b;
 }
 
 /* Cố định chiều rộng cho từng cột */
@@ -338,23 +352,33 @@ export default {
 
 /* Màu sắc trạng thái */
 .status.paid {
-  color: #28a745;
+  color: #4caf50;
 }
 
 .status.completed {
-  color: #6c757d;
+  color: #2b2b2b;
+  opacity: 0.7;
 }
 
 /* Màu sắc phương thức thanh toán */
 .status.qr {
-  color: #17a2b8;
+  color: #2196f3;
 }
 
 .status.cash {
-  color: #ffc107;
+  color: #ff9800;
 }
 
 .status.card {
-  color: #007bff;
+  color: #9c27b0;
+}
+
+/* Hiệu ứng hover cho hàng */
+.reservation-table tbody tr {
+  transition: background-color 0.3s ease;
+}
+
+.reservation-table tbody tr:hover {
+  background: rgba(255, 255, 255, 0.15);
 }
 </style>

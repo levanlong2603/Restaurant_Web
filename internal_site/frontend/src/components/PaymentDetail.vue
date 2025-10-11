@@ -246,18 +246,21 @@ export default {
 
 <style scoped>
 .payment-detail {
-  background: linear-gradient(180deg, #2b2b2b, #1f2020);
+  background: linear-gradient(180deg, #c2aa77, #b29a67);
   padding: 20px 30px;
   border-radius: 20px;
-  color: #ffffff;
+  color: #2b2b2b;
   height: 85vh;
   overflow: auto;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(251, 207, 103, 0.3);
 }
 
 .payment-detail-header h2 {
-  color: white;
+  color: #2b2b2b;
   text-align: center;
   margin-top: 0;
+  font-weight: bold;
 }
 
 .payment-container {
@@ -268,74 +271,121 @@ export default {
 
 .payment-container p {
   margin: 10px 0;
+  color: #2b2b2b;
+  font-weight: 500;
 }
 
 .payment-method {
   margin: 20px 0;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 15px;
+  border-radius: 12px;
+  border: 1px solid rgba(251, 207, 103, 0.3);
 }
 
 .payment-method h3 {
   margin-bottom: 10px;
   text-align: center;
+  color: #2b2b2b;
 }
 
 .payment-method select {
   width: 200px;
   padding: 8px;
-  border: 1px solid #464646;
-  border-radius: 4px;
-  background-color: #2a2a2a;
-  color: #ffffff;
+  border: 1px solid #fbcf67;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.2);
+  color: #2b2b2b;
   outline: none;
+  font-weight: 500;
+}
+
+.payment-method select option {
+  background: #c2aa77;
+  color: #2b2b2b;
+}
+
+.payment-method select option:checked {
+  background: #fbcf67;
+  color: #2b2b2b;
 }
 
 .qr-code {
   margin: 20px 0;
   text-align: center;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 20px;
+  border-radius: 12px;
+  border: 1px solid rgba(251, 207, 103, 0.3);
 }
 
 .qr-code img {
   max-width: 200px;
   border-radius: 8px;
+  border: 2px solid #fbcf67;
 }
 
-.account-info { color: #fff; margin-top: 8px; }
-.btn-copy { margin-left: 8px; padding: 4px 8px; border-radius: 6px; border: none; background: #fbcf67; cursor: pointer; }
-.btn-copy:hover { opacity: 0.9; }
+.account-info { 
+  color: #2b2b2b; 
+  margin-top: 8px; 
+  font-weight: 500;
+}
+.btn-copy { 
+  margin-left: 8px; 
+  padding: 4px 8px; 
+  border-radius: 6px; 
+  border: none; 
+  background: #fbcf67; 
+  cursor: pointer; 
+  color: #2b2b2b;
+  font-weight: bold;
+}
+.btn-copy:hover { 
+  background: #e5b756; 
+}
 
 .payment-actions {
   display: flex;
   gap: 20px;
   justify-content: center;
   align-items: center;
+  margin-top: 20px;
 }
 
 .btn-confirm {
-  background-color: #ae9a64;
-  color: white;
-  border-radius: 5px;
-  height: 30px;
+  background: linear-gradient(135deg, #fbcf67, #e5b756);
+  color: #2b2b2b;
+  border-radius: 8px;
+  height: 40px;
   width: 150px;
   border: none;
   cursor: pointer;
   margin: 10px 0;
+  font-weight: bold;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 
 .btn-confirm:hover {
-  background-color: #8e7a4e;
+  background: linear-gradient(135deg, #e5b756, #d4a745);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
 }
 
 .btn-confirm:disabled {
-  background-color: #555;
+  background: #a0a0a0;
   cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
 }
 
 .checkbox-label {
   display: flex;
   align-items: center;
-  color: #ffffff;
+  color: #2b2b2b;
   font-size: 16px;
   cursor: pointer;
+  font-weight: 500;
 }
 
 .checkbox-label input {
@@ -343,6 +393,7 @@ export default {
   width: 20px;
   height: 20px;
   cursor: pointer;
+  accent-color: #fbcf67;
 }
 
 .checkbox-label input:disabled {
@@ -351,8 +402,13 @@ export default {
 }
 
 .error-message {
-  color: #ff5555;
+  color: #d84315;
   text-align: center;
   margin: 20px 0;
+  background: rgba(216, 67, 21, 0.1);
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(216, 67, 21, 0.3);
+  font-weight: 500;
 }
 </style>

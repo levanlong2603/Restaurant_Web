@@ -3,7 +3,7 @@
   <div class="contact-page">
     <Header />
     <main>
-      <h1>Liên hệ</h1>
+      <h1>LIÊN HỆ</h1>
       <!-- <h3>Các chi nhánh</h3> -->
       <div class="branch">
         <p>Địa chỉ : Số 33, đường Đại Mỗ, phường Đại Mỗ, quận Nam Từ Liêm, TP. Hà Nội</p>
@@ -46,7 +46,7 @@ export default {
 .contact-page {
   background-color: #c2aa77;
   min-height: 100vh;
-  color: #ffffff;
+  color: #2b2b2b;
 }
 
 main {
@@ -60,33 +60,42 @@ h1 {
   font-size: 48px;
   font-weight: bold;
   margin-bottom: 20px;
-  color: #fbcf67;
+  color: #2b2b2b;
   text-shadow: 0 0 5px #fbcf67, 0 0 30px #fbcf67;
 }
 
 h3 {
   font-size: 24px;
-  color: #fbcf67;
+  color: #2b2b2b;
   margin-bottom: 20px;
+  font-weight: bold;
 }
-
 
 .branch {
   margin-bottom: 40px;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 25px;
+  border-radius: 12px;
+  border: 1px solid rgba(251, 207, 103, 0.3);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
 p {
   font-size: 16px;
-  color: #fbcf67;
+  color: #2b2b2b;
   margin: 10px 0;
+  font-weight: 500;
 }
 
 a {
-  color: #fbcf67;
+  color: #2b2b2b;
   text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s ease;
 }
 
 a:hover {
+  color: #fbcf67;
   text-decoration: underline;
 }
 
@@ -94,17 +103,29 @@ a:hover {
   display: inline-block;
   background: #fbcf67;
   color: #2b2b2b;
-  padding: 8px 14px;
-  border-radius: 6px;
+  padding: 10px 20px;
+  border-radius: 8px;
   text-decoration: none;
   font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(251, 207, 103, 0.3);
+  margin-top: 10px;
 }
-.open-map-btn:hover { opacity: 0.9; }
+
+.open-map-btn:hover { 
+  background: #e5b756;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  text-decoration: none;
+}
 
 .map {
   width: 100%;
   height: 300px;
   margin-top: 20px;
-  border-radius: 8px;
+  border-radius: 12px;
+  border: 2px solid #fbcf67;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 </style>

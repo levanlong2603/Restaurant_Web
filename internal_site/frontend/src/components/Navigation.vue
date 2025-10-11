@@ -159,28 +159,23 @@ export default {
   display: flex;
   min-height: 100vh;
   background-color: transparent;
-  color: #ffffff;
+  color: #2b2b2b;
 }
 
 /* Sidebar */
 .sidebar {
   width: 225px;
-  background-color: #1a1a1a;
+  background: linear-gradient(180deg, #c2aa77, #b29a67);
   padding: 20px;
   position: fixed;
-  /* Cố định sidebar */
   top: 0;
-  /* Đặt ở đầu trang */
   left: 0;
-  /* Đặt ở bên trái */
   height: 100vh;
-  /* Chiều cao toàn màn hình */
   overflow-y: auto;
-  /* Cho phép cuộn nếu nội dung dài */
   transition: width 0.3s ease;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
   z-index: 100;
-  /* Đảm bảo sidebar nằm trên các thành phần khác */
+  border-right: 1px solid rgba(251, 207, 103, 0.3);
 }
 
 .sidebar-header {
@@ -196,13 +191,14 @@ export default {
 
 .sidebar-header h2 {
   font-size: 18px;
-  color: #ae9a64;
+  color: #2b2b2b;
   flex-grow: 1;
+  font-weight: bold;
 }
 
 .sidebar-header i {
   cursor: pointer;
-  color: #ae9a64;
+  color: #2b2b2b;
   font-size: 18px;
 }
 
@@ -212,35 +208,40 @@ export default {
 }
 
 .sidebar nav ul li {
-  padding: 10px 0;
+  padding: 12px 0;
   cursor: pointer;
   transition: all 0.3s ease;
-  color: #bac9d3;
+  color: #2b2b2b;
+  margin: 5px 0;
+  border-radius: 8px;
 }
 
 .sidebar nav ul li:hover,
 .sidebar nav ul li.active {
-  background-color: #ae9a64;
-  color: #ffffff;
-  border-radius: 5px;
+  background: rgba(251, 207, 103, 0.5);
+  color: #2b2b2b;
+  border-radius: 8px;
+  transform: translateX(5px);
 }
 
 .sidebar nav ul li a {
-  color: #ffffff;
+  color: #2b2b2b;
   text-decoration: none;
   font-size: 16px;
-  padding-left: 10px;
+  padding-left: 15px;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
+  font-weight: 500;
 }
 
 .sidebar nav ul li span {
   font-size: 16px;
-  padding-left: 10px;
+  padding-left: 15px;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
+  font-weight: 500;
 }
 
 /* Nút mở lại sidebar */
@@ -248,13 +249,20 @@ export default {
   position: fixed;
   left: 10px;
   top: 20px;
-  background-color: #ae9a64;
-  color: #ffffff;
-  padding: 8px;
-  border-radius: 5px;
+  background: #fbcf67;
+  color: #2b2b2b;
+  padding: 10px;
+  border-radius: 8px;
   cursor: pointer;
   z-index: 20;
-  transition: left 0.3s ease;
+  transition: all 0.3s ease;
+  border: 1px solid rgba(251, 207, 103, 0.3);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.sidebar-toggle:hover {
+  background: #e5b756;
+  transform: scale(1.05);
 }
 
 .sidebar-toggle i {
@@ -266,19 +274,20 @@ export default {
   position: fixed;
   left: 0;
   top: 60px;
-  background-color: #ae9a64;
-  color: #ffffff;
-  padding: 5px 15px;
-  border-radius: 0 5px 5px 0;
+  background: #fbcf67;
+  color: #2b2b2b;
+  padding: 8px 15px;
+  border-radius: 0 8px 8px 0;
   font-size: 14px;
   font-weight: bold;
   z-index: 10;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 
 /* Icon Styles */
 i {
   font-family: "FontAwesome" !important;
-  color: #bac9d3;
+  color: #2b2b2b;
 }
 
 .fa-chart-line,
@@ -286,26 +295,56 @@ i {
 .fa-bars,
 .fa-notifications,
 .fa-power-off {
-  color: #bac9d3;
-  font-size: 20px;
+  color: #2b2b2b;
+  font-size: 18px;
   transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.sidebar nav ul li:hover i,
+.sidebar nav ul li.active i {
+  color: #2b2b2b;
+  transform: scale(1.1);
 }
 
 @media (max-width: 768px) {
   .sidebar {
     display: none;
-    /* Ẩn sidebar trên màn hình nhỏ */
   }
 
   .main-layout,
   .main-container {
     margin-left: 0;
-    /* Không cần margin trên màn hình nhỏ */
   }
 
   .sidebar-toggle {
     display: block;
-    /* Hiển thị nút mở sidebar */
   }
+}
+
+/* Thêm style cho main content area */
+.main-content {
+  margin-left: 225px;
+  flex: 1;
+  padding: 20px;
+  background: transparent;
+}
+
+/* Khi sidebar thu gọn */
+.sidebar.collapsed {
+  width: 60px;
+}
+
+.sidebar.collapsed .sidebar-header h2,
+.sidebar.collapsed nav ul li span {
+  display: none;
+}
+
+.sidebar.collapsed .sidebar-header {
+  justify-content: center;
+}
+
+.sidebar.collapsed nav ul li a {
+  justify-content: center;
+  padding-left: 0;
 }
 </style>

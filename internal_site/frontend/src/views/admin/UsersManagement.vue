@@ -748,7 +748,7 @@ export default {
 .main-container {
     display: flex;
     min-height: 100vh;
-    background-color: #1e1e1e;
+    background-color: #c2aa77;
     font-family: 'Arial', sans-serif;
 }
 
@@ -756,8 +756,8 @@ export default {
     flex: 1;
     margin: 0;
     padding: 0;
-    background-color: #1a1a1a;
-    color: #ffffff;
+    background-color: #c2aa77;
+    color: #2b2b2b;
     display: flex;
     flex-direction: column;
     overflow: hidden;
@@ -768,7 +768,7 @@ export default {
 
 .users-management {
     padding: 0px;
-    color: #ffffff;
+    color: #2b2b2b;
     max-width: 1200px;
     width: 100%;
     margin: 0 auto;
@@ -779,12 +779,13 @@ export default {
 .dashboard-header {
     position: fixed;
     top: 0;
-    background-color: #2a2a2a;
+    background: linear-gradient(135deg, #c2aa77, #b29a67);
     z-index: 3;
     padding-bottom: 1rem;
     margin-bottom: 2rem;
-    border-bottom: 1px solid #444;
+    border-bottom: 1px solid #fbcf67;
     width: 95%;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
 .header-top {
@@ -797,14 +798,15 @@ export default {
 .header-top h2 {
     font-size: 1.8rem;
     font-weight: 600;
-    color: #d4af37;
+    color: #2b2b2b;
     margin-left: 350px;
 }
 
 .header-top span {
     font-size: 1rem;
-    color: #b0b0b0;
+    color: #2b2b2b;
     margin-right: 20px;
+    opacity: 0.8;
 }
 
 .header-actions {
@@ -823,57 +825,61 @@ export default {
 .search-input,
 .role-filter {
     padding: 0.5rem;
-    border: 1px solid #444;
-    border-radius: 5px;
-    background-color: #333;
-    color: #e0e0e0;
+    border: 1px solid #fbcf67;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.2);
+    color: #2b2b2b;
     font-size: 0.9rem;
     transition: border-color 0.3s ease;
+    font-weight: 500;
 }
 
 .search-input:focus,
 .role-filter:focus {
-    border-color: #d4af37;
+    border-color: #e5b756;
     outline: none;
+    background: rgba(255, 255, 255, 0.3);
 }
 
 .action-button {
     padding: 0.5rem 1rem;
     border: none;
-    border-radius: 5px;
+    border-radius: 8px;
     font-size: 0.9rem;
     cursor: pointer;
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-    color: #fff;
+    transition: all 0.3s ease;
+    color: #2b2b2b;
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .add-user-btn {
-    background-color: #0056ff;
+    background: #fbcf67;
 }
 
 .add-user-btn:hover {
-    background-color: #0042cc;
+    background: #e5b756;
     transform: translateY(-2px);
 }
 
 .show-deleted-btn {
-    background-color: #666;
+    background: rgba(255, 255, 255, 0.3);
 }
 
 .show-deleted-btn:hover {
-    background-color: #555;
+    background: rgba(255, 255, 255, 0.4);
     transform: translateY(-2px);
 }
 
 .refresh-button {
-    background-color: #4a90e2;
+    background: #fbcf67;
 }
 
 .refresh-button:hover {
-    background-color: #357abd;
+    background: #e5b756;
     transform: translateY(-2px);
 }
 
@@ -881,34 +887,36 @@ export default {
     display: flex;
     flex-direction: column;
     gap: 15px;
-    background-color: #2a2a2a;
-    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
     padding: 15px;
     margin-bottom: 20px;
+    border: 1px solid rgba(251, 207, 103, 0.3);
 }
 
 .users-list h2 {
     font-size: 22px;
     font-weight: bold;
-    color: #ae9a64;
+    color: #2b2b2b;
     margin-bottom: 15px;
 }
 
 .users-list p {
-    color: #ff4d4d;
+    color: #d84315;
     font-size: 16px;
+    font-weight: 500;
 }
 
 .table-header {
     display: grid;
     grid-template-columns: 1fr 120px 120px 120px;
     align-items: center;
-    background-color: #333;
+    background: rgba(251, 207, 103, 0.3);
     padding: 12px 15px;
-    border-radius: 6px;
+    border-radius: 8px;
     font-weight: bold;
-    color: #ddd;
-    border-bottom: 1px solid #444;
+    color: #2b2b2b;
+    border-bottom: 1px solid #fbcf67;
 }
 
 .col-user {
@@ -926,44 +934,45 @@ export default {
 
 .sort-link {
     cursor: pointer;
-    color: #ae9a64;
+    color: #2b2b2b;
     transition: color 0.3s;
 }
 
 .sort-link:hover {
-    color: #fff;
+    color: #fbcf67;
 }
 
 .user-item {
     display: grid;
     grid-template-columns: 1fr 120px 120px 120px;
     align-items: center;
-    background-color: #1a1a1a;
+    background: rgba(255, 255, 255, 0.15);
     padding: 15px;
-    border-radius: 6px;
+    border-radius: 8px;
     cursor: pointer;
-    border-bottom: 1px solid #444;
-    transition: background-color 0.3s;
+    border-bottom: 1px solid rgba(251, 207, 103, 0.3);
+    transition: all 0.3s;
 }
 
 .user-item:hover {
-    background-color: #2f2f2f;
+    background: rgba(255, 255, 255, 0.25);
+    transform: translateY(-2px);
 }
 
 .pending-user {
-    background-color: #2a3a2a;
+    background: rgba(76, 175, 80, 0.2);
 }
 
 .pending-user:hover {
-    background-color: #354a35;
+    background: rgba(76, 175, 80, 0.3);
 }
 
 .deleted-user {
-    background-color: #3a2a2a;
+    background: rgba(244, 67, 54, 0.2);
 }
 
 .deleted-user:hover {
-    background-color: #4a3535;
+    background: rgba(244, 67, 54, 0.3);
 }
 
 .user-details {
@@ -977,7 +986,7 @@ export default {
     height: 48px;
     object-fit: cover;
     border-radius: 50%;
-    border: 2px solid #ae9a64;
+    border: 2px solid #fbcf67;
 }
 
 .user-info {
@@ -988,18 +997,20 @@ export default {
     font-size: 18px;
     font-weight: bold;
     margin-bottom: 5px;
-    color: #fff;
+    color: #2b2b2b;
 }
 
 .user-info p {
     font-size: 14px;
-    color: #ddd;
+    color: #2b2b2b;
+    opacity: 0.8;
 }
 
 .user-meta {
     text-align: center;
-    color: #bbb;
+    color: #2b2b2b;
     font-size: 14px;
+    opacity: 0.8;
 }
 
 .user-actions {
@@ -1010,57 +1021,63 @@ export default {
 
 .action-btn {
     padding: 8px 12px;
-    background-color: #444;
+    background: rgba(255, 255, 255, 0.3);
     border: none;
-    border-radius: 4px;
-    color: #fff;
+    border-radius: 6px;
+    color: #2b2b2b;
     cursor: pointer;
     font-size: 14px;
-    transition: background-color 0.3s, transform 0.1s;
+    font-weight: 500;
+    transition: all 0.3s;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .edit-btn {
-    background-color: #0056ff;
+    background: #fbcf67;
 }
 
 .edit-btn:hover {
-    background-color: #0042cc;
+    background: #e5b756;
     transform: scale(1.05);
 }
 
 .delete-btn {
-    background-color: #ff4d4d;
+    background: #d84315;
+    color: white;
 }
 
 .delete-btn:hover {
-    background-color: #e63939;
+    background: #c62828;
     transform: scale(1.05);
 }
 
 .approve-btn {
-    background-color: #00cc00;
+    background: #4caf50;
+    color: white;
 }
 
 .approve-btn:hover {
-    background-color: #00b300;
+    background: #45a049;
     transform: scale(1.05);
 }
 
 .reject-btn {
-    background-color: #ff4d4d;
+    background: #d84315;
+    color: white;
 }
 
 .reject-btn:hover {
-    background-color: #e63939;
+    background: #c62828;
     transform: scale(1.05);
 }
 
 .restore-btn {
-    background-color: #00cc00;
+    background: #4caf50;
+    color: white;
 }
 
 .restore-btn:hover {
-    background-color: #00b300;
+    background: #45a049;
     transform: scale(1.05);
 }
 
@@ -1070,7 +1087,7 @@ export default {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgba(0, 0, 0, 0.7);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -1078,12 +1095,13 @@ export default {
 }
 
 .modal-content {
-    background-color: #fff;
+    background: linear-gradient(135deg, #c2aa77, #b29a67);
     padding: 25px;
-    border-radius: 8px;
+    border-radius: 12px;
     width: 500px;
-    color: #1a1a1a;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    color: #2b2b2b;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(251, 207, 103, 0.3);
 }
 
 .modal-header {
@@ -1095,9 +1113,10 @@ export default {
 
 .modal-header h2 {
     font-size: 22px;
-    color: #ae9a64;
+    color: #2b2b2b;
     text-align: center;
     margin-left: 130px;
+    font-weight: bold;
 }
 
 .close-btn {
@@ -1105,11 +1124,12 @@ export default {
     border: none;
     font-size: 24px;
     cursor: pointer;
-    color: #666;
+    color: #2b2b2b;
+    transition: color 0.3s;
 }
 
 .close-btn:hover {
-    color: #333;
+    color: #fbcf67;
 }
 
 .edit-form {
@@ -1130,22 +1150,26 @@ export default {
 .form-group label {
     font-size: 14px;
     font-weight: bold;
-    color: #ae9a64;
+    color: #2b2b2b;
 }
 
 .form-group input,
 .form-group select {
     padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+    border: 1px solid #fbcf67;
+    border-radius: 8px;
     font-size: 14px;
     transition: border-color 0.3s;
+    background: rgba(255, 255, 255, 0.2);
+    color: #2b2b2b;
+    font-weight: 500;
 }
 
 .form-group input:focus,
 .form-group select:focus {
-    border-color: #ae9a64;
+    border-color: #e5b756;
     outline: none;
+    background: rgba(255, 255, 255, 0.3);
 }
 
 .image-upload {
@@ -1164,7 +1188,8 @@ export default {
 .current-image p,
 .preview-image-container p {
     font-size: 14px;
-    color: #666;
+    color: #2b2b2b;
+    opacity: 0.8;
 }
 
 .preview-image {
@@ -1172,23 +1197,24 @@ export default {
     height: 100px;
     object-fit: cover;
     border-radius: 8px;
-    border: 1px solid #ccc;
+    border: 1px solid #fbcf67;
 }
 
 .remove-preview {
     padding: 5px 10px;
-    background-color: #d33;
+    background: #d84315;
     color: white;
     border: none;
-    border-radius: 4px;
+    border-radius: 6px;
     cursor: pointer;
     font-size: 12px;
     width: fit-content;
     transition: background-color 0.3s;
+    font-weight: 500;
 }
 
 .remove-preview:hover {
-    background-color: #b32d2d;
+    background: #c62828;
 }
 
 .modal-actions {
@@ -1204,31 +1230,33 @@ export default {
 
 .right-actions button {
     padding: 10px 20px;
-    border-radius: 4px;
+    border-radius: 8px;
     font-size: 14px;
     cursor: pointer;
-    transition: background-color 0.3s, transform 0.1s;
+    transition: all 0.3s;
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .cancel-btn {
-    background-color: #ccc;
+    background: rgba(255, 255, 255, 0.3);
     border: none;
-    color: #1a1a1a;
+    color: #2b2b2b;
 }
 
 .cancel-btn:hover {
-    background-color: #b3b3b3;
+    background: rgba(255, 255, 255, 0.4);
     transform: scale(1.05);
 }
 
 .submit-btn {
-    background-color: #ae9a64;
+    background: #fbcf67;
     border: none;
-    color: #fff;
+    color: #2b2b2b;
 }
 
 .submit-btn:hover {
-    background-color: #8e7a50;
+    background: #e5b756;
     transform: scale(1.05);
 }
 
@@ -1239,7 +1267,8 @@ export default {
 .profile-details h3 {
     font-size: 20px;
     margin-bottom: 15px;
-    color: #ae9a64;
+    color: #2b2b2b;
+    font-weight: bold;
 }
 
 .profile-details .profile-photo {
@@ -1248,13 +1277,14 @@ export default {
     object-fit: cover;
     border-radius: 50%;
     margin-bottom: 15px;
-    border: 2px solid #ae9a64;
+    border: 2px solid #fbcf67;
 }
 
 .profile-details p {
     margin: 10px 0;
     font-size: 14px;
-    color: #333;
+    color: #2b2b2b;
+    font-weight: 500;
 }
 
 .profile-actions {
@@ -1270,7 +1300,7 @@ export default {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgba(0, 0, 0, 0.7);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -1278,46 +1308,50 @@ export default {
 }
 
 .popup-content {
-    background-color: #fff;
+    background: linear-gradient(135deg, #c2aa77, #b29a67);
     padding: 20px;
-    border-radius: 8px;
+    border-radius: 12px;
     width: 400px;
     text-align: center;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(251, 207, 103, 0.3);
 }
 
 .popup-content h3 {
     font-size: 18px;
     font-weight: bold;
     margin-bottom: 15px;
-    color: #ff4d4d;
+    color: #d84315;
 }
 
 .popup-content .success-text {
-    color: #00cc00;
+    color: #4caf50;
 }
 
 .user-info {
-    background-color: #f5f5f5;
+    background: rgba(255, 255, 255, 0.2);
     padding: 10px;
-    border-radius: 4px;
+    border-radius: 8px;
     margin-bottom: 15px;
 }
 
 .user-info p {
     margin: 5px 0;
     font-size: 14px;
-    /* color: #333; */
+    color: #2b2b2b;
+    font-weight: 500;
 }
 
 .warning-text,
 .success-text {
     font-size: 14px;
     margin-bottom: 20px;
+    font-weight: 500;
 }
 
 .warning-text {
-    color: #666;
+    color: #2b2b2b;
+    opacity: 0.8;
 }
 
 .popup-actions {
@@ -1328,43 +1362,45 @@ export default {
 
 .popup-actions .cancel-btn {
     padding: 10px 20px;
-    background-color: #ccc;
+    background: rgba(255, 255, 255, 0.3);
     border: none;
-    border-radius: 4px;
-    color: #1a1a1a;
+    border-radius: 8px;
+    color: #2b2b2b;
     cursor: pointer;
-    transition: background-color 0.3s, transform 0.1s;
+    transition: all 0.3s;
+    font-weight: 600;
 }
 
 .popup-actions .cancel-btn:hover {
-    background-color: #b3b3b3;
+    background: rgba(255, 255, 255, 0.4);
     transform: scale(1.05);
 }
 
 .popup-actions .confirm-btn {
     padding: 10px 20px;
     border: none;
-    border-radius: 4px;
+    border-radius: 8px;
     color: #fff;
     cursor: pointer;
-    transition: background-color 0.3s, transform 0.1s;
+    transition: all 0.3s;
+    font-weight: 600;
 }
 
 .popup-actions .confirm-btn.delete {
-    background-color: #ff4d4d;
+    background: #d84315;
 }
 
 .popup-actions .confirm-btn.delete:hover {
-    background-color: #e63939;
+    background: #c62828;
     transform: scale(1.05);
 }
 
 .popup-actions .confirm-btn.restore {
-    background-color: #00cc00;
+    background: #4caf50;
 }
 
 .popup-actions .confirm-btn.restore:hover {
-    background-color: #00b300;
+    background: #45a049;
     transform: scale(1.05);
 }
 
@@ -1374,33 +1410,35 @@ export default {
     align-items: center;
     gap: 8px;
     margin-top: 20px;
-    color: #fff;
+    color: #2b2b2b;
 }
 
 .pagination-btn {
     padding: 8px 12px;
-    background-color: #444;
+    background: rgba(255, 255, 255, 0.3);
     border: none;
-    border-radius: 4px;
-    color: #fff;
+    border-radius: 8px;
+    color: #2b2b2b;
     cursor: pointer;
     font-size: 14px;
-    transition: background-color 0.3s, transform 0.1s;
+    font-weight: 500;
+    transition: all 0.3s;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .pagination-btn:hover:not(:disabled) {
-    background-color: #ae9a64;
+    background: #fbcf67;
     transform: scale(1.05);
 }
 
 .pagination-btn:disabled {
-    background-color: #666;
+    background: rgba(255, 255, 255, 0.1);
     cursor: not-allowed;
     opacity: 0.6;
 }
 
 .pagination-btn.active {
-    background-color: #ae9a64;
+    background: #fbcf67;
     cursor: default;
     transform: none;
 }
@@ -1419,9 +1457,10 @@ export default {
 }
 
 .page-numbers span {
-    color: #fff;
+    color: #2b2b2b;
     font-size: 14px;
     margin: 0 5px;
+    font-weight: 500;
 }
 
 @media (max-width: 768px) {

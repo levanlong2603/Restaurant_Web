@@ -355,8 +355,8 @@ export default {
 <style scoped>
 .user-profile-page {
   font-family: 'Arial', sans-serif;
-  background: #1c2526;
-  color: #fff;
+  background: #c2aa77;
+  color: #2b2b2b;
   width: 100vw;
   min-height: 100vh;
   overflow-x: hidden;
@@ -371,17 +371,12 @@ export default {
   max-width: none;
   margin: 20px auto;
   padding: 30px 20px 20px;
-  background: linear-gradient(135deg, #2a3435, #1e2627);
-  border-radius: 10px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+  background: linear-gradient(135deg, #c2aa77, #b29a67);
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
   transition: margin-left 0.3s ease;
+  border: 1px solid rgba(251, 207, 103, 0.3);
 }
-
- /* Khi sidebar thu gọn */
-/* .profile-container.sidebar-collapsed {
-  margin-left: 10px;
- 
-} */
 
 .profile-content {
   display: flex;
@@ -408,7 +403,7 @@ export default {
   height: 100px;
   border-radius: 50%;
   object-fit: cover;
-  border: 2px solid #ae9a64;
+  border: 2px solid #fbcf67;
 }
 
 .upload-input {
@@ -425,7 +420,8 @@ export default {
 
 .preview-image-container p {
   font-size: 12px;
-  color: #ccc;
+  color: #2b2b2b;
+  font-weight: 500;
 }
 
 .preview-image {
@@ -433,23 +429,26 @@ export default {
   height: 80px;
   object-fit: cover;
   border-radius: 50%;
-  border: 1px solid #ae9a64;
+  border: 1px solid #fbcf67;
   margin-top: 5px;
 }
 
 .remove-preview {
   margin-top: 5px;
   padding: 5px 10px;
-  background-color: #d33;
+  background: #d84315;
   color: white;
   border: none;
-  border-radius: 4px;
+  border-radius: 6px;
   cursor: pointer;
   font-size: 12px;
+  font-weight: bold;
+  transition: all 0.3s ease;
 }
 
 .remove-preview:hover {
-  background-color: #b32d2d;
+  background: #b32d2d;
+  transform: scale(1.05);
 }
 
 .user-info {
@@ -460,12 +459,14 @@ export default {
 .display-name {
   font-size: 20px;
   font-weight: bold;
-  color: #ae9a64;
+  color: #2b2b2b;
 }
 
 .username {
   font-size: 16px;
-  color: #ccc;
+  color: #2b2b2b;
+  opacity: 0.8;
+  font-weight: 500;
 }
 
 .profile-right {
@@ -476,12 +477,18 @@ export default {
 .details-section,
 .contacts-section {
   margin-bottom: 18px;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 20px;
+  border-radius: 12px;
+  border: 1px solid rgba(251, 207, 103, 0.3);
 }
 
 .details-section h3,
 .contacts-section h3 {
-  color: #ae9a64;
+  color: #2b2b2b;
   text-transform: uppercase;
+  font-weight: bold;
+  margin-bottom: 15px;
 }
 
 .form-group {
@@ -492,23 +499,33 @@ export default {
   display: block;
   font-size: 14px;
   margin-bottom: 5px;
-  color: #ccc;
+  color: #2b2b2b;
+  font-weight: 500;
 }
 
 .form-group input {
   width: 90%;
-  padding: 8px;
-  border: 1px solid #ae9a64;
-  border-radius: 5px;
-  background: #1c2526;
-  color: #fff;
+  padding: 10px;
+  border: 1px solid #fbcf67;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.2);
+  color: #2b2b2b;
   font-size: 14px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: #e5b756;
+  background: rgba(255, 255, 255, 0.3);
+  box-shadow: 0 0 5px rgba(251, 207, 103, 0.5);
 }
 
 .action-buttons {
   display: flex;
   justify-content: flex-end;
-  gap: 10px;
+  gap: 15px;
   margin-top: 20px;
 }
 
@@ -516,28 +533,40 @@ export default {
 .cancel-btn,
 .save-btn,
 .change-password-btn {
-  padding: 10px 20px;
+  padding: 12px 24px;
   border: none;
-  border-radius: 20px;
+  border-radius: 8px;
   cursor: pointer;
   font-size: 16px;
-  margin-right: 20px;
+  font-weight: bold;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(251, 207, 103, 0.3);
 }
 
 .edit-btn,
-.change-password-btn {
-  background: #ae9a64;
-  color: #fff;
+.change-password-btn,
+.save-btn {
+  background: #fbcf67;
+  color: #2b2b2b;
+}
+
+.edit-btn:hover,
+.change-password-btn:hover,
+.save-btn:hover {
+  background: #e5b756;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
 .cancel-btn {
-  background: #ccc;
-  color: #333;
+  background: rgba(255, 255, 255, 0.3);
+  color: #2b2b2b;
 }
 
-.save-btn {
-  background: #ae9a64;
-  color: #fff;
+.cancel-btn:hover {
+  background: rgba(255, 255, 255, 0.4);
+  transform: translateY(-2px);
 }
 
 .modal {
@@ -546,7 +575,7 @@ export default {
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.7);
   z-index: 103;
   justify-content: center;
   align-items: center;
@@ -554,33 +583,37 @@ export default {
 }
 
 .modal-content {
-  background: #2a3435;
-  padding: 20px;
-  border-radius: 10px;
+  background: linear-gradient(135deg, #c2aa77, #b29a67);
+  padding: 30px;
+  border-radius: 12px;
   width: 400px;
   max-width: 90%;
   position: relative;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(251, 207, 103, 0.3);
 }
 
 .close-btn {
   position: absolute;
-  top: 10px;
-  right: 15px;
+  top: 15px;
+  right: 20px;
   font-size: 24px;
-  color: #ccc;  cursor: pointer;
+  color: #2b2b2b;
+  cursor: pointer;
+  font-weight: bold;
 }
 
 .modal-content h3 {
-  color: #ae9a64;
+  color: #2b2b2b;
   text-transform: uppercase;
   margin-bottom: 20px;
+  font-weight: bold;
 }
 
 .modal-actions {
   display: flex;
   justify-content: flex-end;
-  gap: 10px;
+  gap: 15px;
   margin-top: 20px;
 }
 </style>

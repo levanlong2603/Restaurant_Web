@@ -296,7 +296,7 @@ export default {
 .reservation-page {
   background-color: #c2aa77;
   min-height: 100vh;
-  color: #ffffff;
+  color: #2b2b2b;
 }
 
 .reservation {
@@ -309,30 +309,32 @@ export default {
   font-size: 48px;
   font-weight: bold;
   margin-bottom: 20px;
-  color: #fbcf67;
+  color: #2b2b2b;
   text-align: center;
   text-shadow: 0 0 5px #fbcf67, 0 0 30px #fbcf67;
 }
 
 .reservation-content .description {
   font-size: 16px;
-  color: #ffffff;
+  color: #2b2b2b;
   margin-bottom: 40px;
   text-align: center;
   line-height: 1.5;
+  font-weight: 500;
 }
 
 .divider {
   height: 1px;
-  background-color: rgba(255, 255, 255, 0.2);
+  background-color: rgba(43, 43, 43, 0.3);
   margin: 30px 0;
 }
 
 .reservation-form h2 {
   font-size: 20px;
-  color: #fbcf67;
+  color: #2b2b2b;
   margin-bottom: 20px;
   text-align: left;
+  font-weight: bold;
 }
 
 .form-group {
@@ -351,12 +353,12 @@ export default {
   display: block;
   font-size: 14px;
   font-weight: bold;
-  color: #fbcf67;
+  color: #2b2b2b;
   margin-bottom: 8px;
 }
 
 .required {
-  color: #ff4757;
+  color: #d84315;
 }
 
 .form-field input,
@@ -364,29 +366,31 @@ export default {
 .form-field textarea {
   width: 100%;
   padding: 12px;
-  background-color: #ffffff;
-  border: 1px solid #ddd;
-  color: #333;
-  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid #fbcf67;
+  color: #2b2b2b;
+  border-radius: 8px;
   font-size: 14px;
   box-sizing: border-box;
   transition: all 0.3s ease;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  font-weight: 500;
 }
 
 .form-field input:focus,
 .form-field select:focus,
 .form-field textarea:focus {
   outline: none;
-  border-color: #fbcf67;
+  border-color: #e5b756;
   box-shadow: 0 0 5px rgba(251, 207, 103, 0.5);
+  background: rgba(255, 255, 255, 0.3);
 }
 
 .form-field input:disabled,
 .form-field select:disabled,
 .form-field textarea:disabled {
-  background-color: #f5f5f5;
-  color: #888;
+  background: rgba(255, 255, 255, 0.1);
+  color: #666;
   cursor: not-allowed;
 }
 
@@ -400,18 +404,21 @@ export default {
 }
 
 .reservation-note {
-  background-color: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.15);
   padding: 20px;
-  border-radius: 8px;
+  border-radius: 12px;
   margin-bottom: 30px;
   text-align: left;
   border-left: 4px solid #fbcf67;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(251, 207, 103, 0.3);
 }
 
 .reservation-note p {
   margin-bottom: 10px;
   line-height: 1.5;
+  color: #2b2b2b;
+  font-weight: 500;
 }
 
 .reservation-note p:last-child {
@@ -419,15 +426,15 @@ export default {
 }
 
 .reservation-note strong {
-  color: #fbcf67;
+  color: #2b2b2b;
 }
 
 .reserve-button {
-  background-color: #fbcf67;
-  color: #2d2d2d;
+  background: linear-gradient(135deg, #fbcf67, #e5b756);
+  color: #2b2b2b;
   border: none;
   padding: 15px 40px;
-  border-radius: 5px;
+  border-radius: 8px;
   font-size: 16px;
   font-weight: bold;
   cursor: pointer;
@@ -439,32 +446,34 @@ export default {
   justify-content: center;
   gap: 8px;
   margin-bottom: 20px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(251, 207, 103, 0.3);
 }
 
 .reserve-button:hover:not(:disabled) {
-  background-color: #ffd700;
+  background: linear-gradient(135deg, #e5b756, #d4a745);
   transform: translateY(-2px);
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
 }
 
 .reserve-button:active:not(:disabled) {
   transform: translateY(0);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
 .reserve-button:disabled {
   cursor: not-allowed;
-  opacity: 0.8;
+  opacity: 0.6;
+  background: #a0a0a0;
 }
 
 .reserve-button.loading {
-  background-color: #e0e0e0;
+  background: #a0a0a0;
   color: #666;
 }
 
 .reserve-button.success {
-  background-color: #4CAF50;
+  background: linear-gradient(135deg, #28a745, #218838);
   color: white;
 }
 
@@ -473,7 +482,7 @@ export default {
   width: 18px;
   height: 18px;
   border: 2px solid transparent;
-  border-top: 2px solid #2d2d2d;
+  border-top: 2px solid #2b2b2b;
   border-radius: 50%;
   animation: spin 1s linear infinite;
 }
@@ -505,31 +514,31 @@ export default {
 }
 
 .success-modal {
-  background: linear-gradient(135deg, #c2aa77, #2d2d2d);
+  background: linear-gradient(135deg, #c2aa77, #b29a67);
   border-radius: 15px;
   padding: 40px;
   max-width: 500px;
   width: 90%;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
   border: 1px solid rgba(251, 207, 103, 0.3);
   animation: slideUp 0.4s ease;
 }
 
 .success-modal-content {
   text-align: center;
-  color: #ffffff;
+  color: #2b2b2b;
 }
 
 .success-icon {
   font-size: 64px;
-  color: #fbcf67;
+  color: #2b2b2b;
   margin-bottom: 20px;
   text-shadow: 0 0 10px rgba(251, 207, 103, 0.5);
 }
 
 .success-modal h3 {
   font-size: 28px;
-  color: #fbcf67;
+  color: #2b2b2b;
   margin-bottom: 15px;
   font-weight: bold;
 }
@@ -538,19 +547,22 @@ export default {
   margin-bottom: 15px;
   line-height: 1.6;
   font-size: 16px;
+  font-weight: 500;
 }
 
 .reservation-details {
-  background-color: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.2);
   padding: 20px;
-  border-radius: 10px;
+  border-radius: 12px;
   margin: 20px 0;
   text-align: left;
   border-left: 4px solid #fbcf67;
+  border: 1px solid rgba(251, 207, 103, 0.3);
 }
 
 .reservation-details p {
   margin-bottom: 8px;
+  font-weight: 500;
 }
 
 .reservation-details p:last-child {
@@ -558,23 +570,24 @@ export default {
 }
 
 .close-modal-button {
-  background-color: #fbcf67;
-  color: #2d2d2d;
+  background: linear-gradient(135deg, #fbcf67, #e5b756);
+  color: #2b2b2b;
   border: none;
   padding: 12px 30px;
-  border-radius: 5px;
+  border-radius: 8px;
   font-size: 16px;
   font-weight: bold;
   cursor: pointer;
   margin-top: 20px;
   transition: all 0.3s ease;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(251, 207, 103, 0.3);
 }
 
 .close-modal-button:hover {
-  background-color: #ffd700;
+  background: linear-gradient(135deg, #e5b756, #d4a745);
   transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
 }
 
 @keyframes fadeIn {

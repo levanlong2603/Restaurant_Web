@@ -195,7 +195,7 @@
   <style scoped>  
   .main-container {
     display: flex;
-    background: #1a1a1a;
+    background: #c2aa77;
     height: 100vh;
     overflow: hidden;
   }
@@ -204,13 +204,13 @@
     flex: 1;
     margin: 0;
     padding: 0;
-    background-color: #1a1a1a;
-    color: #ffffff;
+    background-color: #c2aa77;
+    color: #2b2b2b;
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    padding-right: 20px; /* Cho khoảng trống bên phải bảng */
-    transition: margin-left 0.3s ease; /* Hiệu ứng mượt mà khi sidebar thay đổi */
+    padding-right: 20px;
+    transition: margin-left 0.3s ease;
   }
 
   .reservation-management.sidebar-collapsed {
@@ -219,26 +219,26 @@
 
   .payment-page {
     flex: 1;
-    /* margin: 0 50px; */
     padding: 0 80px;
-    background-color: #1a1a1a;
-    color: #ffffff;
+    background-color: #c2aa77;
+    color: #2b2b2b;
     display: flex;
     flex-direction: column;
-    overflow-y: auto; /* Cho phép cuộn dọc */
+    overflow-y: auto;
   }
 
   .header {
-    background-color: #1a1a1a;
+    background-color: #c2aa77;
     align-items: center;
     padding: 10px
   }
   
   .header h1 {
-    color: white;
+    color: #2b2b2b;
     text-align: center;
     margin-top: 20px;
     margin-bottom: 10px;
+    font-weight: bold;
   }
   
   .select-table {
@@ -254,24 +254,35 @@
     width: 100px;
     height: 30px;
     padding: 5px;
-    border: 1px solid #464646;
-    border-radius: 4px;
-    background-color: #2a2a2a;
-    color: #ffffff;
+    border: 1px solid #fbcf67;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.2);
+    color: #2b2b2b;
     outline: none;
+    font-weight: 500;
+    transition: all 0.3s ease;
+  }
+
+  .header select:focus {
+    border-color: #e5b756;
+    background: rgba(255, 255, 255, 0.3);
   }
   
   .header .refresh-button {
     padding: 8px 16px;
-    background-color: #ae9a64;
-    color: white;
+    background: #fbcf67;
+    color: #2b2b2b;
     border: none;
-    border-radius: 4px;
+    border-radius: 8px;
     cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   }
   
   .header .refresh-button:hover {
-    background-color: #8e7a4e;
+    background: #e5b756;
+    transform: translateY(-2px);
   }
   
   .container {
@@ -281,7 +292,7 @@
   }
   
   .cart {
-    color: white;
+    color: #2b2b2b;
   }
   
   .bill {
@@ -293,8 +304,9 @@
   }
   
   .error-message {
-    color: #ff5555;
+    color: #d84315;
     text-align: center;
     margin: 20px 0;
+    font-weight: 500;
   }
-  </style>
+</style>

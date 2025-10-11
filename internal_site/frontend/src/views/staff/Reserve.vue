@@ -84,15 +84,15 @@ export default {
 <style scoped>
 .main-container {
   display: flex;
-  background: #1a1a1a;
+  background: #c2aa77;
 }
 
 .reservation-management {
   flex: 1;
   margin: 0;
   padding: 0;
-  background-color: #1a1a1a;
-  color: #ffffff;
+  background-color: #c2aa77;
+  color: #2b2b2b;
   display: flex;
   flex-direction: column;
   overflow: hidden;

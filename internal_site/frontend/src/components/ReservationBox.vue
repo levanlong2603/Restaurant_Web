@@ -164,8 +164,8 @@ export default {
 <style>
 .reservation-box{
     width: 800px;
-    color: #ffffff;
-    border-radius: 5px;
+    color: #2b2b2b;
+    border-radius: 10px;
     padding: 10px;
     display: flex;
     justify-content: center;
@@ -183,13 +183,15 @@ export default {
 
 .item{
     display: flex;
-    background-color: #161616;
+    background: linear-gradient(135deg, #c2aa77, #b29a67);
     justify-content: space-between;
     align-items: center;
-    border: 1px solid #4f4f4f63;
+    border: 1px solid rgba(251, 207, 103, 0.3);
     border-radius: 10px;
     padding: 15px;
     width: 100%;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    transition: transform 0.2s, box-shadow 0.2s;
 }
 
 
@@ -198,11 +200,12 @@ export default {
 }
 
 .clickable:hover {
-    background-color: #3d3d3d;
+    background: linear-gradient(135deg, #d4b887, #c2aa77);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.15);
 }
 
 .info{
-    /* display: flex; */
     flex-direction: column;
 }
 .actions{
@@ -213,36 +216,46 @@ export default {
     padding: 5px 10px;
     border: none;
     border-radius: 5px;
-    background-color: #ffffff;
+    background-color: #fbcf67;
     cursor: pointer;
     width: 100px;
     height: 40px;
+    color: #2b2b2b;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 
 .checkin-btn {
-    background-color: #00c92f;
+    background: linear-gradient(135deg, #28a745, #218838);
     color: #ffffff;
 }
 
 .cancel-btn{
-    background-color: #c90000;
+    background: linear-gradient(135deg, #dc3545, #c82333);
     color: #ffffff;
 }
 
 .checkout-btn, .order-btn, .customer-left-btn{
-    background-color: #0300a4;
+    background: linear-gradient(135deg, #007bff, #0056b3);
     color: #ffffff;
 }
 
 .checkin-btn:hover {
     transform: scale(1.05);
-    background-color: #00c92fb3;
-    color: #ffffff;
+    background: linear-gradient(135deg, #34ce57, #28a745);
+    box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
 }
 
 .cancel-btn:hover {
     transform: scale(1.05);
-    background-color: #c90000b3;
-    color: #ffffff;
+    background: linear-gradient(135deg, #e04a59, #dc3545);
+    box-shadow: 0 4px 15px rgba(220, 53, 69, 0.3);
+}
+
+.checkout-btn:hover, .order-btn:hover, .customer-left-btn:hover {
+    transform: scale(1.05);
+    background: linear-gradient(135deg, #0056b3, #004085);
+    box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
 }
 </style>

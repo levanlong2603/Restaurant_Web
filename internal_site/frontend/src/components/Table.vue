@@ -139,7 +139,7 @@ export default {
 h2 { 
   margin: 0 0 10px; 
   font-size: 24px; 
-  color: #fff; 
+  color: #2b2b2b; 
   text-align: center; 
 }
 
@@ -167,9 +167,10 @@ h2 {
 
 .table-grid { 
   padding: 20px; 
-  background: #333; 
+  background: linear-gradient(135deg, #c2aa77, #b29a67); 
   border-radius: 10px; 
-  box-shadow: 0 2px 10px rgba(0,0,0,0.3); 
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1); 
+  border: 1px solid rgba(251, 207, 103, 0.3);
 }
 .floor-1 { 
   display: grid; 
@@ -177,7 +178,6 @@ h2 {
   grid-template-rows: repeat(2, auto); 
   gap: 15px; 
   width: 90%;
-
 }
 .floor-2 { 
   display: grid; 
@@ -191,28 +191,33 @@ h2 {
   padding: 15px; 
   cursor: pointer; 
   transition: transform 0.2s, box-shadow 0.2s; 
-  color: #fff; 
+  color: #2b2b2b; 
   font-weight: bold; 
   display: flex; 
   flex-direction: column; 
   justify-content: center; 
   height: 60px; 
   margin: 0 auto; 
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
-.table:hover { transform: scale(1.05); box-shadow: 0 4px 15px rgba(0,0,0,0.4); }
+.table:hover { 
+  transform: scale(1.05); 
+  box-shadow: 0 6px 20px rgba(0,0,0,0.2); 
+}
 .table-2 { width: 60px; }
 .table-4 { width: 100px; }
-.available { background: linear-gradient(135deg, #28a745, #218838); }
-.serving { background: linear-gradient(135deg, #ffc107, #e0a800); }
-.reserved { background: linear-gradient(135deg, #fd7e14, #e06b00); }
+.available { background: linear-gradient(135deg, #fbcf67, #e5b756); }
+.serving { background: linear-gradient(135deg, #ffb347, #ff8c00); }
+.reserved { background: linear-gradient(135deg, #d4a574, #b08c5a); }
 .table small { 
   font-size: 12px; 
   margin-top: 5px; 
-  color: rgba(255,255,255,0.9); 
+  color: rgba(43,43,43,0.8); 
 }
 
 .selected {
-  border: 3px solid white;
+  border: 3px solid #2b2b2b;
+  box-shadow: 0 0 0 2px #fbcf67;
 }
 
 .legend { 
@@ -220,22 +225,25 @@ h2 {
   width: 200px;
   display: grid;
   padding: 15px; 
-  background: #333; 
+  background: linear-gradient(135deg, #c2aa77, #b29a67); 
   border-radius: 10px; 
   justify-content: center;
   align-items: center; 
-  box-shadow: 0 2px 5px rgba(0,0,0,0.3); 
-  
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  border: 1px solid rgba(251, 207, 103, 0.3);
 }
 .legend-item { 
   display: flex; 
   align-items: center; 
   gap: 8px; 
   font-size: 14px;
-  color: #fff;
+  color: #2b2b2b;
+  font-weight: 500;
 }
 .legend-box { 
   width: 20px; 
   height: 20px; 
-  border-radius: 4px; }
+  border-radius: 4px; 
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
 </style>

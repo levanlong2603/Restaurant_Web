@@ -325,7 +325,7 @@ export default {
 <style scoped>
 .main-container {
   display: flex;
-  background: #1a1a1a;
+  background: #c2aa77;
   height: 100vh;
   overflow: hidden;
 }
@@ -334,30 +334,30 @@ export default {
   flex: 1;
   margin: 0;
   padding: 0;
-  background-color: #1a1a1a;
-  color: #ffffff;
+  background-color: #c2aa77;
+  color: #2b2b2b;
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  padding-right: 20px; /* Cho khoảng trống bên phải bảng */
-  transition: margin-left 0.3s ease; /* Hiệu ứng mượt mà khi sidebar thay đổi */
+  padding-right: 20px;
+  transition: margin-left 0.3s ease;
 }
 
 .reservation-management.sidebar-collapsed {
   margin-left: 10px; 
 }
 
-
 .header {
-  background-color: #1a1a1a;
+  background-color: #c2aa77;
   padding: 20px;
-  border-bottom: 1px solid #444;
+  border-bottom: 1px solid #fbcf67;
 }
 
 .header h1 {
   text-align: center;
-  color: #ae9a64;
+  color: #2b2b2b;
   margin: 0 0 20px 0;
+  font-weight: bold;
 }
 
 .actions {
@@ -369,14 +369,23 @@ export default {
 .actions input,
 .actions select {
   padding: 10px;
-  border: 1px solid #555;
-  border-radius: 5px;
-  background-color: #444;
-  color: #fff;
+  border: 1px solid #fbcf67;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.2);
+  color: #2b2b2b;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.actions input:focus,
+.actions select:focus {
+  border-color: #e5b756;
+  background: rgba(255, 255, 255, 0.3);
+  outline: none;
 }
 
 .actions select {
-  background-color: #444;
+  background: rgba(255, 255, 255, 0.2);
 }
 
 .reservation-list-wrapper {
@@ -389,13 +398,15 @@ export default {
 .reservation-table {
   width: 98%;
   border-collapse: collapse;
-  background-color: #333;
-  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
   overflow: hidden;
+  border: 1px solid rgba(251, 207, 103, 0.3);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
 .reservation-table thead {
-  background-color: #444;
+  background: rgba(251, 207, 103, 0.3);
   top: 0;
   z-index: 5;
 }
@@ -405,9 +416,10 @@ export default {
   padding: 10px 15px;
   height: 35px;
   text-align: left;
-  border-bottom: 1px solid #555;
-  border-right: 1px solid #555;
+  border-bottom: 1px solid rgba(251, 207, 103, 0.3);
+  border-right: 1px solid rgba(251, 207, 103, 0.3);
   text-align: center;
+  font-weight: 500;
 }
 
 .reservation-table th:last-child,
@@ -417,7 +429,7 @@ export default {
 
 .reservation-table th {
   font-weight: bold;
-
+  color: #2b2b2b;
 }
 
 /* Cố định chiều rộng cho từng cột */
@@ -473,67 +485,76 @@ export default {
 
 /* Màu sắc trạng thái */
 .status.pending {
-  color: #e9c761;
+  color: #ff9800;
 }
 
 .status.preparing {
-  color: #17a2b8;
+  color: #2196f3;
 }
 
 .status.serving {
-  color: #28a745;
+  color: #4caf50;
 }
 
 .status.completed {
-  color: #6c757d;
+  color: #2b2b2b;
+  opacity: 0.7;
 }
 
 /* Nút hành động */
 .col-actions button {
-  color: #fff;
+  color: #2b2b2b;
   border: none;
-  padding: 5px 15px;
-  border-radius: 5px;
+  padding: 6px 12px;
+  border-radius: 6px;
   cursor: pointer;
-}
-.order-button:hover {
-  background-color: #0069d9;
-}
-.approve-button {
-  background-color: #28a745;
-  cursor: pointer;
-}
-.approve-button:hover {
-  background-color: #218838;
-}
-.checkin-button {
-  background-color: #007bff;
-  cursor: pointer;
-}
-.checkin-button:hover {
-  background-color: #0069d9;
-}
-.cancel-button {
-  background-color: #dc3545;
-  cursor: pointer;
-}
-.cancel-button:hover {
-  background-color: #c82333;
-}
-.checkout-button {
-  background-color: #007bff;
-  cursor: pointer;
-}
-.checkout-button:hover {
-  background-color: #0069d9;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .order-button {
-  background-color: #007bff;
-  cursor: pointer;
+  background: #fbcf67;
 }
 .order-button:hover {
-  background-color: #0069d9;
+  background: #e5b756;
+  transform: translateY(-1px);
+}
+
+.approve-button {
+  background: #4caf50;
+  color: white;
+}
+.approve-button:hover {
+  background: #45a049;
+  transform: translateY(-1px);
+}
+
+.checkin-button {
+  background: #2196f3;
+  color: white;
+}
+.checkin-button:hover {
+  background: #1976d2;
+  transform: translateY(-1px);
+}
+
+.cancel-button {
+  background: #d84315;
+  color: white;
+}
+.cancel-button:hover {
+  background: #c62828;
+  transform: translateY(-1px);
+}
+
+.checkout-button {
+  background: #2196f3;
+  color: white;
+}
+.checkout-button:hover {
+  background: #1976d2;
+  transform: translateY(-1px);
 }
 
 .reservation-table td.col-actions {
@@ -542,4 +563,12 @@ export default {
   align-items: center;      
 }
 
+/* Hiệu ứng hover cho hàng */
+.reservation-table tbody tr {
+  transition: background-color 0.3s ease;
+}
+
+.reservation-table tbody tr:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
 </style>

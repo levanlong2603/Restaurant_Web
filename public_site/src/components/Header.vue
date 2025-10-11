@@ -38,7 +38,7 @@ header {
   z-index: 1000;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   border-bottom: 2px solid #7a5429;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: 'Arial', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .header-container {
@@ -73,7 +73,7 @@ nav ul li {
 }
 
 nav ul li a {
-  color: #fff;
+  color: #fbcf67;
   text-decoration: none;
   font-size: 16px;
   font-weight: 600;
@@ -92,7 +92,7 @@ nav ul li a:hover {
 }
 
 nav ul li a.active {
-  color: #ffeb3b; /* Màu vàng nổi bật */
+  color: #fff; /* Màu vàng nổi bật */
   font-weight: 700;
   text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
   /* Không có background, không có border, không có gạch chân */

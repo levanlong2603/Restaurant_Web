@@ -2,7 +2,7 @@
   <div class="menu-page">
     <Header />
     <section class="menu">
-      <h1>MENU TINH HOA VIỆT</h1>
+      <h1>MENU LONG QUÂN AN</h1>
       <p class="description">
         Menu nhà hàng mang đến hương vị đậm đà, hòa quyện giữa truyền thống và tinh tế. <br>Mỗi món ăn đều được chế biến
         tỉ mỉ, giữ trọn tinh hoa ẩm thực Việt.
@@ -234,13 +234,11 @@ export default {
 };
 </script>
 
-
-
 <style scoped>
 .menu-page {
   background-color: #c2aa77;
   min-height: 100vh;
-  color: #ffffff;
+  color: #2b2b2b;
 }
 
 .menu {
@@ -254,14 +252,15 @@ export default {
   font-size: 48px;
   font-weight: bold;
   margin-bottom: 20px;
-  color: #fbcf67;
+  color: #2b2b2b;
   text-shadow: 0 0 5px #fbcf67, 0 0 30px #fbcf67;
 }
 
 .menu .description {
   font-size: 16px;
-  color: #fbcf67;
+  color: #2b2b2b;
   margin-bottom: 40px;
+  font-weight: 500;
 }
 
 /* Featured Dishes (Slide) */
@@ -271,9 +270,10 @@ export default {
 
 .featured-dishes h2 {
   font-size: 24px;
-  color: #fbcf67;
+  color: #2b2b2b;
   margin-bottom: 20px;
   text-align: left;
+  font-weight: bold;
 }
 
 .carousel {
@@ -285,10 +285,12 @@ export default {
   display: flex;
   align-items: center;
   gap: 20px;
-  background: #fff;
+  background: rgba(255, 255, 255, 0.15);
   padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(251, 207, 103, 0.3);
+  backdrop-filter: blur(10px);
 }
 
 .featured-image {
@@ -296,6 +298,7 @@ export default {
   height: 150px;
   object-fit: cover;
   border-radius: 8px;
+  border: 2px solid #fbcf67;
 }
 
 .featured-details {
@@ -306,27 +309,32 @@ export default {
 .featured-details h3 {
   display: block;
   font-size: 18px;
-  color: #333;
+  color: #2b2b2b;
   margin-bottom: 10px;
-  color: #000000;
+  font-weight: bold;
 }
 
 .featured-details p {
   font-size: 14px;
-  color: #666;
+  color: #2b2b2b;
   margin-bottom: 10px;
+  opacity: 0.8;
 }
 
 .featured-details .price {
   font-size: 16px;
-  color: #fbcf67;
+  color: #2b2b2b;
+  font-weight: bold;
 }
 
 .carousel__prev,
 .carousel__next {
-  color: #fbcf67;
-  background: none;
+  color: #2b2b2b;
+  background: #fbcf67;
   border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
 }
 
 .carousel__pagination-button--active {
@@ -336,37 +344,51 @@ export default {
 /* Thực đơn nhà hàng */
 .menu-items-section {
   padding: 20px;
-  background-color: #2a2a2a;
-  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  border: 1px solid rgba(251, 207, 103, 0.3);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
 .filter-section {
   display: flex;
   justify-content: center;
-  /* Căn giữa các phần tử */
-  gap: 10px;
+  gap: 15px;
   margin-bottom: 20px;
 }
 
 .category-select,
 .search-input {
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+  padding: 10px;
+  border: 1px solid #fbcf67;
+  border-radius: 8px;
   font-size: 14px;
+  background: rgba(255, 255, 255, 0.2);
+  color: #2b2b2b;
+  outline: none;
+  font-weight: 500;
+}
+
+.category-select option {
+  background: #c2aa77;
+  color: #2b2b2b;
 }
 
 .refresh-button {
-  padding: 8px 15px;
-  background-color: #fbcf67;
-  color: white;
+  padding: 10px 20px;
+  background: #fbcf67;
+  color: #2b2b2b;
   border: none;
-  border-radius: 4px;
+  border-radius: 8px;
   cursor: pointer;
+  font-weight: bold;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 
 .refresh-button:hover {
-  background-color: #e0b458;
+  background: #e5b756;
+  transform: translateY(-2px);
 }
 
 .menu-items {
@@ -375,14 +397,17 @@ export default {
 
 .category-header {
   font-size: 24px;
-  color: #fbcf67;
+  color: #2b2b2b;
   margin: 20px 0 10px;
   text-align: center;
-  /* Căn giữa tiêu đề danh mục */
+  font-weight: bold;
+  background: rgba(251, 207, 103, 0.3);
+  padding: 15px;
+  border-radius: 8px;
 }
 
 .menu-item {
-  margin-bottom: 10px;
+  margin-bottom: 15px;
 }
 
 .menu-item-content {
@@ -390,9 +415,17 @@ export default {
   align-items: center;
   gap: 20px;
   padding: 15px;
-  background-color: #fff;
-  border-radius: 8px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(251, 207, 103, 0.3);
+  transition: all 0.3s ease;
+}
+
+.menu-item-content:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
 }
 
 .menu-item-image {
@@ -400,6 +433,7 @@ export default {
   height: 100px;
   object-fit: cover;
   border-radius: 8px;
+  border: 2px solid #fbcf67;
 }
 
 .menu-item-details {
@@ -411,24 +445,28 @@ export default {
   font-size: 18px;
   font-weight: bold;
   margin-bottom: 5px;
-  color: #333;
+  color: #2b2b2b;
 }
 
 .menu-item-details p {
   font-size: 14px;
-  color: #666;
+  color: #2b2b2b;
   margin-bottom: 5px;
+  opacity: 0.8;
 }
 
 .price {
   font-size: 16px;
-  color: #fbcf67;
+  color: #2b2b2b;
+  font-weight: bold;
 }
 
 .no-items {
   text-align: center;
-  color: #fbcf67;
+  color: #2b2b2b;
   font-size: 16px;
+  font-weight: 500;
+  padding: 20px;
 }
 
 .pagination {
@@ -439,20 +477,31 @@ export default {
 }
 
 .pagination button {
-  padding: 5px 10px;
-  background-color: #fbcf67;
-  color: white;
+  padding: 8px 16px;
+  background: #fbcf67;
+  color: #2b2b2b;
   border: none;
-  border-radius: 4px;
+  border-radius: 8px;
   cursor: pointer;
+  font-weight: bold;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.pagination button:hover:not(:disabled) {
+  background: #e5b756;
+  transform: translateY(-2px);
 }
 
 .pagination button:disabled {
-  background-color: #ccc;
+  background: #a0a0a0;
   cursor: not-allowed;
+  transform: none;
 }
 
 .pagination span {
-  color: #fbcf67;
+  color: #2b2b2b;
+  font-weight: 500;
+  line-height: 40px;
 }
 </style>

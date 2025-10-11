@@ -335,29 +335,33 @@
   flex-direction: column; 
   gap: 15px; 
   padding: 15px; 
-  background: #333; 
+  background: linear-gradient(135deg, #c2aa77, #b29a67); 
   border-radius: 10px; 
-  box-shadow: 0 2px 5px rgba(0,0,0,0.3); 
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1); 
   width: 200px; 
+  border: 1px solid rgba(251, 207, 103, 0.3);
 }
 
 .tab-group { 
   display: flex; 
   gap: 20px; 
-  border-bottom: 2px solid #555; 
+  border-bottom: 2px solid #fbcf67; 
   padding-bottom: 5px; 
   margin-bottom: 10px; 
   justify-content: center;
-
 }
 
 .tab-group a { 
-  color: #fff; 
+  color: #2b2b2b; 
   text-decoration: none; 
   font-size: 16px; 
   font-weight: 500; 
   padding-bottom: 5px; 
   transition: color 0.3s; 
+}
+
+.tab-group a:hover {
+  color: #fbcf67;
 }
 
 .reset-button { 
@@ -366,23 +370,29 @@
   border: none; 
   cursor: pointer; 
   padding: 0; 
+  color: #2b2b2b;
 }
+
 .search-content, .reserve-content { 
   display: flex; 
   flex-direction: column; 
   gap: 13px; 
 }
+
 .search-bar-content input { 
   padding: 8px; 
-  border: 1px solid #555; 
+  border: 1px solid #fbcf67; 
   border-radius: 5px; 
   font-size: 14px; 
-  background: #444; 
-  color: #fff; 
+  background: rgba(255, 255, 255, 0.2); 
+  color: #2b2b2b; 
   width: 90%; 
   outline: none;
 }
 
+.search-bar-content input::placeholder {
+  color: rgba(43, 43, 43, 0.6);
+}
 
 .phone-number-input { 
   position: relative;
@@ -402,49 +412,50 @@
   width: 20px; 
   height: 20px; 
   cursor: pointer; 
+  color: #2b2b2b;
 }
 
 select {
   padding: 8px; 
-  border: 1px solid #555; 
+  border: 1px solid #fbcf67; 
   border-radius: 5px; 
   font-size: 14px; 
-  background: #444; 
-  color: #fff; 
-  border: 1px solid #555;
-  border-radius: 5px;
-  background-color: #444;
-  color: #fff;
-  font-size: 16px;
+  background: rgba(255, 255, 255, 0.2); 
+  color: #2b2b2b; 
   cursor: pointer;
   outline: none;
 }
 
 option {
-  background: #222;  
-  color: #fff;       
+  background: #c2aa77;  
+  color: #2b2b2b;       
 }
 
 option:checked {
-  background: #ae9a64;
-  color: #fff;
+  background: #fbcf67;
+  color: #2b2b2b;
 }
-
-
 
 .search-bar-content button { 
   padding: 10px; 
   border: none; 
-  background: #ae9a64; 
-  color: white; 
+  background: #fbcf67; 
+  color: #2b2b2b; 
   border-radius: 5px; 
   cursor: pointer; 
   transition: background 0.3s; 
+  font-weight: bold;
 }
-.search-bar-content button:hover { background: #0056b3; }
+
+.search-bar-content button:hover { 
+  background: #e5b756; 
+}
+
 .reserve-content button { 
   background: #28a745; 
+  color: white;
 }
+
 .reserve-content button:hover { 
   background: #218838; 
 }
