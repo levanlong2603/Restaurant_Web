@@ -1,23 +1,27 @@
 <template>
-  <header>
+  <header :class="{ scrolled: isScrolled }">
     <div class="header-container">
-      <img src="@/assets/images/Logo.png" alt="Logo Nhà hàng Tinh Hoa Việt" class="header-logo" />
+      <!-- Logo -->
+      <img
+        src="@/assets/images/Logo.png"
+        alt="Logo Nhà hàng Long Quân An"
+        class="header-logo"
+      />
+
+      <!-- Menu -->
       <nav>
         <ul>
-          <li>
-            <router-link to="/" active-class="active">GIỚI THIỆU</router-link>
-          </li>
-          <li>
-            <router-link to="/menu" active-class="active">THỰC ĐƠN</router-link>
-          </li>
-          <li>
-            <router-link to="/reservation" active-class="active">ĐẶT BÀN</router-link>
-          </li>
-          <li>
-            <router-link to="/contact" active-class="active">LIÊN HỆ</router-link>
-          </li>
+          <li><router-link to="/" active-class="active">{{ t('intro') }}</router-link></li>
+          <li><router-link to="/menu" active-class="active">{{ t('menu') }}</router-link></li>
+          <li><router-link to="/reservation" active-class="active">{{ t('reservation') }}</router-link></li>
+          <li><router-link to="/contact" active-class="active">{{ t('contact') }}</router-link></li>
         </ul>
       </nav>
+
+      <!-- Nút chuyển ngôn ngữ -->
+      <button class="lang-switch" @click="toggleLanguage">
+        {{ language === 'vi' ? 'EN' : 'VI' }}
+      </button>
     </div>
   </header>
 </template>
@@ -25,20 +29,60 @@
 <script>
 export default {
   name: 'Header',
+  data() {
+    return {
+      language: localStorage.getItem('lang') || 'vi',
+      isScrolled: false,
+      translations: {
+        vi: {
+          intro: 'GIỚI THIỆU',
+          menu: 'THỰC ĐƠN',
+          reservation: 'ĐẶT BÀN',
+          contact: 'LIÊN HỆ',
+        },
+        en: {
+          intro: 'ABOUT',
+          menu: 'MENU',
+          reservation: 'RESERVATION',
+          contact: 'CONTACT',
+        },
+      },
+    };
+  },
+  methods: {
+    toggleLanguage() {
+      this.language = this.language === 'vi' ? 'en' : 'vi';
+      localStorage.setItem('lang', this.language);
+    },
+    t(key) {
+      return this.translations[this.language][key];
+    },
+    handleScroll() {
+      this.isScrolled = window.scrollY > 20;
+    },
+  },
+  mounted() {
+    window.addEventListener('scroll', this.handleScroll);
+  },
+  beforeUnmount() {
+    window.removeEventListener('scroll', this.handleScroll);
+  },
 };
 </script>
 
 <style scoped>
+/* ===== HEADER ===== */
 header {
-  background: linear-gradient(135deg, #ae8346 0%, #8a6632 100%);
+  background: linear-gradient(135deg, #6b4226 0%, #8b5e3c 100%);
   padding: 8px 0;
   position: fixed;
   width: 100%;
   top: 0;
   z-index: 1000;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  border-bottom: 2px solid #7a5429;
+  box-shadow: 0 4px 12px rgba(107, 66, 38, 0.3);
+  border-bottom: 2px solid #e7c27d;
   font-family: 'Arial', Tahoma, Geneva, Verdana, sans-serif;
+  transition: all 0.3s ease;
 }
 
 .header-container {
@@ -50,11 +94,23 @@ header {
   padding: 0 20px;
 }
 
+/* ===== LOGO ===== */
 .header-logo {
   max-width: 50px;
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+  border: 2px solid #e7c27d;
+  border-radius: 8px;
+  padding: 2px;
+  background: #fff8e7;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+  transition: all 0.3s ease;
 }
 
+.header-logo:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(231, 194, 125, 0.3);
+}
+
+/* ===== NAVIGATION ===== */
 nav {
   flex-grow: 1;
   display: flex;
@@ -70,10 +126,11 @@ nav ul {
 
 nav ul li {
   margin: 0 15px;
+  position: relative;
 }
 
 nav ul li a {
-  color: #fbcf67;
+  color: #e7c27d;
   text-decoration: none;
   font-size: 16px;
   font-weight: 600;
@@ -83,55 +140,94 @@ nav ul li a {
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
   letter-spacing: 0.3px;
   display: block;
-  font-family: inherit;
+  border: 1px solid transparent;
 }
 
 nav ul li a:hover {
-  color: #f8f8f8;
-  background-color: rgba(255, 255, 255, 0.1);
+  color: #fff8e7;
+  background-color: rgba(231, 194, 125, 0.2);
+  border: 1px solid #e7c27d;
+  transform: translateY(-2px);
 }
 
 nav ul li a.active {
-  color: #fff; /* Màu vàng nổi bật */
+  color: #fff8e7;
+  background: linear-gradient(135deg, #e7c27d 0%, #8b5e3c 100%);
   font-weight: 700;
   text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
-  /* Không có background, không có border, không có gạch chân */
+  box-shadow: 0 2px 8px rgba(107, 66, 38, 0.4);
+  border: 1px solid #fff8e7;
 }
 
-/* Responsive cho màn hình nhỏ */
+
+/* ===== NÚT CHUYỂN NGÔN NGỮ ===== */
+.lang-switch {
+  background: rgba(231, 194, 125, 0.15);
+  border: 1px solid #e7c27d;
+  color: #e7c27d;
+  padding: 6px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 15px;
+  transition: all 0.3s ease;
+  letter-spacing: 0.5px;
+}
+
+.lang-switch:hover {
+  background: rgba(231, 194, 125, 0.3);
+  color: #fff8e7;
+  transform: translateY(-1px);
+}
+
+/* ===== SCROLL EFFECT ===== */
+header.scrolled {
+  padding: 5px 0;
+  background: rgba(107, 66, 38, 0.95);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 10px rgba(107, 66, 38, 0.4);
+}
+
+/* ===== RESPONSIVE ===== */
 @media (max-width: 768px) {
   .header-container {
     flex-direction: column;
+    gap: 8px;
     padding: 10px 20px;
   }
-  
-  .header-logo {
-    margin-bottom: 10px;
-  }
-  
-  nav ul li {
-    margin: 0 8px;
-  }
-  
-  nav ul li a {
-    font-size: 14px;
-    padding: 8px 12px;
-  }
-}
 
-@media (max-width: 480px) {
+  .header-logo {
+    max-width: 45px;
+  }
+
   nav ul {
     flex-wrap: wrap;
     justify-content: center;
   }
-  
+
   nav ul li {
-    margin: 5px;
+    margin: 5px 10px;
   }
-  
+
+  nav ul li a {
+    font-size: 14px;
+    padding: 8px 12px;
+  }
+
+  .lang-switch {
+    font-size: 13px;
+    padding: 5px 10px;
+  }
+}
+
+@media (max-width: 480px) {
   nav ul li a {
     font-size: 13px;
     padding: 6px 10px;
+  }
+
+  header {
+    padding: 5px 0;
   }
 }
 </style>

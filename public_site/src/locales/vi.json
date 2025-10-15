@@ -1,0 +1,16 @@
+{
+  "header": {
+    "home": "GIỚI THIỆU",
+    "menu": "THỰC ĐƠN",
+    "reservation": "ĐẶT BÀN",
+    "contact": "LIÊN HỆ"
+  },
+  "hero": {
+    "title": "Nhà Hàng Tinh Hoa Việt",
+    "subtitle": "Hương vị truyền thống - Tinh hoa ẩm thực"
+  },
+  "about": {
+    "title": "Về Chúng Tôi",
+    "content": "Nhà hàng Tinh Hoa Việt mang đến những món ăn truyền thống với hương vị đặc trưng..."
+  }
+}

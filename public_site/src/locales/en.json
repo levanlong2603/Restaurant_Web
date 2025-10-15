@@ -1,0 +1,16 @@
+{
+  "header": {
+    "home": "ABOUT",
+    "menu": "MENU",
+    "reservation": "RESERVATION",
+    "contact": "CONTACT"
+  },
+  "hero": {
+    "title": "Vietnamese Essence Restaurant",
+    "subtitle": "Traditional Flavors - Culinary Excellence"
+  },
+  "about": {
+    "title": "About Us",
+    "content": "Vietnamese Essence Restaurant offers traditional dishes with authentic flavors..."
+  }
+}

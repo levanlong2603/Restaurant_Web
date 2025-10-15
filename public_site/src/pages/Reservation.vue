@@ -294,47 +294,52 @@ export default {
 
 <style scoped>
 .reservation-page {
-  background-color: #c2aa77;
+  background-color: #FFF8E7; /* Trắng kem */
   min-height: 100vh;
-  color: #2b2b2b;
+  color: #3B2F2F; /* Đen nâu */
+  font-family: 'Arial', Tahoma, Geneva, Verdana, sans-serif; /* Đồng nhất font với menu */
 }
 
 .reservation {
   max-width: 800px;
   margin: 0 auto;
   padding: 100px 20px;
+  font-family: inherit; /* Kế thừa font */
 }
 
 .reservation-content h1 {
   font-size: 48px;
   font-weight: bold;
   margin-bottom: 20px;
-  color: #2b2b2b;
+  color: #6B4226; /* Nâu đất */
   text-align: center;
-  text-shadow: 0 0 5px #fbcf67, 0 0 30px #fbcf67;
+  text-shadow: 0 0 5px #E7C27D, 0 0 30px #E7C27D; /* Hiệu ứng vàng nhạt */
+  font-family: inherit; /* Đồng nhất font */
 }
 
 .reservation-content .description {
   font-size: 16px;
-  color: #2b2b2b;
+  color: #3B2F2F; /* Đen nâu */
   margin-bottom: 40px;
   text-align: center;
   line-height: 1.5;
   font-weight: 500;
+  font-family: inherit; /* Đồng nhất font */
 }
 
 .divider {
   height: 1px;
-  background-color: rgba(43, 43, 43, 0.3);
+  background: linear-gradient(to right, transparent, #E7C27D, transparent); /* Gradient vàng */
   margin: 30px 0;
 }
 
 .reservation-form h2 {
   font-size: 20px;
-  color: #2b2b2b;
+  color: #6B4226; /* Nâu đất */
   margin-bottom: 20px;
   text-align: left;
   font-weight: bold;
+  font-family: inherit; /* Đồng nhất font */
 }
 
 .form-group {
@@ -353,12 +358,13 @@ export default {
   display: block;
   font-size: 14px;
   font-weight: bold;
-  color: #2b2b2b;
+  color: #3B2F2F; /* Đen nâu */
   margin-bottom: 8px;
+  font-family: inherit; /* Đồng nhất font */
 }
 
 .required {
-  color: #d84315;
+  color: #D32F2F; /* Đỏ đậm */
 }
 
 .form-field input,
@@ -366,31 +372,32 @@ export default {
 .form-field textarea {
   width: 100%;
   padding: 12px;
-  background: rgba(255, 255, 255, 0.2);
-  border: 1px solid #fbcf67;
-  color: #2b2b2b;
+  background: rgba(255, 248, 231, 0.8); /* Trắng kem trong suốt */
+  border: 1px solid #8B5E3C; /* Nâu gỗ */
+  color: #3B2F2F; /* Đen nâu */
   border-radius: 8px;
   font-size: 14px;
   box-sizing: border-box;
   transition: all 0.3s ease;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 8px rgba(107, 66, 38, 0.1); /* Bóng nâu */
   font-weight: 500;
+  font-family: inherit; /* Đồng nhất font */
 }
 
 .form-field input:focus,
 .form-field select:focus,
 .form-field textarea:focus {
   outline: none;
-  border-color: #e5b756;
-  box-shadow: 0 0 5px rgba(251, 207, 103, 0.5);
-  background: rgba(255, 255, 255, 0.3);
+  border-color: #E7C27D; /* Vàng nhạt */
+  box-shadow: 0 0 0 3px rgba(231, 194, 125, 0.3);
+  background: #FFF8E7; /* Trắng kem */
 }
 
 .form-field input:disabled,
 .form-field select:disabled,
 .form-field textarea:disabled {
-  background: rgba(255, 255, 255, 0.1);
-  color: #666;
+  background: rgba(139, 94, 60, 0.1); /* Nâu gỗ trong suốt */
+  color: #8B5E3C; /* Nâu gỗ */
   cursor: not-allowed;
 }
 
@@ -404,21 +411,22 @@ export default {
 }
 
 .reservation-note {
-  background: rgba(255, 255, 255, 0.15);
+  background: rgba(231, 194, 125, 0.1); /* Vàng nhạt trong suốt */
   padding: 20px;
   border-radius: 12px;
   margin-bottom: 30px;
   text-align: left;
-  border-left: 4px solid #fbcf67;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-  border: 1px solid rgba(251, 207, 103, 0.3);
+  border-left: 4px solid #E7C27D; /* Viền vàng */
+  box-shadow: 0 4px 15px rgba(107, 66, 38, 0.1);
+  border: 1px solid rgba(231, 194, 125, 0.3);
 }
 
 .reservation-note p {
   margin-bottom: 10px;
   line-height: 1.5;
-  color: #2b2b2b;
+  color: #3B2F2F; /* Đen nâu */
   font-weight: 500;
+  font-family: inherit; /* Đồng nhất font */
 }
 
 .reservation-note p:last-child {
@@ -426,12 +434,12 @@ export default {
 }
 
 .reservation-note strong {
-  color: #2b2b2b;
+  color: #6B4226; /* Nâu đất */
 }
 
 .reserve-button {
-  background: linear-gradient(135deg, #fbcf67, #e5b756);
-  color: #2b2b2b;
+  background: linear-gradient(135deg, #E7C27D 0%, #8B5E3C 100%); /* Gradient vàng đến nâu */
+  color: #FFF8E7; /* Trắng kem */
   border: none;
   padding: 15px 40px;
   border-radius: 8px;
@@ -446,35 +454,37 @@ export default {
   justify-content: center;
   gap: 8px;
   margin-bottom: 20px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-  border: 1px solid rgba(251, 207, 103, 0.3);
+  box-shadow: 0 4px 15px rgba(107, 66, 38, 0.3);
+  border: 2px solid #FFF8E7; /* Viền trắng */
+  font-family: inherit; /* Đồng nhất font */
 }
 
 .reserve-button:hover:not(:disabled) {
-  background: linear-gradient(135deg, #e5b756, #d4a745);
+  background: linear-gradient(135deg, #FFF8E7 0%, #E7C27D 100%); /* Gradient trắng đến vàng */
+  color: #6B4226; /* Nâu đất */
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 6px 20px rgba(231, 194, 125, 0.4);
 }
 
 .reserve-button:active:not(:disabled) {
   transform: translateY(0);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 2px 8px rgba(107, 66, 38, 0.2);
 }
 
 .reserve-button:disabled {
   cursor: not-allowed;
   opacity: 0.6;
-  background: #a0a0a0;
+  background: #A89B8B; /* Nâu xám */
 }
 
 .reserve-button.loading {
-  background: #a0a0a0;
-  color: #666;
+  background: #A89B8B; /* Nâu xám */
+  color: #3B2F2F; /* Đen nâu */
 }
 
 .reserve-button.success {
-  background: linear-gradient(135deg, #28a745, #218838);
-  color: white;
+  background: linear-gradient(135deg, #388E3C, #2E7D32); /* Xanh lá */
+  color: #FFF8E7; /* Trắng kem */
 }
 
 /* Hiệu ứng loading spinner */
@@ -482,9 +492,13 @@ export default {
   width: 18px;
   height: 18px;
   border: 2px solid transparent;
-  border-top: 2px solid #2b2b2b;
+  border-top: 2px solid #FFF8E7; /* Trắng kem */
   border-radius: 50%;
   animation: spin 1s linear infinite;
+}
+
+.reserve-button:hover:not(:disabled) .button-spinner {
+  border-top: 2px solid #6B4226; /* Nâu đất khi hover */
 }
 
 @keyframes spin {
@@ -505,7 +519,7 @@ export default {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.7);
+  background-color: rgba(107, 66, 38, 0.8); /* Nâu đất trong suốt */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -514,33 +528,35 @@ export default {
 }
 
 .success-modal {
-  background: linear-gradient(135deg, #c2aa77, #b29a67);
+  background: linear-gradient(135deg, #FFF8E7 0%, #F5E3B3 100%); /* Gradient trắng kem đến be */
   border-radius: 15px;
   padding: 40px;
   max-width: 500px;
   width: 90%;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-  border: 1px solid rgba(251, 207, 103, 0.3);
+  box-shadow: 0 10px 30px rgba(107, 66, 38, 0.4);
+  border: 2px solid #E7C27D; /* Viền vàng */
   animation: slideUp 0.4s ease;
 }
 
 .success-modal-content {
   text-align: center;
-  color: #2b2b2b;
+  color: #3B2F2F; /* Đen nâu */
+  font-family: inherit; /* Đồng nhất font */
 }
 
 .success-icon {
   font-size: 64px;
-  color: #2b2b2b;
+  color: #8B5E3C; /* Nâu gỗ */
   margin-bottom: 20px;
-  text-shadow: 0 0 10px rgba(251, 207, 103, 0.5);
+  text-shadow: 0 0 10px rgba(231, 194, 125, 0.5);
 }
 
 .success-modal h3 {
   font-size: 28px;
-  color: #2b2b2b;
+  color: #6B4226; /* Nâu đất */
   margin-bottom: 15px;
   font-weight: bold;
+  font-family: inherit; /* Đồng nhất font */
 }
 
 .success-modal p {
@@ -548,21 +564,25 @@ export default {
   line-height: 1.6;
   font-size: 16px;
   font-weight: 500;
+  color: #3B2F2F; /* Đen nâu */
+  font-family: inherit; /* Đồng nhất font */
 }
 
 .reservation-details {
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(231, 194, 125, 0.1); /* Vàng nhạt trong suốt */
   padding: 20px;
   border-radius: 12px;
   margin: 20px 0;
   text-align: left;
-  border-left: 4px solid #fbcf67;
-  border: 1px solid rgba(251, 207, 103, 0.3);
+  border-left: 4px solid #E7C27D; /* Viền vàng */
+  border: 1px solid rgba(231, 194, 125, 0.3);
 }
 
 .reservation-details p {
   margin-bottom: 8px;
   font-weight: 500;
+  color: #3B2F2F; /* Đen nâu */
+  font-family: inherit; /* Đồng nhất font */
 }
 
 .reservation-details p:last-child {
@@ -570,8 +590,8 @@ export default {
 }
 
 .close-modal-button {
-  background: linear-gradient(135deg, #fbcf67, #e5b756);
-  color: #2b2b2b;
+  background: linear-gradient(135deg, #E7C27D 0%, #8B5E3C 100%); /* Gradient vàng đến nâu */
+  color: #FFF8E7; /* Trắng kem */
   border: none;
   padding: 12px 30px;
   border-radius: 8px;
@@ -580,14 +600,16 @@ export default {
   cursor: pointer;
   margin-top: 20px;
   transition: all 0.3s ease;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-  border: 1px solid rgba(251, 207, 103, 0.3);
+  box-shadow: 0 2px 8px rgba(107, 66, 38, 0.3);
+  border: 2px solid #FFF8E7; /* Viền trắng */
+  font-family: inherit; /* Đồng nhất font */
 }
 
 .close-modal-button:hover {
-  background: linear-gradient(135deg, #e5b756, #d4a745);
+  background: linear-gradient(135deg, #FFF8E7 0%, #E7C27D 100%); /* Gradient trắng đến vàng */
+  color: #6B4226; /* Nâu đất */
   transform: translateY(-2px);
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 4px 15px rgba(231, 194, 125, 0.4);
 }
 
 @keyframes fadeIn {
@@ -632,6 +654,29 @@ export default {
   
   .success-icon {
     font-size: 48px;
+  }
+  
+  .reserve-button {
+    padding: 12px 30px;
+    font-size: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .reservation-content h1 {
+    font-size: 28px;
+  }
+  
+  .reservation {
+    padding: 60px 10px;
+  }
+  
+  .success-modal {
+    padding: 25px 15px;
+  }
+  
+  .success-modal h3 {
+    font-size: 22px;
   }
 }
 </style>

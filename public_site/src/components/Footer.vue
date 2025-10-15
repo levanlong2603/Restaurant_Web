@@ -61,11 +61,12 @@
 
 <style scoped>
 .footer {
-  background: #ae8346;
-  color: #fff;
+  background: linear-gradient(135deg, #6B4226 0%, #8B5E3C 100%); /* Gradient nâu đất đến nâu gỗ */
+  color: #FFF8E7; /* Trắng kem */
   padding: 40px 20px 20px;
   font-family: 'Arial', sans-serif;
-  box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 -4px 15px rgba(107, 66, 38, 0.4); /* Bóng màu nâu */
+  border-top: 2px solid #E7C27D; /* Viền vàng nhạt */
 }
 
 .footer-content {
@@ -86,11 +87,12 @@
 
 .restaurant-name {
   font-size: 24px;
-  color: #fbcf67;
+  color: #E7C27D; /* Vàng nhạt */
   margin-bottom: 20px;
   text-transform: uppercase;
   font-weight: 700;
   letter-spacing: 0.5px;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
 }
 
 .contact-info {
@@ -105,17 +107,19 @@
   font-size: 16px;
   margin-bottom: 5px;
   font-weight: 600;
+  color: #FFF8E7; /* Trắng kem */
 }
 
 .location p, .email, .parking {
   font-size: 14px;
-  opacity: 0.8;
+  opacity: 0.9;
   margin-bottom: 5px;
+  color: #F5E3B3; /* Be nhạt */
 }
 
 .divider {
   width: 1px;
-  background: #444;
+  background: linear-gradient(to bottom, transparent, #E7C27D, transparent); /* Gradient vàng */
   margin: 0 20px;
 }
 
@@ -126,14 +130,16 @@
 .opening-hours h3, .social-media h3 {
   font-size: 18px;
   margin-bottom: 15px;
-  color: #fbcf67;
+  color: #E7C27D; /* Vàng nhạt */
   font-weight: 600;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
 }
 
 .opening-hours p {
   font-size: 14px;
   margin-bottom: 8px;
-  opacity: 0.8;
+  opacity: 0.9;
+  color: #F5E3B3; /* Be nhạt */
 }
 
 .social-media {
@@ -151,25 +157,28 @@
   justify-content: center;
   width: 40px;
   height: 40px;
-  background: #fbcf67;
+  background: linear-gradient(135deg, #E7C27D 0%, #8B5E3C 100%); /* Gradient vàng đến nâu */
   border-radius: 50%;
-  color: #2c2c2c;
+  color: #FFF8E7; /* Trắng kem */
   font-size: 18px;
   transition: all 0.3s ease;
-  text-decoration: none; /* Bỏ gạch chân */
+  text-decoration: none;
+  border: 1px solid #FFF8E7;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
 .social-icon:hover {
-  background: #fff;
-  color: #2c2c2c;
-  transform: scale(1.1);
+  background: linear-gradient(135deg, #FFF8E7 0%, #E7C27D 100%); /* Gradient trắng đến vàng */
+  color: #6B4226; /* Nâu đất */
+  transform: scale(1.1) translateY(-2px);
+  box-shadow: 0 4px 12px rgba(231, 194, 125, 0.4);
 }
 
 .footer-bottom {
   max-width: 1100px;
   margin: 20px auto 0;
   padding-top: 20px;
-  border-top: 1px solid #444;
+  border-top: 1px solid rgba(231, 194, 125, 0.3); /* Viền vàng trong suốt */
 }
 
 .footer-bottom-content {
@@ -182,8 +191,14 @@
 
 .copyright {
   font-size: 14px;
-  opacity: 0.7;
+  opacity: 0.9;
   margin: 0;
+  color: #F5E3B3; /* Be nhạt */
+}
+
+.copyright strong {
+  color: #E7C27D; /* Vàng nhạt */
+  font-weight: 700;
 }
 
 .footer-links {
@@ -193,20 +208,32 @@
 }
 
 .footer-links a {
-  color: #fff;
-  text-decoration: none; /* Bỏ gạch chân */
+  color: #F5E3B3; /* Be nhạt */
+  text-decoration: none;
   font-size: 14px;
-  opacity: 0.7;
-  transition: opacity 0.3s ease;
+  opacity: 0.9;
+  transition: all 0.3s ease;
+  font-weight: 500;
 }
 
 .footer-links a:hover {
   opacity: 1;
-  color: #fbcf67;
+  color: #E7C27D; /* Vàng nhạt */
+  transform: translateY(-1px);
 }
 
 .separator {
   opacity: 0.5;
+  color: #E7C27D; /* Vàng nhạt */
+}
+
+/* Hiệu ứng cho toàn bộ footer */
+.footer-content > div {
+  transition: transform 0.3s ease;
+}
+
+.footer-content > div:hover {
+  transform: translateY(-5px);
 }
 
 /* Responsive */
@@ -221,6 +248,7 @@
     width: 100%;
     height: 1px;
     margin: 10px 0;
+    background: linear-gradient(to right, transparent, #E7C27D, transparent); /* Gradient ngang */
   }
   
   .restaurant-name {
@@ -235,5 +263,50 @@
     flex-wrap: wrap;
     justify-content: center;
   }
+  
+  .opening-hours, .social-media {
+    flex: 1;
+    min-width: 100%;
+  }
 }
+
+@media (max-width: 480px) {
+  .footer {
+    padding: 30px 15px 15px;
+  }
+  
+  .restaurant-name {
+    font-size: 18px;
+  }
+  
+  .footer-content {
+    gap: 25px;
+  }
+  
+  .social-icon {
+    width: 35px;
+    height: 35px;
+    font-size: 16px;
+  }
+}
+
+/* Animation subtle */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.footer-content > div {
+  animation: fadeInUp 0.6s ease forwards;
+}
+
+.footer-content > div:nth-child(1) { animation-delay: 0.1s; }
+.footer-content > div:nth-child(2) { animation-delay: 0.2s; }
+.footer-content > div:nth-child(3) { animation-delay: 0.3s; }
 </style>

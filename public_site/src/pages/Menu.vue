@@ -236,9 +236,9 @@ export default {
 
 <style scoped>
 .menu-page {
-  background-color: #c2aa77;
+  background-color: #FFF8E7; /* Trắng kem - nền chính */
   min-height: 100vh;
-  color: #2b2b2b;
+  color: #3B2F2F; /* Đen nâu - chữ chính */
 }
 
 .menu {
@@ -252,13 +252,13 @@ export default {
   font-size: 48px;
   font-weight: bold;
   margin-bottom: 20px;
-  color: #2b2b2b;
-  text-shadow: 0 0 5px #fbcf67, 0 0 30px #fbcf67;
+  color: #6B4226; /* Nâu đất - tiêu đề chính */
+  text-shadow: 0 0 5px #E7C27D, 0 0 30px #E7C27D; /* Vàng nhạt cho hiệu ứng */
 }
 
 .menu .description {
   font-size: 16px;
-  color: #2b2b2b;
+  color: #3B2F2F; /* Đen nâu */
   margin-bottom: 40px;
   font-weight: 500;
 }
@@ -270,7 +270,7 @@ export default {
 
 .featured-dishes h2 {
   font-size: 24px;
-  color: #2b2b2b;
+  color: #6B4226; /* Nâu đất */
   margin-bottom: 20px;
   text-align: left;
   font-weight: bold;
@@ -285,11 +285,11 @@ export default {
   display: flex;
   align-items: center;
   gap: 20px;
-  background: rgba(255, 255, 255, 0.15);
+  background: rgba(139, 94, 60, 0.1); /* Nâu gỗ với độ trong suốt */
   padding: 20px;
   border-radius: 12px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-  border: 1px solid rgba(251, 207, 103, 0.3);
+  box-shadow: 0 4px 15px rgba(107, 66, 38, 0.2); /* Nâu đất */
+  border: 1px solid #E7C27D; /* Vàng nhạt */
   backdrop-filter: blur(10px);
 }
 
@@ -298,7 +298,7 @@ export default {
   height: 150px;
   object-fit: cover;
   border-radius: 8px;
-  border: 2px solid #fbcf67;
+  border: 2px solid #8B5E3C; /* Nâu gỗ */
 }
 
 .featured-details {
@@ -309,28 +309,28 @@ export default {
 .featured-details h3 {
   display: block;
   font-size: 18px;
-  color: #2b2b2b;
+  color: #6B4226; /* Nâu đất */
   margin-bottom: 10px;
   font-weight: bold;
 }
 
 .featured-details p {
   font-size: 14px;
-  color: #2b2b2b;
+  color: #3B2F2F; /* Đen nâu */
   margin-bottom: 10px;
   opacity: 0.8;
 }
 
 .featured-details .price {
   font-size: 16px;
-  color: #2b2b2b;
+  color: #6B4226; /* Nâu đất */
   font-weight: bold;
 }
 
 .carousel__prev,
 .carousel__next {
-  color: #2b2b2b;
-  background: #fbcf67;
+  color: #3B2F2F; /* Đen nâu */
+  background: #E7C27D; /* Vàng nhạt */
   border: none;
   border-radius: 50%;
   width: 40px;
@@ -338,16 +338,16 @@ export default {
 }
 
 .carousel__pagination-button--active {
-  background: #fbcf67;
+  background: #8B5E3C; /* Nâu gỗ */
 }
 
 /* Thực đơn nhà hàng */
 .menu-items-section {
   padding: 20px;
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(231, 194, 125, 0.1); /* Vàng nhạt với độ trong suốt */
   border-radius: 12px;
-  border: 1px solid rgba(251, 207, 103, 0.3);
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  border: 1px solid #E7C27D; /* Vàng nhạt */
+  box-shadow: 0 4px 15px rgba(107, 66, 38, 0.1); /* Nâu đất nhạt */
 }
 
 .filter-section {
@@ -360,34 +360,34 @@ export default {
 .category-select,
 .search-input {
   padding: 10px;
-  border: 1px solid #fbcf67;
+  border: 1px solid #8B5E3C; /* Nâu gỗ */
   border-radius: 8px;
   font-size: 14px;
-  background: rgba(255, 255, 255, 0.2);
-  color: #2b2b2b;
+  background: rgba(255, 248, 231, 0.8); /* Trắng kem */
+  color: #3B2F2F; /* Đen nâu */
   outline: none;
   font-weight: 500;
 }
 
 .category-select option {
-  background: #c2aa77;
-  color: #2b2b2b;
+  background: #FFF8E7; /* Trắng kem */
+  color: #3B2F2F; /* Đen nâu */
 }
 
 .refresh-button {
   padding: 10px 20px;
-  background: #fbcf67;
-  color: #2b2b2b;
+  background: #8B5E3C; /* Nâu gỗ */
+  color: #FFF8E7; /* Trắng kem */
   border: none;
   border-radius: 8px;
   cursor: pointer;
   font-weight: bold;
   transition: all 0.3s ease;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 8px rgba(107, 66, 38, 0.3); /* Nâu đất */
 }
 
 .refresh-button:hover {
-  background: #e5b756;
+  background: #6B4226; /* Nâu đất */
   transform: translateY(-2px);
 }
 
@@ -397,13 +397,14 @@ export default {
 
 .category-header {
   font-size: 24px;
-  color: #2b2b2b;
+  color: #FFF8E7; /* Trắng kem */
   margin: 20px 0 10px;
   text-align: center;
   font-weight: bold;
-  background: rgba(251, 207, 103, 0.3);
+  background: linear-gradient(135deg, #8B5E3C, #6B4226); /* Gradient nâu gỗ đến nâu đất */
   padding: 15px;
   border-radius: 8px;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
 }
 
 .menu-item {
@@ -415,17 +416,17 @@ export default {
   align-items: center;
   gap: 20px;
   padding: 15px;
-  background: rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.9); /* Trắng trong suốt */
   border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  border: 1px solid rgba(251, 207, 103, 0.3);
+  box-shadow: 0 2px 8px rgba(107, 66, 38, 0.1); /* Nâu đất nhạt */
+  border: 1px solid #E7C27D; /* Vàng nhạt */
   transition: all 0.3s ease;
 }
 
 .menu-item-content:hover {
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 1); /* Trắng đặc */
   transform: translateY(-2px);
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 4px 15px rgba(107, 66, 38, 0.2); /* Nâu đất */
 }
 
 .menu-item-image {
@@ -433,7 +434,7 @@ export default {
   height: 100px;
   object-fit: cover;
   border-radius: 8px;
-  border: 2px solid #fbcf67;
+  border: 2px solid #8B5E3C; /* Nâu gỗ */
 }
 
 .menu-item-details {
@@ -445,25 +446,25 @@ export default {
   font-size: 18px;
   font-weight: bold;
   margin-bottom: 5px;
-  color: #2b2b2b;
+  color: #6B4226; /* Nâu đất */
 }
 
 .menu-item-details p {
   font-size: 14px;
-  color: #2b2b2b;
+  color: #3B2F2F; /* Đen nâu */
   margin-bottom: 5px;
   opacity: 0.8;
 }
 
 .price {
   font-size: 16px;
-  color: #2b2b2b;
+  color: #6B4226; /* Nâu đất */
   font-weight: bold;
 }
 
 .no-items {
   text-align: center;
-  color: #2b2b2b;
+  color: #3B2F2F; /* Đen nâu */
   font-size: 16px;
   font-weight: 500;
   padding: 20px;
@@ -478,29 +479,29 @@ export default {
 
 .pagination button {
   padding: 8px 16px;
-  background: #fbcf67;
-  color: #2b2b2b;
+  background: #8B5E3C; /* Nâu gỗ */
+  color: #FFF8E7; /* Trắng kem */
   border: none;
   border-radius: 8px;
   cursor: pointer;
   font-weight: bold;
   transition: all 0.3s ease;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 8px rgba(107, 66, 38, 0.3); /* Nâu đất */
 }
 
 .pagination button:hover:not(:disabled) {
-  background: #e5b756;
+  background: #6B4226; /* Nâu đất */
   transform: translateY(-2px);
 }
 
 .pagination button:disabled {
-  background: #a0a0a0;
+  background: #A89B8B; /* Nâu xám nhạt */
   cursor: not-allowed;
   transform: none;
 }
 
 .pagination span {
-  color: #2b2b2b;
+  color: #3B2F2F; /* Đen nâu */
   font-weight: 500;
   line-height: 40px;
 }
