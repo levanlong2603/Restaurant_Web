@@ -355,8 +355,8 @@ export default {
 <style scoped>
 .user-profile-page {
   font-family: 'Arial', sans-serif;
-  background: #c2aa77;
-  color: #2b2b2b;
+  background: #FFF8E7; /* Trắng kem */
+  color: #3B2F2F; /* Đen nâu */
   width: 100vw;
   min-height: 100vh;
   overflow-x: hidden;
@@ -371,11 +371,11 @@ export default {
   max-width: none;
   margin: 20px auto;
   padding: 30px 20px 20px;
-  background: linear-gradient(135deg, #c2aa77, #b29a67);
+  background: linear-gradient(135deg, #8B5E3C, #6B4226); /* Gradient nâu */
   border-radius: 12px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 15px rgba(107, 66, 38, 0.3); /* Bóng nâu */
   transition: margin-left 0.3s ease;
-  border: 1px solid rgba(251, 207, 103, 0.3);
+  border: 1px solid #E7C27D; /* Viền vàng */
 }
 
 .profile-content {
@@ -403,7 +403,7 @@ export default {
   height: 100px;
   border-radius: 50%;
   object-fit: cover;
-  border: 2px solid #fbcf67;
+  border: 2px solid #E7C27D; /* Vàng nhạt */
 }
 
 .upload-input {
@@ -420,7 +420,7 @@ export default {
 
 .preview-image-container p {
   font-size: 12px;
-  color: #2b2b2b;
+  color: #FFF8E7; /* Trắng kem */
   font-weight: 500;
 }
 
@@ -429,15 +429,15 @@ export default {
   height: 80px;
   object-fit: cover;
   border-radius: 50%;
-  border: 1px solid #fbcf67;
+  border: 1px solid #E7C27D; /* Vàng nhạt */
   margin-top: 5px;
 }
 
 .remove-preview {
   margin-top: 5px;
   padding: 5px 10px;
-  background: #d84315;
-  color: white;
+  background: #D32F2F; /* Đỏ đậm */
+  color: #FFF8E7; /* Trắng kem */
   border: none;
   border-radius: 6px;
   cursor: pointer;
@@ -447,7 +447,7 @@ export default {
 }
 
 .remove-preview:hover {
-  background: #b32d2d;
+  background: #B71C1C; /* Đỏ đậm hơn */
   transform: scale(1.05);
 }
 
@@ -459,13 +459,19 @@ export default {
 .display-name {
   font-size: 20px;
   font-weight: bold;
-  color: #2b2b2b;
+  color: #FFF8E7; /* Trắng kem */
 }
 
 .username {
   font-size: 16px;
-  color: #2b2b2b;
+  color: #F5E3B3; /* Be nhạt */
   opacity: 0.8;
+  font-weight: 500;
+}
+
+.role {
+  font-size: 14px;
+  color: #E7C27D; /* Vàng nhạt */
   font-weight: 500;
 }
 
@@ -477,15 +483,15 @@ export default {
 .details-section,
 .contacts-section {
   margin-bottom: 18px;
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 248, 231, 0.1); /* Trắng kem trong suốt */
   padding: 20px;
   border-radius: 12px;
-  border: 1px solid rgba(251, 207, 103, 0.3);
+  border: 1px solid rgba(231, 194, 125, 0.3); /* Vàng nhạt trong suốt */
 }
 
 .details-section h3,
 .contacts-section h3 {
-  color: #2b2b2b;
+  color: #FFF8E7; /* Trắng kem */
   text-transform: uppercase;
   font-weight: bold;
   margin-bottom: 15px;
@@ -499,17 +505,17 @@ export default {
   display: block;
   font-size: 14px;
   margin-bottom: 5px;
-  color: #2b2b2b;
+  color: #F5E3B3; /* Be nhạt */
   font-weight: 500;
 }
 
 .form-group input {
   width: 90%;
   padding: 10px;
-  border: 1px solid #fbcf67;
+  border: 1px solid #E7C27D; /* Vàng nhạt */
   border-radius: 8px;
-  background: rgba(255, 255, 255, 0.2);
-  color: #2b2b2b;
+  background: rgba(255, 248, 231, 0.2); /* Trắng kem trong suốt */
+  color: #FFF8E7; /* Trắng kem */
   font-size: 14px;
   font-weight: 500;
   transition: all 0.3s ease;
@@ -517,9 +523,14 @@ export default {
 
 .form-group input:focus {
   outline: none;
-  border-color: #e5b756;
-  background: rgba(255, 255, 255, 0.3);
-  box-shadow: 0 0 5px rgba(251, 207, 103, 0.5);
+  border-color: #F5E3B3; /* Be nhạt */
+  background: rgba(255, 248, 231, 0.3);
+  box-shadow: 0 0 5px rgba(231, 194, 125, 0.5);
+}
+
+.form-group input:readonly {
+  background: rgba(139, 94, 60, 0.3); /* Nâu gỗ trong suốt */
+  color: #F5E3B3; /* Be nhạt */
 }
 
 .action-buttons {
@@ -540,32 +551,32 @@ export default {
   font-size: 16px;
   font-weight: bold;
   transition: all 0.3s ease;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  border: 1px solid rgba(251, 207, 103, 0.3);
+  box-shadow: 0 2px 8px rgba(107, 66, 38, 0.3); /* Bóng nâu */
+  border: 1px solid #FFF8E7; /* Viền trắng */
 }
 
 .edit-btn,
 .change-password-btn,
 .save-btn {
-  background: #fbcf67;
-  color: #2b2b2b;
+  background: #E7C27D; /* Vàng nhạt */
+  color: #6B4226; /* Nâu đất */
 }
 
 .edit-btn:hover,
 .change-password-btn:hover,
 .save-btn:hover {
-  background: #e5b756;
+  background: #F5E3B3; /* Be nhạt */
   transform: translateY(-2px);
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 15px rgba(231, 194, 125, 0.4);
 }
 
 .cancel-btn {
-  background: rgba(255, 255, 255, 0.3);
-  color: #2b2b2b;
+  background: rgba(255, 248, 231, 0.3); /* Trắng kem trong suốt */
+  color: #FFF8E7; /* Trắng kem */
 }
 
 .cancel-btn:hover {
-  background: rgba(255, 255, 255, 0.4);
+  background: rgba(255, 248, 231, 0.4);
   transform: translateY(-2px);
 }
 
@@ -575,7 +586,7 @@ export default {
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.7);
+  background: rgba(107, 66, 38, 0.8); /* Nâu đất trong suốt */
   z-index: 103;
   justify-content: center;
   align-items: center;
@@ -583,14 +594,14 @@ export default {
 }
 
 .modal-content {
-  background: linear-gradient(135deg, #c2aa77, #b29a67);
+  background: linear-gradient(135deg, #8B5E3C, #6B4226); /* Gradient nâu */
   padding: 30px;
   border-radius: 12px;
   width: 400px;
   max-width: 90%;
   position: relative;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-  border: 1px solid rgba(251, 207, 103, 0.3);
+  box-shadow: 0 10px 30px rgba(107, 66, 38, 0.4);
+  border: 2px solid #E7C27D; /* Viền vàng */
 }
 
 .close-btn {
@@ -598,13 +609,18 @@ export default {
   top: 15px;
   right: 20px;
   font-size: 24px;
-  color: #2b2b2b;
+  color: #FFF8E7; /* Trắng kem */
   cursor: pointer;
   font-weight: bold;
+  transition: color 0.3s ease;
+}
+
+.close-btn:hover {
+  color: #E7C27D; /* Vàng nhạt */
 }
 
 .modal-content h3 {
-  color: #2b2b2b;
+  color: #FFF8E7; /* Trắng kem */
   text-transform: uppercase;
   margin-bottom: 20px;
   font-weight: bold;
@@ -615,5 +631,61 @@ export default {
   justify-content: flex-end;
   gap: 15px;
   margin-top: 20px;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .profile-container {
+    width: 90%;
+    padding: 20px 15px;
+  }
+  
+  .profile-content {
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .profile-left {
+    min-width: auto;
+  }
+  
+  .action-buttons {
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  
+  .modal-content {
+    width: 350px;
+    padding: 25px;
+  }
+}
+
+@media (max-width: 480px) {
+  .profile-container {
+    width: 95%;
+    padding: 15px 10px;
+  }
+  
+  .avatar {
+    width: 80px;
+    height: 80px;
+  }
+  
+  .form-group input {
+    width: 95%;
+  }
+  
+  .edit-btn,
+  .cancel-btn,
+  .save-btn,
+  .change-password-btn {
+    padding: 10px 20px;
+    font-size: 14px;
+  }
+  
+  .modal-content {
+    width: 300px;
+    padding: 20px;
+  }
 }
 </style>

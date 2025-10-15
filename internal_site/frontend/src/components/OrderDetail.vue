@@ -1,7 +1,7 @@
 <template>
     <div class="order-detail">
         <div class="order-detail-header">
-            <h2>Chi tiết đơn hàng </h2>
+            <h2>Chi tiết đơn hàng</h2>
             <p v-if="reservation">Bàn: {{ reservation.tableNumber }}</p>
             <p v-else>Vui lòng chọn bàn</p>
         </div>
@@ -26,9 +26,11 @@
                                     type="number"
                                     v-model="item.quantity"
                                     class="quantity-input"
+                                    min="1"
+                                    @change="validateQuantity(item)"
                                 />
                             </td>
-                            <td> <input v-model="item.note" class="note-input" /></td>
+                            <td><input v-model="item.note" class="note-input" /></td>
                             <td>
                                 <img
                                     src="@/assets/save-icon.svg"
@@ -42,44 +44,71 @@
                     </tbody>
                 </table>
                 <div class="checkout-btn-container"> 
-                    <button @click="checkOut" class="btn-checkout">Thanh toán</button>
+                    <button @click="checkOut" class="btn-checkout" :disabled="orderItems.length === 0">
+                        Thanh toán
+                    </button>
                 </div>
             </div>
-                
-            <div class="cart-item-container" v-if="localCartItems.length > 0">
-                <h3>Chờ xác nhận</h3>
-                <table class="order-table">
-                    <thead>
-                        <tr>
-                            <th>Tên món</th>
-                            <th>SL</th>
-                            <th>Ghi chú</th>
-                            <th class="center">Xóa</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-for="(item, index) in localCartItems" :key="item.id">
-                            <td>{{ item.name }}</td>
-                            <td>
-                                <input
-                                    type="number"
-                                    v-model="item.quantity"
-                                    class="quantity-input"
-                                />
-                            </td>
-                            <td> <input v-model="item.note" class="note-input" /></td>
-                            <td><img src="@/assets/trash-icon.svg" alt="Reset Icon" class="icon" @click="removeLocalCartItem(item.id)"/></td>
-                        </tr>
-                    </tbody>
-                </table>
+           
+           <div class="cart-item-container" v-if="localCartItems.length > 0">
+            <h3>Chờ xác nhận</h3>
+            <table class="order-table">
+                <thead>
+                <tr>
+                    <th>Tên món</th>
+                    <th>SL</th>
+                    <th>Ghi chú</th>
+                    <th class="center">Xóa</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                <tr v-for="(item, index) in localCartItems" :key="item.id">
+                    <td>{{ item.name }}</td>
+                    <td>
+                    <input
+                        type="number"
+                        v-model="item.quantity"
+                        class="quantity-input"
+                        min="1"
+                        @change="validateQuantity(item)"
+                    />
+                    </td>
+                    <td>
+                    <input v-model="item.note" class="note-input" />
+                    </td>
+                    <td>
+                    <img
+                        src="@/assets/trash-icon.svg"
+                        alt="Xóa món"
+                        class="icon"
+                        @click="removeLocalCartItem(item.id)"
+                    />
+                    </td>
+                </tr>
+                </tbody>
+
+                <tfoot>
                 <tr>
                     <td colspan="4" style="text-align: center">
-                        <div class="confirm-btn-container">
-                        <button class="btn-confirm">Xác nhận</button>
-                        </div>
+                    <div class="confirm-btn-container">
+                        <button 
+                            class="btn-confirm" 
+                            @click="confirmOrder"
+                            :disabled="!reservation_id || localCartItems.length === 0"
+                        >
+                            Xác nhận
+                        </button>
+                    </div>
                     </td>
-                    </tr>
+                </tr>
+                </tfoot>
+            </table>
+            </div>
 
+            <!-- Hiển thị thông báo khi không có gì -->
+            <div v-if="orderItems.length === 0 && localCartItems.length === 0" class="empty-state">
+                <p>Chưa có món ăn nào được đặt</p>
             </div>
         </div>
     </div>
@@ -152,8 +181,10 @@ export default {
                 this.fetchOrderItems();
                 this.localCartItems = [];
                 this.$emit('update:cartItems', this.localCartItems);
+                return response;
             } catch (error) {
                 console.log(error.response?.data?.message || 'Lỗi khi thêm món ăn', 'error');
+                throw error;
             }
         },
         editItem(item) {
@@ -191,9 +222,42 @@ export default {
         },
         removeLocalCartItem(id) {
             this.localCartItems = this.localCartItems.filter(item => item.id !== id);
-            this.$emit('update:cartItems', this.localCartItems); // sync về parent nếu cần
+            this.$emit('update:cartItems', this.localCartItems);
         },
         
+        async confirmOrder() {
+            try {
+                if (this.localCartItems.length === 0) {
+                    this.showMessage('Không có món ăn nào để xác nhận', 'error');
+                    return;
+                }
+
+                if (!this.reservation_id) {
+                    this.showMessage('Vui lòng chọn bàn trước khi xác nhận đơn hàng', 'error');
+                    return;
+                }
+
+                // Gọi API để xác nhận đơn hàng
+                await this.addOrderItem();
+                
+                this.showMessage('Xác nhận đơn hàng thành công!', 'success');
+                
+                // Clear cart sau khi xác nhận
+                this.localCartItems = [];
+                this.$emit('update:cartItems', []);
+                
+            } catch (error) {
+                console.error('Lỗi khi xác nhận đơn hàng:', error);
+                this.showMessage(error.response?.data?.message || 'Lỗi khi xác nhận đơn hàng', 'error');
+            }
+        },
+
+        validateQuantity(item) {
+            if (item.quantity < 1) {
+                item.quantity = 1;
+            }
+        },
+
         showMessage(message, type) {
             this.$emit('show-message', { message, type });
         },
@@ -239,12 +303,12 @@ export default {
 
 <style scoped>
 .order-detail {
-    background: linear-gradient(180deg, #c2aa77, #b29a67);
+    background: linear-gradient(180deg, #8B5E3C, #6B4226);
     padding: 20px 30px;
     border-radius: 20px;
-    color: #2b2b2b;
-    border: 1px solid rgba(251, 207, 103, 0.3);
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    color: #FFF8E7;
+    border: 1px solid rgba(231, 194, 125, 0.4);
+    box-shadow: 0 8px 25px rgba(107, 66, 38, 0.3);
 }
 
 .container{
@@ -265,16 +329,19 @@ export default {
     padding-bottom: 10px;
     margin-bottom: 10px;
     justify-items: center;
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(255, 248, 231, 0.1);
     border-radius: 12px;
-    border: 1px solid rgba(251, 207, 103, 0.3);
+    border: 1px solid rgba(231, 194, 125, 0.3);
     margin: 10px 0;
+    backdrop-filter: blur(10px);
 }
 
 .cart-item-container h3{
     text-align: center;
     margin-top: 10px;
-    color: #2b2b2b;
+    color: #FFF8E7;
+    font-weight: bold;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .checkout-btn-container{
@@ -285,23 +352,32 @@ export default {
 }
 
 .btn-checkout{
-    background: linear-gradient(135deg, #fbcf67, #e5b756);
-    color: #2b2b2b;
+    background: linear-gradient(135deg, #E7C27D, #D4AF37);
+    color: #3B2F2F;
     border-radius: 8px;
     height: 40px;
-    width: 120px;
+    width: 140px;
     margin: 10px 0px;
     cursor: pointer;
     border: none;
     font-weight: bold;
     transition: all 0.3s ease;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    font-size: 16px;
 }
 
-.btn-checkout:hover {
-    background: linear-gradient(135deg, #e5b756, #d4a745);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+.btn-checkout:hover:not(:disabled) {
+    background: linear-gradient(135deg, #D4AF37, #C19B2E);
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+}
+
+.btn-checkout:disabled {
+    background: rgba(160, 160, 160, 0.5);
+    color: rgba(59, 47, 47, 0.5);
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
 }
 
 .confirm-btn-container{
@@ -313,30 +389,40 @@ export default {
 }
 
 .btn-confirm{
-    background: linear-gradient(135deg, #fbcf67, #e5b756);
-    color: #2b2b2b;
+    background: linear-gradient(135deg, #E7C27D, #D4AF37);
+    color: #3B2F2F;
     border-radius: 8px;
     height: 40px;
-    width: 120px;
+    width: 140px;
     margin: 10px 0px;
     cursor: pointer;
     border: none;
     font-weight: bold;
     transition: all 0.3s ease;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    font-size: 16px;
 }
 
-.btn-confirm:hover {
-    background: linear-gradient(135deg, #e5b756, #d4a745);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+.btn-confirm:hover:not(:disabled) {
+    background: linear-gradient(135deg, #D4AF37, #C19B2E);
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+}
+
+.btn-confirm:disabled {
+    background: rgba(160, 160, 160, 0.5);
+    color: rgba(59, 47, 47, 0.5);
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
 }
 
 .order-detail h2{
-    color: #2b2b2b;
+    color: #FFF8E7;
     text-align: center;
     margin-top: 0px;
     font-weight: bold;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .order-item {
@@ -352,7 +438,7 @@ export default {
 
 .cart-item {
     display: grid;
-    grid-template-columns:  8fr 4fr 1fr 1fr 1fr;
+    grid-template-columns: 8fr 4fr 1fr 1fr 1fr;
     gap: 10px;
     align-items: center;
     justify-self: center;
@@ -363,28 +449,29 @@ export default {
 
 .cart-item-detail1 {
     display: grid;
-    grid-template-columns: 1fr 2fr 2fr ;
+    grid-template-columns: 1fr 2fr 2fr;
     gap: 10px;
 }
 
 .order-item.header {
   font-weight: bold;
-  background: rgba(251, 207, 103, 0.3);
-  border-bottom: 2px solid #fbcf67;
-  border-radius: 6px;
-  padding: 10px;
+  background: rgba(231, 194, 125, 0.4);
+  border-bottom: 2px solid #E7C27D;
+  border-radius: 8px;
+  padding: 12px;
+  color: #3B2F2F;
 }
 
 .order-item span {
   font-size: 16px;
-  color: #2b2b2b;
+  color: #FFF8E7;
   padding: 10px;
   font-weight: 500;
 }
 
 .cart-item span {
   font-size: 14px;
-  color: #2b2b2b;
+  color: #FFF8E7;
   font-weight: 500;
 }
 
@@ -392,32 +479,54 @@ export default {
 .cart-item-container .note-input {
     width: 100px;
     height: 25px;
-    background: rgba(255, 255, 255, 0.2);
-    border: 1px solid #fbcf67;
-    color: #2b2b2b;
+    background: rgba(255, 248, 231, 0.2);
+    border: 1px solid #E7C27D;
+    color: #FFF8E7;
     border-radius: 5px;
     text-align: left;
     outline: none;
     padding: 0 8px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.order-item-container .note-input:focus,
+.cart-item-container .note-input:focus {
+    border-color: #D4AF37;
+    background: rgba(255, 248, 231, 0.3);
+    box-shadow: 0 0 8px rgba(231, 194, 125, 0.3);
 }
 
 .quantity-input {
     width: 40px;
     height: 25px;
-    background: rgba(255, 255, 255, 0.2);
-    border: 1px solid #fbcf67;
-    color: #2b2b2b;
+    background: rgba(255, 248, 231, 0.2);
+    border: 1px solid #E7C27D;
+    color: #FFF8E7;
     border-radius: 5px;
     text-align: center;
     outline: none;
     font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.quantity-input:focus {
+    border-color: #D4AF37;
+    background: rgba(255, 248, 231, 0.3);
+    box-shadow: 0 0 8px rgba(231, 194, 125, 0.3);
 }
 
 .cart-item img {
     width: 20px;
     height: 20px;
     cursor: pointer;
-    filter: brightness(0.3);
+    filter: brightness(0.8);
+    transition: all 0.3s ease;
+}
+
+.cart-item img:hover {
+    filter: brightness(1);
+    transform: scale(1.1);
 }
 
 .left {
@@ -431,60 +540,135 @@ export default {
   width: 100%;
   border-collapse: collapse;
   margin-top: 10px;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 8px;
+  background: rgba(255, 248, 231, 0.1);
+  border-radius: 10px;
   overflow: hidden;
+  backdrop-filter: blur(10px);
 }
 
 .order-table td {
-  border: 1px solid rgba(251, 207, 103, 0.4);
-  padding: 8px;
+  border: 1px solid rgba(231, 194, 125, 0.3);
+  padding: 10px;
   text-align: center;
-  color: #2b2b2b;
+  color: #FFF8E7;
   font-weight: 500;
 }
 
-.order-table th{
-  border: 1px solid #fbcf67;
-  padding: 10px;
+.order-table th {
+  border: 1px solid #E7C27D;
+  padding: 12px;
   text-align: center;
 }
 
 .order-table th {
-  background: #fbcf67;
-  color: #2b2b2b;
+  background: #E7C27D;
+  color: #3B2F2F;
   font-weight: bold;
 }
 
 .order-table input {
     width: 50px;
     height: 25px;
-    background: rgba(255, 255, 255, 0.2);
-    border: 1px solid #fbcf67;
-    color: #2b2b2b;
+    background: rgba(255, 248, 231, 0.2);
+    border: 1px solid #E7C27D;
+    color: #FFF8E7;
     border-radius: 5px;
     text-align: center;
     font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.order-table input:focus {
+    border-color: #D4AF37;
+    background: rgba(255, 248, 231, 0.3);
+    box-shadow: 0 0 8px rgba(231, 194, 125, 0.3);
 }
 
 .order-table img {
     width: 20px;
     cursor: pointer;
-    filter: brightness(0.3);
+    filter: brightness(0.8);
+    transition: all 0.3s ease;
+}
+
+.order-table img:hover {
+    filter: brightness(1);
+    transform: scale(1.1);
 }
 
 .right {
   text-align: right;
 }
 
-/* Thêm hiệu ứng hover cho các hàng */
+/* Hiệu ứng hover cho các hàng */
 .cart-item:hover, .order-item:not(.header):hover {
-    background: rgba(255, 255, 255, 0.15);
-    border-radius: 6px;
-    transition: background 0.3s ease;
+    background: rgba(255, 248, 231, 0.15);
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    transform: translateY(-1px);
 }
 
 .order-table tr:hover td {
-    background: rgba(251, 207, 103, 0.2);
+    background: rgba(231, 194, 125, 0.15);
+}
+
+/* Empty state */
+.empty-state {
+    text-align: center;
+    padding: 40px;
+    color: #F5E3B3;
+    font-style: italic;
+    background: rgba(255, 248, 231, 0.05);
+    border-radius: 10px;
+    margin: 20px 0;
+}
+
+/* Scrollbar tùy chỉnh */
+.container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.container::-webkit-scrollbar-track {
+  background: rgba(255, 248, 231, 0.1);
+  border-radius: 4px;
+}
+
+.container::-webkit-scrollbar-thumb {
+  background: #E7C27D;
+  border-radius: 4px;
+}
+
+.container::-webkit-scrollbar-thumb:hover {
+  background: #D4AF37;
+}
+
+/* Responsive cho mobile */
+@media (max-width: 768px) {
+    .order-item, .cart-item {
+        grid-template-columns: 1fr;
+        gap: 5px;
+        width: 95%;
+        padding: 0px 10px;
+    }
+    
+    .cart-item-detail1 {
+        grid-template-columns: 1fr;
+        gap: 5px;
+    }
+    
+    .btn-checkout, .btn-confirm {
+        width: 120px;
+        height: 35px;
+        font-size: 14px;
+    }
+    
+    .order-table {
+        font-size: 14px;
+    }
+    
+    .order-table th,
+    .order-table td {
+        padding: 8px 4px;
+    }
 }
 </style>

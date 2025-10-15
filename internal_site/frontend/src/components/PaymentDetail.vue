@@ -246,154 +246,230 @@ export default {
 
 <style scoped>
 .payment-detail {
-  background: linear-gradient(180deg, #c2aa77, #b29a67);
-  padding: 20px 30px;
+  background: linear-gradient(180deg, #8B5E3C, #6B4226); /* Nâu gỗ đến nâu đất */
+  padding: 25px 30px;
   border-radius: 20px;
-  color: #2b2b2b;
+  color: #FFF8E7; /* Trắng kem */
   height: 85vh;
   overflow: auto;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-  border: 1px solid rgba(251, 207, 103, 0.3);
+  box-shadow: 0 8px 25px rgba(107, 66, 38, 0.3);
+  border: 1px solid rgba(231, 194, 125, 0.4); /* Vàng nhạt */
+  backdrop-filter: blur(10px);
 }
 
 .payment-detail-header h2 {
-  color: #2b2b2b;
+  color: #FFF8E7; /* Trắng kem */
   text-align: center;
   margin-top: 0;
+  margin-bottom: 20px;
   font-weight: bold;
+  font-size: 28px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .payment-container {
-  padding-top: 10px;
-  padding-bottom: 10px;
-  margin-bottom: 10px;
+  padding: 15px 0;
+  margin-bottom: 15px;
+  background: rgba(255, 248, 231, 0.05); /* Trắng kem trong suốt */
+  border-radius: 12px;
+  border: 1px solid rgba(231, 194, 125, 0.2);
 }
 
 .payment-container p {
-  margin: 10px 0;
-  color: #2b2b2b;
+  margin: 12px 0;
+  color: #FFF8E7; /* Trắng kem */
   font-weight: 500;
+  font-size: 16px;
+  padding: 0 20px;
 }
 
 .payment-method {
-  margin: 20px 0;
-  background: rgba(255, 255, 255, 0.1);
-  padding: 15px;
-  border-radius: 12px;
-  border: 1px solid rgba(251, 207, 103, 0.3);
+  margin: 25px 0;
+  background: rgba(255, 248, 231, 0.1); /* Trắng kem trong suốt */
+  padding: 20px;
+  border-radius: 15px;
+  border: 1px solid rgba(231, 194, 125, 0.3);
+  backdrop-filter: blur(5px);
 }
 
 .payment-method h3 {
-  margin-bottom: 10px;
+  margin-bottom: 15px;
   text-align: center;
-  color: #2b2b2b;
+  color: #FFF8E7; /* Trắng kem */
+  font-size: 20px;
+  font-weight: bold;
 }
 
 .payment-method select {
-  width: 200px;
-  padding: 8px;
-  border: 1px solid #fbcf67;
-  border-radius: 8px;
-  background: rgba(255, 255, 255, 0.2);
-  color: #2b2b2b;
+  width: 220px;
+  padding: 12px;
+  border: 1px solid #E7C27D; /* Vàng nhạt */
+  border-radius: 10px;
+  background: rgba(255, 248, 231, 0.15); /* Trắng kem trong suốt */
+  color: #FFF8E7; /* Trắng kem */
   outline: none;
   font-weight: 500;
+  font-size: 14px;
+  transition: all 0.3s ease;
+  display: block;
+  margin: 0 auto;
+}
+
+.payment-method select:focus {
+  border-color: #D4AF37;
+  background: rgba(255, 248, 231, 0.25);
+  box-shadow: 0 0 12px rgba(231, 194, 125, 0.4);
 }
 
 .payment-method select option {
-  background: #c2aa77;
-  color: #2b2b2b;
+  background: #8B5E3C; /* Nâu gỗ */
+  color: #FFF8E7; /* Trắng kem */
+  padding: 10px;
+  font-weight: 500;
 }
 
 .payment-method select option:checked {
-  background: #fbcf67;
-  color: #2b2b2b;
+  background: #E7C27D; /* Vàng nhạt */
+  color: #3B2F2F; /* Đen nâu */
+  font-weight: bold;
+}
+
+.payment-method select option:hover {
+  background: #E7C27D; /* Vàng nhạt */
+  color: #3B2F2F; /* Đen nâu */
 }
 
 .qr-code {
-  margin: 20px 0;
+  margin: 25px 0;
   text-align: center;
-  background: rgba(255, 255, 255, 0.1);
-  padding: 20px;
-  border-radius: 12px;
-  border: 1px solid rgba(251, 207, 103, 0.3);
+  background: rgba(255, 248, 231, 0.1); /* Trắng kem trong suốt */
+  padding: 25px;
+  border-radius: 15px;
+  border: 1px solid rgba(231, 194, 125, 0.3);
+  backdrop-filter: blur(5px);
+}
+
+.qr-code h3 {
+  color: #FFF8E7; /* Trắng kem */
+  margin-bottom: 15px;
+  font-size: 18px;
+  font-weight: bold;
 }
 
 .qr-code img {
-  max-width: 200px;
-  border-radius: 8px;
-  border: 2px solid #fbcf67;
+  max-width: 220px;
+  border-radius: 12px;
+  border: 3px solid #E7C27D; /* Vàng nhạt */
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+}
+
+.qr-code img:hover {
+  transform: scale(1.02);
+  box-shadow: 0 6px 20px rgba(231, 194, 125, 0.3);
 }
 
 .account-info { 
-  color: #2b2b2b; 
-  margin-top: 8px; 
+  color: #FFF8E7; /* Trắng kem */
+  margin-top: 12px; 
   font-weight: 500;
-}
-.btn-copy { 
-  margin-left: 8px; 
-  padding: 4px 8px; 
-  border-radius: 6px; 
-  border: none; 
-  background: #fbcf67; 
-  cursor: pointer; 
-  color: #2b2b2b;
-  font-weight: bold;
-}
-.btn-copy:hover { 
-  background: #e5b756; 
-}
-
-.payment-actions {
-  display: flex;
-  gap: 20px;
-  justify-content: center;
-  align-items: center;
-  margin-top: 20px;
-}
-
-.btn-confirm {
-  background: linear-gradient(135deg, #fbcf67, #e5b756);
-  color: #2b2b2b;
+  font-size: 15px;
+  background: rgba(231, 194, 125, 0.2);
+  padding: 10px 15px;
   border-radius: 8px;
-  height: 40px;
-  width: 150px;
-  border: none;
-  cursor: pointer;
-  margin: 10px 0;
+  display: inline-block;
+}
+
+.btn-copy { 
+  margin-left: 10px; 
+  padding: 8px 12px; 
+  border-radius: 8px; 
+  border: none; 
+  background: #E7C27D; /* Vàng nhạt */
+  cursor: pointer; 
+  color: #3B2F2F; /* Đen nâu */
   font-weight: bold;
   transition: all 0.3s ease;
   box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 
-.btn-confirm:hover {
-  background: linear-gradient(135deg, #e5b756, #d4a745);
+.btn-copy:hover { 
+  background: #D4AF37;
   transform: translateY(-2px);
-  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+.btn-copy:active {
+  transform: translateY(0);
+}
+
+.payment-actions {
+  display: flex;
+  gap: 25px;
+  justify-content: center;
+  align-items: center;
+  margin-top: 30px;
+  flex-wrap: wrap;
+}
+
+.btn-confirm {
+  background: linear-gradient(135deg, #E7C27D, #D4AF37); /* Vàng nhạt đến vàng đậm */
+  color: #3B2F2F; /* Đen nâu */
+  border-radius: 10px;
+  height: 45px;
+  width: 160px;
+  border: none;
+  cursor: pointer;
+  margin: 10px 0;
+  font-weight: bold;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  font-size: 16px;
+}
+
+.btn-confirm:hover:not(:disabled) {
+  background: linear-gradient(135deg, #D4AF37, #C19B2E);
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.25);
 }
 
 .btn-confirm:disabled {
-  background: #a0a0a0;
+  background: rgba(160, 160, 160, 0.5);
+  color: rgba(59, 47, 47, 0.5);
   cursor: not-allowed;
   transform: none;
   box-shadow: none;
 }
 
+.checkbox-container {
+  background: rgba(255, 248, 231, 0.1);
+  padding: 15px 20px;
+  border-radius: 10px;
+  border: 1px solid rgba(231, 194, 125, 0.3);
+  margin: 20px 0;
+}
+
 .checkbox-label {
   display: flex;
   align-items: center;
-  color: #2b2b2b;
+  color: #FFF8E7; /* Trắng kem */
   font-size: 16px;
   cursor: pointer;
   font-weight: 500;
+  margin: 0;
 }
 
 .checkbox-label input {
-  margin-right: 8px;
+  margin-right: 12px;
   width: 20px;
   height: 20px;
   cursor: pointer;
-  accent-color: #fbcf67;
+  accent-color: #E7C27D; /* Vàng nhạt */
+  border-radius: 4px;
+}
+
+.checkbox-label input:checked {
+  background-color: #E7C27D; /* Vàng nhạt */
 }
 
 .checkbox-label input:disabled {
@@ -402,13 +478,72 @@ export default {
 }
 
 .error-message {
-  color: #d84315;
+  color: #FFB4A2;
   text-align: center;
   margin: 20px 0;
-  background: rgba(216, 67, 21, 0.1);
-  padding: 12px;
-  border-radius: 8px;
-  border: 1px solid rgba(216, 67, 21, 0.3);
+  background: rgba(216, 67, 21, 0.15);
+  padding: 15px;
+  border-radius: 10px;
+  border: 1px solid rgba(216, 67, 21, 0.4);
   font-weight: 500;
+  backdrop-filter: blur(5px);
+}
+
+.success-message {
+  color: #A8E6A3;
+  text-align: center;
+  margin: 20px 0;
+  background: rgba(40, 167, 69, 0.15);
+  padding: 15px;
+  border-radius: 10px;
+  border: 1px solid rgba(40, 167, 69, 0.4);
+  font-weight: 500;
+  backdrop-filter: blur(5px);
+}
+
+/* Custom scrollbar */
+.payment-detail::-webkit-scrollbar {
+  width: 8px;
+}
+
+.payment-detail::-webkit-scrollbar-track {
+  background: rgba(255, 248, 231, 0.1);
+  border-radius: 4px;
+}
+
+.payment-detail::-webkit-scrollbar-thumb {
+  background: #E7C27D;
+  border-radius: 4px;
+}
+
+.payment-detail::-webkit-scrollbar-thumb:hover {
+  background: #D4AF37;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .payment-detail {
+    padding: 15px 20px;
+    height: 90vh;
+  }
+  
+  .payment-actions {
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .btn-confirm {
+    width: 100%;
+    max-width: 200px;
+  }
+  
+  .qr-code img {
+    max-width: 180px;
+  }
+  
+  .payment-method select {
+    width: 100%;
+    max-width: 250px;
+  }
 }
 </style>

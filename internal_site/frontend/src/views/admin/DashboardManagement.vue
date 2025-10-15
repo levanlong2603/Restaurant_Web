@@ -1059,26 +1059,26 @@ export default defineComponent({
 .main-container {
     display: flex;
     min-height: 100vh;
-    background-color: #c2aa77;
+    background-color: #FFF8E7; /* Trắng kem */
     font-family: 'Arial', sans-serif;
 }
 
 .dashboard {
     flex: 1;
     padding: 2rem;
-    background-color: #c2aa77;
+    background-color: #FFF8E7; /* Trắng kem */
     transition: margin-left 0.3s ease;
 }
 
 .dashboard-header {
     position: sticky;
     top: 0;
-    background: linear-gradient(135deg, #c2aa77, #b29a67);
+    background: linear-gradient(135deg, #8B5E3C, #6B4226); /* Gradient nâu */
     z-index: 3;
     padding-bottom: 1rem;
     margin-bottom: 2rem;
-    border-bottom: 1px solid #fbcf67;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    border-bottom: 1px solid #E7C27D; /* Vàng nhạt */
+    box-shadow: 0 4px 15px rgba(107, 66, 38, 0.3); /* Bóng nâu */
 }
 
 .header-top {
@@ -1091,13 +1091,14 @@ export default defineComponent({
 .header-top h2 {
     font-size: 1.8rem;
     font-weight: 600;
-    color: #2b2b2b;
+    color: #FFF8E7; /* Trắng kem */
     margin-left: 350px;
+    text-shadow: 0 0 5px #E7C27D, 0 0 30px #E7C27D; /* Hiệu ứng vàng */
 }
 
 .header-top span {
     font-size: 1rem;
-    color: #2b2b2b;
+    color: #F5E3B3; /* Be nhạt */
     opacity: 0.8;
 }
 
@@ -1113,10 +1114,10 @@ export default defineComponent({
 .date-filter select,
 .date-filter input {
     padding: 0.5rem;
-    border: 1px solid #fbcf67;
+    border: 1px solid #8B5E3C; /* Nâu gỗ */
     border-radius: 8px;
-    background: rgba(255, 255, 255, 0.2);
-    color: #2b2b2b;
+    background: rgba(255, 248, 231, 0.8); /* Trắng kem trong suốt */
+    color: #3B2F2F; /* Đen nâu */
     font-size: 0.9rem;
     transition: all 0.3s ease;
     font-weight: 500;
@@ -1125,9 +1126,10 @@ export default defineComponent({
 .filter-section select:focus,
 .date-filter select:focus,
 .date-filter input:focus {
-    border-color: #e5b756;
+    border-color: #E7C27D; /* Vàng nhạt */
     outline: none;
-    background: rgba(255, 255, 255, 0.3);
+    background: #FFF8E7; /* Trắng kem */
+    box-shadow: 0 0 0 3px rgba(231, 194, 125, 0.3);
 }
 
 .date-filter {
@@ -1138,7 +1140,7 @@ export default defineComponent({
 
 .date-filter label {
     font-size: 0.9rem;
-    color: #2b2b2b;
+    color: #FFF8E7; /* Trắng kem */
     font-weight: 500;
 }
 
@@ -1149,7 +1151,7 @@ export default defineComponent({
 }
 
 .custom-date-range span {
-    color: #2b2b2b;
+    color: #F5E3B3; /* Be nhạt */
     opacity: 0.8;
 }
 
@@ -1164,27 +1166,30 @@ export default defineComponent({
     gap: 0.5rem;
     transition: all 0.3s ease;
     font-weight: 600;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 8px rgba(107, 66, 38, 0.3); /* Bóng nâu */
+    border: 1px solid #E7C27D; /* Viền vàng */
 }
 
 .refresh-button {
-    background: #fbcf67;
-    color: #2b2b2b;
+    background: #8B5E3C; /* Nâu gỗ */
+    color: #FFF8E7; /* Trắng kem */
 }
 
 .refresh-button:hover {
-    background: #e5b756;
+    background: #6B4226; /* Nâu đất */
     transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(107, 66, 38, 0.4);
 }
 
 .export-button {
-    background: #fbcf67;
-    color: #2b2b2b;
+    background: #E7C27D; /* Vàng nhạt */
+    color: #6B4226; /* Nâu đất */
 }
 
 .export-button:hover {
-    background: #e5b756;
+    background: #F5E3B3; /* Be nhạt */
     transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(231, 194, 125, 0.4);
 }
 
 .stats-grid {
@@ -1204,32 +1209,32 @@ export default defineComponent({
 }
 
 .stat-card {
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(255, 248, 231, 0.5); /* Trắng kem trong suốt */
     padding: 1.5rem;
     border-radius: 12px;
     position: relative;
     transition: all 0.3s ease;
-    border: 1px solid rgba(251, 207, 103, 0.3);
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(231, 194, 125, 0.3); /* Vàng nhạt trong suốt */
+    box-shadow: 0 4px 15px rgba(107, 66, 38, 0.2); /* Bóng nâu */
 }
 
 .stat-card:hover {
     transform: scale(1.03);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-    background: rgba(255, 255, 255, 0.15);
+    box-shadow: 0 8px 25px rgba(107, 66, 38, 0.3);
+    background: rgba(255, 248, 231, 0.6);
 }
 
 .stat-card h3 {
     font-size: 1.2rem;
     margin-bottom: 0.5rem;
-    color: #2b2b2b;
+    color: #6B4226; /* Nâu đất */
     font-weight: bold;
 }
 
 .stat-card p {
     font-size: 1.5rem;
     font-weight: 600;
-    color: #2b2b2b;
+    color: #3B2F2F; /* Đen nâu */
     margin: 0.5rem 0;
 }
 
@@ -1240,36 +1245,36 @@ export default defineComponent({
     font-size: 1.5rem;
     opacity: 0.7;
     z-index: 1;
-    color: #2b2b2b;
+    color: #8B5E3C; /* Nâu gỗ */
 }
 
 .revenue-icon {
-    color: #2b2b2b;
+    color: #388E3C; /* Xanh lá */
 }
 
 .booking-icon {
-    color: #2b2b2b;
+    color: #1976D2; /* Xanh dương */
 }
 
 .customer-icon {
-    color: #2b2b2b;
+    color: #7B1FA2; /* Tím */
 }
 
 .time-icon {
-    color: #2b2b2b;
+    color: #F57C00; /* Cam */
 }
 
 .serving-icon {
-    color: #2b2b2b;
+    color: #D32F2F; /* Đỏ */
 }
 
 .cancel-icon {
-    color: #2b2b2b;
+    color: #6B4226; /* Nâu đất */
 }
 
 .sub-text {
     font-size: 0.9rem;
-    color: #2b2b2b;
+    color: #3B2F2F; /* Đen nâu */
     opacity: 0.8;
     margin-top: 0.3rem;
     display: block;
@@ -1284,21 +1289,21 @@ export default defineComponent({
 }
 
 .trend-up {
-    color: #4caf50;
+    color: #388E3C; /* Xanh lá */
 }
 
 .trend-down {
-    color: #d84315;
+    color: #D32F2F; /* Đỏ */
 }
 
 .trend-neutral {
-    color: #2b2b2b;
+    color: #3B2F2F; /* Đen nâu */
     opacity: 0.6;
 }
 
 .trend-text {
     font-size: 0.9rem;
-    color: #2b2b2b;
+    color: #3B2F2F; /* Đen nâu */
     opacity: 0.8;
     margin-top: 1rem;
     display: block;
@@ -1317,8 +1322,8 @@ export default defineComponent({
     padding: 0.5rem;
     border-radius: 8px;
     transition: all 0.3s ease;
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(251, 207, 103, 0.3);
+    background: rgba(255, 248, 231, 0.3); /* Trắng kem trong suốt */
+    border: 1px solid rgba(231, 194, 125, 0.3); /* Vàng nhạt trong suốt */
 }
 
 .dish-image,
@@ -1328,7 +1333,7 @@ export default defineComponent({
     object-fit: cover;
     border-radius: 8px;
     margin-bottom: 0.5rem;
-    border: 2px solid #fbcf67;
+    border: 2px solid #E7C27D; /* Vàng nhạt */
 }
 
 .dish-image-small {
@@ -1338,14 +1343,14 @@ export default defineComponent({
 
 .dish-item span {
     font-size: 1rem;
-    color: #2b2b2b;
+    color: #3B2F2F; /* Đen nâu */
     display: block;
     margin-bottom: 0.3rem;
     font-weight: 500;
 }
 
 .dish-item.gold {
-    background: rgba(251, 207, 103, 0.3);
+    background: rgba(231, 194, 125, 0.4); /* Vàng nhạt trong suốt */
 }
 
 .dish-item.silver {
@@ -1357,14 +1362,14 @@ export default defineComponent({
 }
 
 .dish-item:hover {
-    background: rgba(251, 207, 103, 0.4);
+    background: rgba(231, 194, 125, 0.5);
     transform: translateY(-2px);
 }
 
 .avg-revenue,
 .sold-count {
     font-size: 0.9rem;
-    color: #2b2b2b;
+    color: #3B2F2F; /* Đen nâu */
     opacity: 0.8;
     font-weight: 500;
 }
@@ -1379,23 +1384,24 @@ export default defineComponent({
 
 .category-item span {
     font-size: 1rem;
-    color: #2b2b2b;
+    color: #3B2F2F; /* Đen nâu */
     font-weight: 500;
 }
 
 .category-item button {
-    background: rgba(255, 255, 255, 0.2);
-    border: 1px solid #fbcf67;
+    background: rgba(255, 248, 231, 0.8); /* Trắng kem trong suốt */
+    border: 1px solid #8B5E3C; /* Nâu gỗ */
     padding: 0.5rem 1rem;
     border-radius: 8px;
-    color: #2b2b2b;
+    color: #3B2F2F; /* Đen nâu */
     cursor: pointer;
     transition: all 0.3s ease;
     font-weight: 500;
 }
 
 .category-item button:hover {
-    background: rgba(255, 255, 255, 0.3);
+    background: #FFF8E7; /* Trắng kem */
+    border-color: #E7C27D; /* Vàng nhạt */
 }
 
 .category-table {
@@ -1405,8 +1411,8 @@ export default defineComponent({
     display: block;
     max-height: 300px;
     overflow-y: auto;
-    color: #2b2b2b;
-    background: rgba(255, 255, 255, 0.1);
+    color: #3B2F2F; /* Đen nâu */
+    background: rgba(255, 248, 231, 0.5); /* Trắng kem trong suốt */
     border-radius: 8px;
 }
 
@@ -1414,15 +1420,15 @@ export default defineComponent({
 .category-table td {
     padding: 0.5rem;
     text-align: left;
-    border-bottom: 1px solid rgba(251, 207, 103, 0.3);
+    border-bottom: 1px solid rgba(231, 194, 125, 0.3); /* Vàng nhạt trong suốt */
     word-wrap: break-word;
     min-width: 100px;
     font-weight: 500;
 }
 
 .category-table th {
-    background: rgba(251, 207, 103, 0.3);
-    color: #2b2b2b;
+    background: rgba(139, 94, 60, 0.3); /* Nâu gỗ trong suốt */
+    color: #6B4226; /* Nâu đất */
     position: sticky;
     top: 0;
     z-index: 1;
@@ -1436,12 +1442,12 @@ export default defineComponent({
     border-radius: 8px;
     margin: 0.5rem auto;
     display: block;
-    border: 2px solid #fbcf67;
+    border: 2px solid #E7C27D; /* Vàng nhạt */
 }
 
 .leastSoldDish .no-data {
     text-align: center;
-    color: #2b2b2b;
+    color: #3B2F2F; /* Đen nâu */
     opacity: 0.6;
     font-style: italic;
     padding: 1rem;
@@ -1462,13 +1468,13 @@ export default defineComponent({
     padding: 0.8rem;
     margin-bottom: 0.5rem;
     border-radius: 8px;
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(255, 248, 231, 0.3); /* Trắng kem trong suốt */
     transition: all 0.3s ease;
-    border: 1px solid rgba(251, 207, 103, 0.3);
+    border: 1px solid rgba(231, 194, 125, 0.3); /* Vàng nhạt trong suốt */
 }
 
 .customer-item.gold {
-    background: rgba(251, 207, 103, 0.3);
+    background: rgba(231, 194, 125, 0.4); /* Vàng nhạt trong suốt */
 }
 
 .customer-item.silver {
@@ -1480,14 +1486,14 @@ export default defineComponent({
 }
 
 .customer-item:hover {
-    background: rgba(251, 207, 103, 0.4);
+    background: rgba(231, 194, 125, 0.5);
     transform: translateY(-2px);
 }
 
 .customer-name {
     font-size: 1.1rem;
     font-weight: 500;
-    color: #2b2b2b;
+    color: #3B2F2F; /* Đen nâu */
     flex: 1 1 40%;
 }
 
@@ -1500,37 +1506,38 @@ export default defineComponent({
 
 .total-bill {
     font-size: 1rem;
-    color: #2b2b2b;
+    color: #3B2F2F; /* Đen nâu */
     font-weight: 600;
 }
 
 .visits {
     font-size: 1rem;
-    color: #2b2b2b;
+    color: #3B2F2F; /* Đen nâu */
     opacity: 0.8;
     font-weight: 400;
 }
 
 .details-button {
     padding: 0.3rem 0.8rem;
-    background: #fbcf67;
+    background: #8B5E3C; /* Nâu gỗ */
     border: none;
     border-radius: 6px;
-    color: #2b2b2b;
+    color: #FFF8E7; /* Trắng kem */
     font-size: 0.9rem;
     cursor: pointer;
     transition: all 0.3s ease;
     font-weight: 500;
+    border: 1px solid #E7C27D; /* Viền vàng */
 }
 
 .details-button:hover {
-    background: #e5b756;
+    background: #6B4226; /* Nâu đất */
     transform: scale(1.05);
 }
 
 .no-data {
     text-align: center;
-    color: #2b2b2b;
+    color: #3B2F2F; /* Đen nâu */
     opacity: 0.6;
     font-style: italic;
     padding: 1rem;
@@ -1543,7 +1550,7 @@ export default defineComponent({
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.7);
+    background: rgba(107, 66, 38, 0.8); /* Nâu đất trong suốt */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -1551,7 +1558,7 @@ export default defineComponent({
 }
 
 .spinner {
-    border: 4px solid #fbcf67;
+    border: 4px solid #E7C27D; /* Vàng nhạt */
     border-top: 4px solid transparent;
     border-radius: 50%;
     width: 40px;
@@ -1570,8 +1577,8 @@ export default defineComponent({
 }
 
 .error-message {
-    background: #d84315;
-    color: white;
+    background: #D32F2F; /* Đỏ */
+    color: #FFF8E7; /* Trắng kem */
     padding: 1rem;
     border-radius: 8px;
     margin-bottom: 1rem;
@@ -1583,11 +1590,11 @@ export default defineComponent({
     position: absolute;
     top: 0.5rem;
     right: 0.5rem;
-    background: rgba(255, 255, 255, 0.3);
-    border: none;
+    background: rgba(255, 248, 231, 0.8); /* Trắng kem trong suốt */
+    border: 1px solid #8B5E3C; /* Nâu gỗ */
     border-radius: 6px;
     padding: 0.3rem 0.6rem;
-    color: #2b2b2b;
+    color: #3B2F2F; /* Đen nâu */
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -1599,7 +1606,8 @@ export default defineComponent({
 }
 
 .export-image-button:hover {
-    background: rgba(255, 255, 255, 0.4);
+    background: #FFF8E7; /* Trắng kem */
+    border-color: #E7C27D; /* Vàng nhạt */
     transform: translateY(-1px);
 }
 
@@ -1610,7 +1618,7 @@ export default defineComponent({
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.7);
+    background: rgba(107, 66, 38, 0.8); /* Nâu đất trong suốt */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -1618,30 +1626,30 @@ export default defineComponent({
 }
 
 .modal-content {
-    background: linear-gradient(135deg, #c2aa77, #b29a67);
+    background: linear-gradient(135deg, #FFF8E7, #F5E3B3); /* Gradient trắng kem đến be */
     padding: 2rem;
     border-radius: 12px;
-    color: #2b2b2b;
+    color: #3B2F2F; /* Đen nâu */
     text-align: center;
     width: 90%;
     max-width: 400px;
     max-height: 80vh;
     overflow-y: auto;
-    border: 1px solid rgba(251, 207, 103, 0.3);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    border: 2px solid #E7C27D; /* Viền vàng */
+    box-shadow: 0 10px 30px rgba(107, 66, 38, 0.4);
 }
 
 .modal-content h3 {
     font-size: 1.5rem;
     margin-bottom: 1rem;
-    color: #2b2b2b;
+    color: #6B4226; /* Nâu đất */
     font-weight: bold;
 }
 
 .modal-content p {
     font-size: 1rem;
     margin: 0.5rem 0;
-    color: #2b2b2b;
+    color: #3B2F2F; /* Đen nâu */
     font-weight: 500;
 }
 
@@ -1652,41 +1660,42 @@ export default defineComponent({
     border-radius: 8px;
     margin: 1rem auto;
     display: block;
-    border: 2px solid #fbcf67;
+    border: 2px solid #E7C27D; /* Vàng nhạt */
 }
 
 .modal-content input[type="file"] {
     margin: 1rem auto;
     display: block;
-    color: #2b2b2b;
+    color: #3B2F2F; /* Đen nâu */
 }
 
 .modal-content button {
     margin-top: 1rem;
     padding: 0.5rem 1rem;
-    background: #fbcf67;
+    background: #8B5E3C; /* Nâu gỗ */
     border: none;
     border-radius: 8px;
-    color: #2b2b2b;
+    color: #FFF8E7; /* Trắng kem */
     cursor: pointer;
     transition: all 0.3s ease;
     font-weight: 600;
+    border: 1px solid #E7C27D; /* Viền vàng */
 }
 
 .modal-content button:hover {
-    background: #e5b756;
+    background: #6B4226; /* Nâu đất */
 }
 
 .customer-details-modal .modal-content {
     width: 90%;
     max-width: 500px;
     padding: 2rem;
-    background: linear-gradient(135deg, #c2aa77, #b29a67);
+    background: linear-gradient(135deg, #FFF8E7, #F5E3B3); /* Gradient trắng kem đến be */
     border-radius: 12px;
-    color: #2b2b2b;
+    color: #3B2F2F; /* Đen nâu */
     text-align: left;
     overflow-y: auto;
-    border: 1px solid rgba(251, 207, 103, 0.3);
+    border: 2px solid #E7C27D; /* Viền vàng */
 }
 
 .customer-details-modal .modal-content p {
@@ -1698,23 +1707,43 @@ export default defineComponent({
 .customer-details-modal .modal-content button {
     margin-top: 1.5rem;
     padding: 0.6rem 1.2rem;
-    background: #fbcf67;
+    background: #8B5E3C; /* Nâu gỗ */
     border: none;
     border-radius: 8px;
-    color: #2b2b2b;
+    color: #FFF8E7; /* Trắng kem */
     cursor: pointer;
     transition: all 0.3s ease;
     font-weight: 600;
+    border: 1px solid #E7C27D; /* Viền vàng */
 }
 
 .customer-details-modal .modal-content button:hover {
-    background: #e5b756;
+    background: #6B4226; /* Nâu đất */
 }
 
 .dish-details-modal .modal-content,
 .customer-details-modal .modal-content {
     position: relative;
     z-index: 1002;
+}
+
+/* Custom scrollbar */
+.category-table::-webkit-scrollbar {
+    width: 6px;
+}
+
+.category-table::-webkit-scrollbar-track {
+    background: rgba(231, 194, 125, 0.1);
+    border-radius: 3px;
+}
+
+.category-table::-webkit-scrollbar-thumb {
+    background: #E7C27D; /* Vàng nhạt */
+    border-radius: 3px;
+}
+
+.category-table::-webkit-scrollbar-thumb:hover {
+    background: #8B5E3C; /* Nâu gỗ */
 }
 
 /* Responsive adjustments */

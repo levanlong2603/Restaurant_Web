@@ -192,121 +192,174 @@
   };
   </script>
   
-  <style scoped>  
-  .main-container {
-    display: flex;
-    background: #c2aa77;
-    height: 100vh;
-    overflow: hidden;
-  }
+ <style scoped>  
+.main-container {
+  display: flex;
+  background: #FFF8E7; /* Trắng kem */
+  height: 100vh;
+  overflow: hidden;
+}
 
-  .reservation-management {
-    flex: 1;
-    margin: 0;
-    padding: 0;
-    background-color: #c2aa77;
-    color: #2b2b2b;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    padding-right: 20px;
-    transition: margin-left 0.3s ease;
-  }
+.reservation-management {
+  flex: 1;
+  margin: 0;
+  padding: 0;
+  background-color: #FFF8E7; /* Trắng kem */
+  color: #3B2F2F; /* Đen nâu */
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  padding-right: 20px;
+  transition: margin-left 0.3s ease;
+}
 
-  .reservation-management.sidebar-collapsed {
-    margin-left: 10px; 
-  }
+.reservation-management.sidebar-collapsed {
+  margin-left: 10px; 
+}
 
+.payment-page {
+  flex: 1;
+  padding: 0 80px;
+  background-color: #FFF8E7; /* Trắng kem */
+  color: #3B2F2F; /* Đen nâu */
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+.header {
+  background-color: #FFF8E7; /* Trắng kem */
+  align-items: center;
+  padding: 10px
+}
+
+.header h1 {
+  color: #6B4226; /* Nâu đất */
+  text-align: center;
+  margin-top: 20px;
+  margin-bottom: 10px;
+  font-weight: bold;
+  text-shadow: 0 0 5px #E7C27D, 0 0 30px #E7C27D; /* Hiệu ứng vàng */
+}
+
+.select-table {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+  margin-bottom: 10px;
+  gap: 30px;
+}
+
+.header select {
+  width: 100px;
+  height: 30px;
+  padding: 5px;
+  border: 1px solid #8B5E3C; /* Nâu gỗ */
+  border-radius: 8px;
+  background: rgba(255, 248, 231, 0.8); /* Trắng kem trong suốt */
+  color: #3B2F2F; /* Đen nâu */
+  outline: none;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.header select:focus {
+  border-color: #E7C27D; /* Vàng nhạt */
+  background: #FFF8E7; /* Trắng kem */
+  box-shadow: 0 0 0 3px rgba(231, 194, 125, 0.3);
+}
+
+.header .refresh-button {
+  padding: 8px 16px;
+  background: #8B5E3C; /* Nâu gỗ */
+  color: #FFF8E7; /* Trắng kem */
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(107, 66, 38, 0.3); /* Bóng nâu */
+  border: 1px solid #E7C27D; /* Viền vàng */
+}
+
+.header .refresh-button:hover {
+  background: #6B4226; /* Nâu đất */
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(107, 66, 38, 0.4);
+}
+
+.container {
+  display: flex;
+  gap: 40px;
+  margin-top: 20px;
+}
+
+.cart {
+  color: #3B2F2F; /* Đen nâu */
+}
+
+.bill {
+  width: 50%;
+}
+
+.payment {
+  width: 50%;
+}
+
+.error-message {
+  color: #D32F2F; /* Đỏ đậm */
+  text-align: center;
+  margin: 20px 0;
+  font-weight: 500;
+  background-color: rgba(211, 47, 47, 0.1);
+  padding: 10px;
+  border-radius: 8px;
+  border-left: 3px solid #D32F2F;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
   .payment-page {
-    flex: 1;
-    padding: 0 80px;
-    background-color: #c2aa77;
-    color: #2b2b2b;
-    display: flex;
-    flex-direction: column;
-    overflow-y: auto;
-  }
-
-  .header {
-    background-color: #c2aa77;
-    align-items: center;
-    padding: 10px
-  }
-  
-  .header h1 {
-    color: #2b2b2b;
-    text-align: center;
-    margin-top: 20px;
-    margin-bottom: 10px;
-    font-weight: bold;
-  }
-  
-  .select-table {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 20px;
-    margin-bottom: 10px;
-    gap: 30px;
-  }
-  
-  .header select {
-    width: 100px;
-    height: 30px;
-    padding: 5px;
-    border: 1px solid #fbcf67;
-    border-radius: 8px;
-    background: rgba(255, 255, 255, 0.2);
-    color: #2b2b2b;
-    outline: none;
-    font-weight: 500;
-    transition: all 0.3s ease;
-  }
-
-  .header select:focus {
-    border-color: #e5b756;
-    background: rgba(255, 255, 255, 0.3);
-  }
-  
-  .header .refresh-button {
-    padding: 8px 16px;
-    background: #fbcf67;
-    color: #2b2b2b;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: 600;
-    transition: all 0.3s ease;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  }
-  
-  .header .refresh-button:hover {
-    background: #e5b756;
-    transform: translateY(-2px);
+    padding: 0 20px;
   }
   
   .container {
-    display: flex;
-    gap: 40px;
-    margin-top: 20px;
+    flex-direction: column;
+    gap: 20px;
   }
   
-  .cart {
-    color: #2b2b2b;
+  .bill, .payment {
+    width: 100%;
   }
   
-  .bill {
-    width: 50%;
+  .select-table {
+    flex-direction: column;
+    gap: 15px;
   }
   
-  .payment {
-    width: 50%;
+  .header select {
+    width: 150px;
+  }
+}
+
+@media (max-width: 480px) {
+  .payment-page {
+    padding: 0 15px;
   }
   
-  .error-message {
-    color: #d84315;
-    text-align: center;
-    margin: 20px 0;
-    font-weight: 500;
+  .header h1 {
+    font-size: 24px;
+    margin-top: 15px;
   }
+  
+  .select-table {
+    gap: 10px;
+  }
+  
+  .header .refresh-button {
+    padding: 6px 12px;
+    font-size: 14px;
+  }
+}
 </style>

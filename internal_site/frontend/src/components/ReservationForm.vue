@@ -334,24 +334,24 @@
   flex-direction: column; 
   gap: 15px; 
   padding: 15px; 
-  background: linear-gradient(135deg, #c2aa77, #b29a67); 
+  background: linear-gradient(135deg, #8B5E3C, #6B4226); /* Nâu gỗ đến nâu đất */
   border-radius: 10px; 
-  box-shadow: 0 4px 15px rgba(0,0,0,0.1); 
+  box-shadow: 0 4px 15px rgba(107, 66, 38, 0.3); /* Shadow màu nâu */
   width: 200px; 
-  border: 1px solid rgba(251, 207, 103, 0.3);
+  border: 1px solid rgba(139, 94, 60, 0.5); /* Viền nâu gỗ */
 }
 
 .tab-group { 
   display: flex; 
   gap: 20px; 
-  border-bottom: 2px solid #fbcf67; 
+  border-bottom: 2px solid #E7C27D; /* Vàng nhạt */
   padding-bottom: 5px; 
   margin-bottom: 10px; 
   justify-content: center;
 }
 
 .tab-group a { 
-  color: #2b2b2b; 
+  color: #FFF8E7; /* Trắng kem */
   text-decoration: none; 
   font-size: 16px; 
   font-weight: 500; 
@@ -360,7 +360,7 @@
 }
 
 .tab-group a:hover {
-  color: #fbcf67;
+  color: #E7C27D; /* Vàng nhạt khi hover */
 }
 
 .reset-button { 
@@ -369,7 +369,7 @@
   border: none; 
   cursor: pointer; 
   padding: 0; 
-  color: #2b2b2b;
+  color: #FFF8E7; /* Trắng kem */
 }
 
 .search-content, .reserve-content { 
@@ -380,17 +380,17 @@
 
 .search-bar-content input { 
   padding: 8px; 
-  border: 1px solid #fbcf67; 
+  border: 1px solid #E7C27D; /* Viền vàng nhạt */
   border-radius: 5px; 
   font-size: 14px; 
-  background: rgba(255, 255, 255, 0.2); 
-  color: #2b2b2b; 
+  background: rgba(255, 248, 231, 0.2); /* Nền trắng kem trong suốt */
+  color: #FFF8E7; /* Chữ trắng kem */
   width: 90%; 
   outline: none;
 }
 
 .search-bar-content input::placeholder {
-  color: rgba(43, 43, 43, 0.6);
+  color: rgba(255, 248, 231, 0.6); /* Placeholder trắng kem mờ */
 }
 
 .phone-number-input { 
@@ -411,35 +411,35 @@
   width: 20px; 
   height: 20px; 
   cursor: pointer; 
-  color: #2b2b2b;
+  color: #FFF8E7; /* Icon trắng kem */
 }
 
 select {
   padding: 8px; 
-  border: 1px solid #fbcf67; 
+  border: 1px solid #E7C27D; /* Viền vàng nhạt */
   border-radius: 5px; 
   font-size: 14px; 
-  background: rgba(255, 255, 255, 0.2); 
-  color: #2b2b2b; 
+  background: rgba(255, 248, 231, 0.2); /* Nền trắng kem trong suốt */
+  color: #FFF8E7; /* Chữ trắng kem */
   cursor: pointer;
   outline: none;
 }
 
 option {
-  background: #c2aa77;  
-  color: #2b2b2b;       
+  background: #8B5E3C;  /* Nền nâu gỗ */
+  color: #FFF8E7;       /* Chữ trắng kem */
 }
 
 option:checked {
-  background: #fbcf67;
-  color: #2b2b2b;
+  background: #6B4226; /* Nâu đất khi chọn */
+  color: #E7C27D; /* Vàng nhạt khi chọn */
 }
 
 .search-bar-content button { 
   padding: 10px; 
   border: none; 
-  background: #fbcf67; 
-  color: #2b2b2b; 
+  background: #E7C27D; /* Nền vàng nhạt */
+  color: #3B2F2F; /* Chữ nâu đậm */
   border-radius: 5px; 
   cursor: pointer; 
   transition: background 0.3s; 
@@ -447,15 +447,15 @@ option:checked {
 }
 
 .search-bar-content button:hover { 
-  background: #e5b756; 
+  background: #D4B15F; /* Vàng đậm hơn khi hover */
 }
 
 .reserve-content button { 
-  background: #fbcf67; 
-  color: white;
+  background: #6B4226; /* Nâu đất */
+  color: #FFF8E7; /* Chữ trắng kem */
 }
 
 .reserve-content button:hover { 
-  background: #e5b756; 
+  background: #5A3620; /* Nâu đậm hơn khi hover */
 }
 </style>

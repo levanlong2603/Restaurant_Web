@@ -85,97 +85,203 @@ export default {
 
 <style scoped>
 .bill-detail {
-  background: linear-gradient(180deg, #c2aa77, #b29a67);
+  background: linear-gradient(180deg, #8B5E3C, #6B4226); /* Nâu gỗ đến nâu đất */
   padding: 20px 30px;
   border-radius: 20px;
-  color: #2b2b2b;
+  color: #FFF8E7; /* Trắng kem cho chữ chính */
   height: 85vh;
   overflow: auto;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8px 25px rgba(107, 66, 38, 0.3);
+  border: 1px solid rgba(231, 194, 125, 0.2); /* Thêm viền vàng nhạt */
+}
+
+.bill-detail-header {
+  border-bottom: 2px solid rgba(231, 194, 125, 0.5); /* Đường phân cách */
+  padding-bottom: 15px;
+  margin-bottom: 20px;
 }
 
 .bill-detail-header h2 {
-  color: #2b2b2b;
+  color: #FFF8E7; /* Trắng kem */
   text-align: center;
   margin-top: 0;
   font-weight: bold;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  font-size: 24px;
 }
 
 .bill-item-container {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 248, 231, 0.15); /* Trắng kem trong suốt */
   border-radius: 12px;
   padding: 15px;
   margin-bottom: 15px;
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(251, 207, 103, 0.3);
+  backdrop-filter: blur(15px);
+  border: 1px solid rgba(231, 194, 125, 0.4); /* Vàng nhạt */
+  transition: all 0.3s ease;
+}
+
+.bill-item-container:hover {
+  background: rgba(255, 248, 231, 0.25);
+  transform: translateY(-2px);
+  border-color: rgba(231, 194, 125, 0.7);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .bill-item-container p {
   margin: 8px 0;
-  color: #2b2b2b;
+  color: #FFF8E7; /* Trắng kem */
   font-weight: 500;
+}
+
+.bill-item-container .item-label {
+  color: #E7C27D; /* Vàng nhạt cho nhãn */
+  font-weight: 600;
 }
 
 .bill-table {
   width: 100%;
   border-collapse: collapse;
   margin-top: 15px;
-  background: rgba(255, 255, 255, 0.15);
+  background: rgba(255, 248, 231, 0.1);
   border-radius: 10px;
   overflow: hidden;
+  border: 1px solid rgba(231, 194, 125, 0.3);
 }
 
 .bill-table th {
-  background-color: #fbcf67;
-  border: 1px solid #e5b756;
-  padding: 10px;
+  background: linear-gradient(135deg, #E7C27D, #D4B15F); /* Gradient vàng */
+  border: 1px solid rgba(139, 94, 60, 0.3);
+  padding: 12px 10px;
   text-align: center;
-  color: #2b2b2b;
+  color: #3B2F2F; /* Đen nâu */
   font-weight: bold;
+  font-size: 14px;
 }
 
 .bill-table td {
-  border: 1px solid rgba(251, 207, 103, 0.4);
-  padding: 10px;
+  border: 1px solid rgba(231, 194, 125, 0.2);
+  padding: 12px 10px;
   text-align: center;
-  color: #2b2b2b;
+  color: #FFF8E7; /* Trắng kem */
   font-weight: 500;
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 248, 231, 0.05);
+  transition: background 0.3s ease;
+}
+
+.bill-table tr:hover td {
+  background: rgba(231, 194, 125, 0.15);
+}
+
+.bill-table .total-row td {
+  background: rgba(231, 194, 125, 0.2);
+  font-weight: bold;
+  color: #FFF8E7;
 }
 
 .bill-total {
   margin-top: 25px;
   text-align: right;
-  padding: 15px;
-  background: rgba(251, 207, 103, 0.3);
+  padding: 20px;
+  background: linear-gradient(135deg, rgba(231, 194, 125, 0.3), rgba(139, 94, 60, 0.2));
   border-radius: 12px;
+  border: 1px solid rgba(231, 194, 125, 0.4);
+  backdrop-filter: blur(10px);
 }
 
 .bill-total p {
   font-size: 20px;
-  color: #2b2b2b;
+  color: #FFF8E7; /* Trắng kem */
   font-weight: bold;
   margin: 0;
 }
 
+.bill-total .total-amount {
+  color: #E7C27D; /* Vàng nhạt cho số tiền */
+  font-size: 24px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
 .error-message {
-  color: #d84315;
+  color: #FFE0B2;
   text-align: center;
   margin: 20px 0;
-  background: rgba(216, 67, 21, 0.1);
-  padding: 12px;
+  background: rgba(183, 28, 28, 0.2);
+  padding: 15px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 224, 178, 0.4);
+  backdrop-filter: blur(10px);
+}
+
+/* Scrollbar tùy chỉnh */
+.bill-detail::-webkit-scrollbar {
+  width: 8px;
+}
+
+.bill-detail::-webkit-scrollbar-track {
+  background: rgba(255, 248, 231, 0.1);
+  border-radius: 4px;
+}
+
+.bill-detail::-webkit-scrollbar-thumb {
+  background: #E7C27D;
+  border-radius: 4px;
+}
+
+.bill-detail::-webkit-scrollbar-thumb:hover {
+  background: #D4B15F;
+}
+
+/* Nút hành động */
+.bill-actions {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  margin-top: 25px;
+}
+
+.bill-button {
+  background: linear-gradient(135deg, #E7C27D, #D4B15F);
+  color: #3B2F2F;
+  border: none;
+  padding: 12px 25px;
   border-radius: 8px;
-  border: 1px solid rgba(216, 67, 21, 0.3);
-}
-
-/* Thêm hiệu ứng hover cho các phần tử tương tác */
-.bill-item-container:hover {
-  background: rgba(255, 255, 255, 0.2);
-  transform: translateY(-2px);
+  font-weight: bold;
+  cursor: pointer;
   transition: all 0.3s ease;
+  font-size: 16px;
+  min-width: 120px;
 }
 
-.bill-table tr:hover td {
-  background: rgba(251, 207, 103, 0.2);
+.bill-button:hover {
+  background: linear-gradient(135deg, #D4B15F, #C19B3C);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+}
+
+.bill-button.secondary {
+  background: rgba(255, 248, 231, 0.2);
+  color: #FFF8E7;
+  border: 1px solid #E7C27D;
+}
+
+.bill-button.secondary:hover {
+  background: rgba(231, 194, 125, 0.3);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .bill-detail {
+    padding: 15px 20px;
+    height: 80vh;
+  }
+  
+  .bill-table {
+    font-size: 14px;
+  }
+  
+  .bill-table th,
+  .bill-table td {
+    padding: 8px 6px;
+  }
 }
 </style>

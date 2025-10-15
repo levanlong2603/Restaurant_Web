@@ -84,15 +84,15 @@ export default {
 <style scoped>
 .main-container {
   display: flex;
-  background: #c2aa77;
+  background: #FFF8E7; /* Trắng kem */
 }
 
 .reservation-management {
   flex: 1;
   margin: 0;
   padding: 0;
-  background-color: #c2aa77;
-  color: #2b2b2b;
+  background-color: #FFF8E7; /* Trắng kem */
+  color: #3B2F2F; /* Đen nâu */
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -130,5 +130,36 @@ export default {
   justify-content: center;
   align-items: center;
   width: 70%;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .container {
+    margin: 20px 10px;
+  }
+  
+  .floor1-container {
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+  }
+  
+  .reservation-list {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    margin: 15px 5px;
+  }
+  
+  .floor1-container {
+    gap: 15px;
+  }
+  
+  .reservation-management {
+    padding-right: 10px;
+  }
 }
 </style>

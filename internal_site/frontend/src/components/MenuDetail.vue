@@ -239,13 +239,13 @@ export default {
 
 <style scoped>
 .menu-page {
-  background: linear-gradient(180deg, #c2aa77, #b29a67);
+  background: linear-gradient(180deg, #8B5E3C, #6B4226); /* Nâu gỗ đến nâu đất */
   padding: 20px 30px;
   border-radius: 20px;
-  color: #2b2b2b;
+  color: #FFF8E7; /* Trắng kem cho chữ */
   width: 100%;
-  border: 1px solid rgba(251, 207, 103, 0.3);
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(231, 194, 125, 0.4); /* Vàng nhạt */
+  box-shadow: 0 8px 25px rgba(107, 66, 38, 0.3);
 }
 
 .menu {
@@ -263,24 +263,33 @@ export default {
 
 .filter-search select,
 .filter-search input {
-  padding: 8px;
-  border: 1px solid #fbcf67;
+  padding: 8px 12px;
+  border: 1px solid #E7C27D; /* Vàng nhạt */
   border-radius: 8px;
-  background: rgba(255, 255, 255, 0.2);
-  color: #2b2b2b;
+  background: rgba(255, 248, 231, 0.15); /* Trắng kem trong suốt */
+  color: #FFF8E7; /* Trắng kem */
   outline: none;
   font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.filter-search select:focus,
+.filter-search input:focus {
+  border-color: #D4AF37;
+  background: rgba(255, 248, 231, 0.25);
+  box-shadow: 0 0 8px rgba(231, 194, 125, 0.3);
 }
 
 .filter-search select option {
-  background: #c2aa77;
-  color: #2b2b2b;
+  background: #8B5E3C; /* Nâu gỗ */
+  color: #FFF8E7; /* Trắng kem */
+  padding: 8px;
 }
 
 .filter-search .refresh-button {
   padding: 8px 16px;
-  background: #fbcf67;
-  color: #2b2b2b;
+  background: #E7C27D; /* Vàng nhạt */
+  color: #3B2F2F; /* Đen nâu */
   border: none;
   border-radius: 8px;
   cursor: pointer;
@@ -289,49 +298,54 @@ export default {
 }
 
 .filter-search .refresh-button:hover {
-  background: #e5b756;
+  background: #D4AF37;
   transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 .menu h2 {
-  color: #2b2b2b;
+  color: #FFF8E7; /* Trắng kem */
   margin-bottom: 10px;
   margin-top: 0;
   text-align: center;
   font-weight: bold;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 /* Tiêu đề danh mục */
 .category {
-  color: #2b2b2b;
+  color: #3B2F2F; /* Đen nâu */
   font-size: 24px;
   margin: 20px 0 10px;
   text-align: center;
   font-weight: bold;
-  background: rgba(251, 207, 103, 0.3);
-  padding: 10px;
-  border-radius: 8px;
+  background: rgba(231, 194, 125, 0.8); /* Vàng nhạt */
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(212, 175, 55, 0.5);
 }
 
 .menu-item {
   display: flex;
   justify-content: space-between;
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 248, 231, 0.1); /* Trắng kem trong suốt */
   padding: 15px;
   border-radius: 12px;
   margin-bottom: 20px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   width: 95%;
   height: auto;
   min-height: 180px;
-  border: 1px solid rgba(251, 207, 103, 0.3);
+  border: 1px solid rgba(231, 194, 125, 0.3);
   transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
 }
 
 .menu-item:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
-  background: rgba(255, 255, 255, 0.15);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+  background: rgba(255, 248, 231, 0.15);
+  border-color: rgba(231, 194, 125, 0.6);
 }
 
 .item-details {
@@ -349,16 +363,16 @@ export default {
   font-size: 18px;
   font-weight: bold;
   margin-right: 10px;
-  color: #2b2b2b;
+  color: #FFF8E7; /* Trắng kem */
 }
 
 .item-details p {
   font-size: 14px;
-  color: #2b2b2b;
+  color: #F5E3B3; /* Be - nhạt hơn cho mô tả */
   margin: 0;
   max-width: 70%;
   word-wrap: break-word;
-  opacity: 0.8;
+  opacity: 0.9;
 }
 
 .item-detail2 {
@@ -374,7 +388,13 @@ export default {
   height: 100px;
   object-fit: cover;
   border-radius: 8px;
-  border: 2px solid #fbcf67;
+  border: 2px solid #E7C27D; /* Vàng nhạt */
+  transition: all 0.3s ease;
+}
+
+.menu-image:hover {
+  transform: scale(1.05);
+  border-color: #D4AF37;
 }
 
 .item-detail3 {
@@ -394,7 +414,7 @@ export default {
 
 .item-detail4 .price {
   font-size: 16px;
-  color: #2b2b2b;
+  color: #E7C27D; /* Vàng nhạt cho giá */
   flex: 1;
   font-weight: bold;
 }
@@ -407,7 +427,7 @@ export default {
 }
 
 .item-quantity p {
-  color: #2b2b2b;
+  color: #FFF8E7; /* Trắng kem */
   margin-bottom: 8px;
   margin-top: 0;
   text-align: center;
@@ -415,37 +435,46 @@ export default {
 }
 
 .item-quantity input {
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(255, 248, 231, 0.2);
   width: 60px;
   padding: 8px;
-  border: 1px solid #fbcf67;
+  border: 1px solid #E7C27D;
   border-radius: 6px;
   text-align: center;
-  color: #2b2b2b;
+  color: #FFF8E7; /* Trắng kem */
   outline: none;
   font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.item-quantity input:focus {
+  border-color: #D4AF37;
+  background: rgba(255, 248, 231, 0.3);
+  box-shadow: 0 0 8px rgba(231, 194, 125, 0.3);
 }
 
 .add-to-cart {
-  background: #fbcf67;
+  background: #E7C27D; /* Vàng nhạt */
   border: none;
   border-radius: 8px;
-  padding: 8px 12px;
+  padding: 8px 16px;
   cursor: pointer;
   flex: 0;
-  color: #2b2b2b;
+  color: #3B2F2F; /* Đen nâu */
   font-weight: bold;
   transition: all 0.3s ease;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
 }
 
 .add-to-cart:hover:not(:disabled) {
-  background: #e5b756;
+  background: #D4AF37;
   transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
 }
 
 .add-to-cart:disabled {
-  background: #a0a0a0;
+  background: rgba(160, 160, 160, 0.5);
+  color: rgba(59, 47, 47, 0.5);
   cursor: not-allowed;
   transform: none;
 }
@@ -459,16 +488,22 @@ export default {
 
 .item-detail5 img {
   cursor: pointer;
-  filter: brightness(0.3);
+  filter: brightness(0.8);
+  transition: all 0.3s ease;
+}
+
+.item-detail5 img:hover {
+  filter: brightness(1);
+  transform: scale(1.1);
 }
 
 .item-detail5 input {
-  background: rgba(255, 255, 255, 0.2);
-  padding: 8px;
+  background: rgba(255, 248, 231, 0.2);
+  padding: 8px 12px;
   width: 180px;
-  border: 1px solid #fbcf67;
+  border: 1px solid #E7C27D;
   border-radius: 6px;
-  color: #2b2b2b;
+  color: #FFF8E7; /* Trắng kem */
   outline: none;
   font-weight: 500;
 }
@@ -482,22 +517,25 @@ export default {
 
 .pagination button {
   padding: 8px 16px;
-  background: #fbcf67;
-  color: #2b2b2b;
+  background: #E7C27D; /* Vàng nhạt */
+  color: #3B2F2F; /* Đen nâu */
   border: none;
   border-radius: 8px;
   cursor: pointer;
   font-weight: bold;
   transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 
 .pagination button:hover:not(:disabled) {
-  background: #e5b756;
+  background: #D4AF37;
   transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
 }
 
 .pagination button:disabled {
-  background: #a0a0a0;
+  background: rgba(160, 160, 160, 0.5);
+  color: rgba(59, 47, 47, 0.5);
   cursor: not-allowed;
   transform: none;
 }
@@ -505,7 +543,26 @@ export default {
 .pagination span {
   font-size: 16px;
   line-height: 40px;
-  color: #2b2b2b;
+  color: #FFF8E7; /* Trắng kem */
   font-weight: 500;
+}
+
+/* Scrollbar tùy chỉnh */
+.menu::-webkit-scrollbar {
+  width: 8px;
+}
+
+.menu::-webkit-scrollbar-track {
+  background: rgba(255, 248, 231, 0.1);
+  border-radius: 4px;
+}
+
+.menu::-webkit-scrollbar-thumb {
+  background: #E7C27D;
+  border-radius: 4px;
+}
+
+.menu::-webkit-scrollbar-thumb:hover {
+  background: #D4AF37;
 }
 </style>

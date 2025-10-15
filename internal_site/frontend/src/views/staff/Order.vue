@@ -149,15 +149,15 @@ import Navigation from '../../components/Navigation.vue';
 <style scoped>
 .main-container {
   display: flex;
-  background: #c2aa77;
+  background: #FFF8E7; /* Trắng kem */
 }
 
 .reservation-management {
   flex: 1;
   margin: 0;
   padding: 0;
-  background-color: #c2aa77;
-  color: #2b2b2b;
+  background-color: #FFF8E7; /* Trắng kem */
+  color: #3B2F2F; /* Đen nâu */
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -167,15 +167,16 @@ import Navigation from '../../components/Navigation.vue';
 }
 
 .header{
-  background-color: #c2aa77;
+  background-color: #FFF8E7; /* Trắng kem */
   align-items: center;
 }
 .header h1{
-  color: #2b2b2b;
+  color: #6B4226; /* Nâu đất */
   text-align: center;
   margin-top: 20px;
   margin-bottom: 10px;
   font-weight: bold;
+  text-shadow: 0 0 5px #E7C27D, 0 0 30px #E7C27D; /* Hiệu ứng vàng */
 }
 
 .select-table{
@@ -191,9 +192,9 @@ import Navigation from '../../components/Navigation.vue';
 .header select{
   width: 100px;
   height: 30px;
-  background: rgba(255, 255, 255, 0.2);
-  border: 1px solid #fbcf67;
-  color: #2b2b2b;
+  background: rgba(255, 248, 231, 0.8); /* Trắng kem trong suốt */
+  border: 1px solid #8B5E3C; /* Nâu gỗ */
+  color: #3B2F2F; /* Đen nâu */
   border-radius: 8px;
   outline: none;
   padding: 0 8px;
@@ -202,28 +203,29 @@ import Navigation from '../../components/Navigation.vue';
 }
 
 .header select:focus {
-  border-color: #e5b756;
-  background: rgba(255, 255, 255, 0.3);
+  border-color: #E7C27D; /* Vàng nhạt */
+  background: #FFF8E7; /* Trắng kem */
+  box-shadow: 0 0 0 3px rgba(231, 194, 125, 0.3);
 }
 
 .header button{
   width: 100px;
   height: 35px;
-  background: #fbcf67;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-  color: #2b2b2b;
+  background: #8B5E3C; /* Nâu gỗ */
+  box-shadow: 0 4px 15px rgba(107, 66, 38, 0.3); /* Bóng nâu */
+  color: #FFF8E7; /* Trắng kem */
   border-radius: 8px;
   margin-left: 30px;
-  border: none;
+  border: 1px solid #E7C27D; /* Viền vàng */
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
 }
 
 .header button:hover{
-  background: #e5b756;
+  background: #6B4226; /* Nâu đất */
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+  box-shadow: 0 6px 20px rgba(107, 66, 38, 0.4);
 }
 
 .container {
@@ -233,7 +235,7 @@ import Navigation from '../../components/Navigation.vue';
 }
 
 .cart{
-  color: #2b2b2b;
+  color: #3B2F2F; /* Đen nâu */
 }
 
 .menu {
@@ -243,5 +245,51 @@ import Navigation from '../../components/Navigation.vue';
 
 .order {
   width: 50%;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .reservation-management {
+    margin: 0 20px;
+    padding-right: 10px;
+  }
+  
+  .container {
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .menu, .order {
+    width: 100%;
+  }
+  
+  .select-table {
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .header button {
+    margin-left: 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .reservation-management {
+    margin: 0 10px;
+  }
+  
+  .header h1 {
+    font-size: 24px;
+    margin-top: 15px;
+  }
+  
+  .header select, .header button {
+    width: 120px;
+  }
+  
+  .container {
+    gap: 15px;
+    margin-top: 15px;
+  }
 }
 </style>

@@ -325,7 +325,7 @@ export default {
 <style scoped>
 .main-container {
   display: flex;
-  background: #c2aa77;
+  background: #FFF8E7; /* Trắng kem */
   height: 100vh;
   overflow: hidden;
 }
@@ -334,8 +334,8 @@ export default {
   flex: 1;
   margin: 0;
   padding: 0;
-  background-color: #c2aa77;
-  color: #2b2b2b;
+  background-color: #FFF8E7; /* Trắng kem */
+  color: #3B2F2F; /* Đen nâu */
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -348,16 +348,17 @@ export default {
 }
 
 .header {
-  background-color: #c2aa77;
+  background-color: #FFF8E7; /* Trắng kem */
   padding: 20px;
-  border-bottom: 1px solid #fbcf67;
+  border-bottom: 1px solid #E7C27D; /* Vàng nhạt */
 }
 
 .header h1 {
   text-align: center;
-  color: #2b2b2b;
+  color: #6B4226; /* Nâu đất */
   margin: 0 0 20px 0;
   font-weight: bold;
+  text-shadow: 0 0 5px #E7C27D, 0 0 30px #E7C27D; /* Hiệu ứng vàng */
 }
 
 .actions {
@@ -369,23 +370,24 @@ export default {
 .actions input,
 .actions select {
   padding: 10px;
-  border: 1px solid #fbcf67;
+  border: 1px solid #8B5E3C; /* Nâu gỗ */
   border-radius: 8px;
-  background: rgba(255, 255, 255, 0.2);
-  color: #2b2b2b;
+  background: rgba(255, 248, 231, 0.8); /* Trắng kem trong suốt */
+  color: #3B2F2F; /* Đen nâu */
   font-weight: 500;
   transition: all 0.3s ease;
 }
 
 .actions input:focus,
 .actions select:focus {
-  border-color: #e5b756;
-  background: rgba(255, 255, 255, 0.3);
+  border-color: #E7C27D; /* Vàng nhạt */
+  background: #FFF8E7; /* Trắng kem */
   outline: none;
+  box-shadow: 0 0 0 3px rgba(231, 194, 125, 0.3);
 }
 
 .actions select {
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(255, 248, 231, 0.8); /* Trắng kem trong suốt */
 }
 
 .reservation-list-wrapper {
@@ -398,15 +400,15 @@ export default {
 .reservation-table {
   width: 98%;
   border-collapse: collapse;
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 248, 231, 0.5); /* Trắng kem trong suốt */
   border-radius: 12px;
   overflow: hidden;
-  border: 1px solid rgba(251, 207, 103, 0.3);
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(231, 194, 125, 0.3); /* Vàng nhạt trong suốt */
+  box-shadow: 0 4px 15px rgba(107, 66, 38, 0.2); /* Bóng nâu */
 }
 
 .reservation-table thead {
-  background: rgba(251, 207, 103, 0.3);
+  background: rgba(139, 94, 60, 0.3); /* Nâu gỗ trong suốt */
   top: 0;
   z-index: 5;
 }
@@ -416,8 +418,8 @@ export default {
   padding: 10px 15px;
   height: 35px;
   text-align: left;
-  border-bottom: 1px solid rgba(251, 207, 103, 0.3);
-  border-right: 1px solid rgba(251, 207, 103, 0.3);
+  border-bottom: 1px solid rgba(231, 194, 125, 0.3); /* Vàng nhạt trong suốt */
+  border-right: 1px solid rgba(231, 194, 125, 0.3); /* Vàng nhạt trong suốt */
   text-align: center;
   font-weight: 500;
 }
@@ -429,7 +431,7 @@ export default {
 
 .reservation-table th {
   font-weight: bold;
-  color: #2b2b2b;
+  color: #6B4226; /* Nâu đất */
 }
 
 /* Cố định chiều rộng cho từng cột */
@@ -475,6 +477,9 @@ export default {
 
 .reservation-table td.col-status .status {
   font-weight: bold;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 12px;
 }
 
 .reservation-table td.col-actions {
@@ -485,76 +490,93 @@ export default {
 
 /* Màu sắc trạng thái */
 .status.pending {
-  color: #ff9800;
+  color: #F57C00; /* Cam */
+  background-color: rgba(245, 124, 0, 0.1);
 }
 
 .status.preparing {
-  color: #2196f3;
+  color: #1976D2; /* Xanh dương */
+  background-color: rgba(25, 118, 210, 0.1);
 }
 
 .status.serving {
-  color: #4caf50;
+  color: #388E3C; /* Xanh lá */
+  background-color: rgba(56, 142, 60, 0.1);
+}
+
+.status.paid {
+  color: #7B1FA2; /* Tím */
+  background-color: rgba(123, 31, 162, 0.1);
 }
 
 .status.completed {
-  color: #2b2b2b;
+  color: #6B4226; /* Nâu đất */
+  background-color: rgba(107, 66, 38, 0.1);
   opacity: 0.7;
+}
+
+.status.cancelled {
+  color: #D32F2F; /* Đỏ */
+  background-color: rgba(211, 47, 47, 0.1);
 }
 
 /* Nút hành động */
 .col-actions button {
-  color: #2b2b2b;
+  color: #FFF8E7; /* Trắng kem */
   border: none;
   padding: 6px 12px;
   border-radius: 6px;
   cursor: pointer;
   font-weight: 600;
   transition: all 0.3s ease;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 4px rgba(107, 66, 38, 0.2); /* Bóng nâu */
+  border: 1px solid rgba(255, 248, 231, 0.3); /* Viền trắng trong suốt */
 }
 
 .order-button {
-  background: #fbcf67;
+  background: #E7C27D; /* Vàng nhạt */
+  color: #6B4226; /* Nâu đất */
 }
 .order-button:hover {
-  background: #e5b756;
+  background: #F5E3B3; /* Be nhạt */
   transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(231, 194, 125, 0.3);
 }
 
 .approve-button {
-  background: #4caf50;
-  color: white;
+  background: #388E3C; /* Xanh lá */
 }
 .approve-button:hover {
-  background: #45a049;
+  background: #2E7D32; /* Xanh lá đậm */
   transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(56, 142, 60, 0.3);
 }
 
 .checkin-button {
-  background: #2196f3;
-  color: white;
+  background: #1976D2; /* Xanh dương */
 }
 .checkin-button:hover {
-  background: #1976d2;
+  background: #1565C0; /* Xanh dương đậm */
   transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(25, 118, 210, 0.3);
 }
 
 .cancel-button {
-  background: #d84315;
-  color: white;
+  background: #D32F2F; /* Đỏ */
 }
 .cancel-button:hover {
-  background: #c62828;
+  background: #C62828; /* Đỏ đậm */
   transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(211, 47, 47, 0.3);
 }
 
 .checkout-button {
-  background: #2196f3;
-  color: white;
+  background: #7B1FA2; /* Tím */
 }
 .checkout-button:hover {
-  background: #1976d2;
+  background: #6A1B9A; /* Tím đậm */
   transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(123, 31, 162, 0.3);
 }
 
 .reservation-table td.col-actions {
@@ -569,6 +591,88 @@ export default {
 }
 
 .reservation-table tbody tr:hover {
-  background: rgba(255, 255, 255, 0.15);
+  background: rgba(231, 194, 125, 0.2); /* Vàng nhạt trong suốt */
+}
+
+/* Custom scrollbar */
+.reservation-list-wrapper::-webkit-scrollbar {
+  width: 8px;
+}
+
+.reservation-list-wrapper::-webkit-scrollbar-track {
+  background: rgba(231, 194, 125, 0.1);
+  border-radius: 4px;
+}
+
+.reservation-list-wrapper::-webkit-scrollbar-thumb {
+  background: #E7C27D; /* Vàng nhạt */
+  border-radius: 4px;
+}
+
+.reservation-list-wrapper::-webkit-scrollbar-thumb:hover {
+  background: #8B5E3C; /* Nâu gỗ */
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .reservation-management {
+    padding-right: 10px;
+  }
+  
+  .header {
+    padding: 15px;
+  }
+  
+  .actions {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  
+  .reservation-list-wrapper {
+    padding: 10px;
+  }
+  
+  .reservation-table {
+    font-size: 14px;
+  }
+  
+  .reservation-table th,
+  .reservation-table td {
+    padding: 8px 10px;
+  }
+  
+  .col-actions {
+    width: 150px;
+  }
+}
+
+@media (max-width: 480px) {
+  .header h1 {
+    font-size: 20px;
+  }
+  
+  .actions {
+    gap: 8px;
+  }
+  
+  .actions input,
+  .actions select {
+    padding: 8px;
+    font-size: 14px;
+  }
+  
+  .reservation-table {
+    font-size: 12px;
+  }
+  
+  .reservation-table th,
+  .reservation-table td {
+    padding: 6px 8px;
+  }
+  
+  .col-actions button {
+    padding: 4px 8px;
+    font-size: 12px;
+  }
 }
 </style>
