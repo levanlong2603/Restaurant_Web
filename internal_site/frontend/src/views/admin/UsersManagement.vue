@@ -1,22 +1,22 @@
 <template>
     <div class="main-container">
         <Navigation @sidebar-toggle="handleSidebarToggle" />
-        <div class="container-user" :class="{ 'sidebar-collapsed': isSidebarCollapsed }">
-            <section class="users-management">
-                <div class="dashboard-header" ref="dashboardHeader">
-                    <div class="header-top">
-                        <h2>QUẢN LÝ TÀI KHOẢN NHÂN VIÊN</h2>
-                        <span>{{ currentDateTime }}</span>
+        <section class="dashboard" :class="{ 'sidebar-collapsed': isSidebarCollapsed }">
+            <div class="dashboard-header" ref="dashboardHeader">
+                <div class="header-top">
+                    <h2>QUẢN LÝ TÀI KHOẢN NHÂN VIÊN</h2>
+                    <span>{{ currentDateTime }}</span>
+                </div>
+                <div class="header-actions">
+                    <div class="filter-section">
+                        <input type="text" v-model="searchQuery" placeholder="Tìm kiếm..." class="search-input" ref="searchInput" />
+                        <select v-model="roleFilter" class="role-filter">
+                            <option value="">Tất cả vai trò</option>
+                            <option value="manager">Quản lý</option>
+                            <option value="staff">Nhân viên</option>
+                        </select>
                     </div>
-                    <div class="header-actions">
-                        <div class="filter-section">
-                            <input type="text" v-model="searchQuery" placeholder="Tìm kiếm..." class="search-input" ref="searchInput" />
-                            <select v-model="roleFilter" class="role-filter">
-                                <option value="">Tất cả vai trò</option>
-                                <option value="manager">Quản lý</option>
-                                <option value="staff">Nhân viên</option>
-                            </select>
-                        </div>
+                    <div class="action-buttons">
                         <button class="action-button add-user-btn" @click="openAddUserModal">
                             <i class="fa-solid fa-plus"></i> Thêm
                         </button>
@@ -28,288 +28,305 @@
                         </button>
                     </div>
                 </div>
+            </div>
 
-                <!-- Danh sách người dùng chờ duyệt -->
-                <div class="users-list" v-if="!showDeletedUsers && pendingUsers.length > 0">
-                    <h2>Yêu cầu đăng ký ({{ pendingUsers.length }})</h2>
-                    <div class="table-header">
-                        <div class="col-user">Người dùng (Chờ duyệt)</div>
-                        <div class="col-meta">Last active</div>
-                        <div class="col-meta">Date added</div>
-                        <div class="col-actions">Hành động</div>
-                    </div>
-                    <div class="user-item pending-user" v-for="user in pendingUsers" :key="user.id"
-                        @click="openProfileModal(user)">
-                        <div class="user-details">
-                            <img :src="getImageUrl(user.profilePhoto)" alt="Ảnh đại diện" class="user-photo"
-                                @error="handleImageError" />
-                            <div class="user-info">
-                                <h3>{{ user.name }}</h3>
-                                <p>{{ user.email }}</p>
-                                <p><strong>Trạng thái:</strong> {{ user.status }}</p>
-                            </div>
+            <div class="container-user">
+                <section class="users-management">
+                    <!-- Danh sách người dùng chờ duyệt -->
+                    <div class="users-list" v-if="!showDeletedUsers && pendingUsers.length > 0">
+                        <h2>Yêu cầu đăng ký ({{ pendingUsers.length }})</h2>
+                        <div class="table-header">
+                            <div class="col-user">Người dùng (Chờ duyệt)</div>
+                            <div class="col-meta">Last active</div>
+                            <div class="col-meta">Date added</div>
+                            <div class="col-actions">Hành động</div>
                         </div>
-                        <div class="user-meta">{{ formatDate(user.lastActive) }}</div>
-                        <div class="user-meta">{{ formatDate(user.dateAdded) }}</div>
-                        <div class="user-actions">
-                            <button @click.stop="approveUser(user)" class="action-btn approve-btn"><i
-                                    class="fas fa-check"></i> Duyệt</button>
-                            <button @click.stop="rejectUser(user)" class="action-btn reject-btn"><i
-                                    class="fas fa-times"></i> Từ chối</button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Danh sách người dùng đang hoạt động -->
-                <div class="users-list" v-if="!showDeletedUsers">
-                    <div class="table-header">
-                        <div class="col-user">Người dùng</div>
-                        <div class="col-meta">
-                            <span @click="sortByLastActive" class="sort-link">
-                                Last active <i
-                                    :class="sortDirection === 'asc' ? 'fas fa-arrow-up' : 'fas fa-arrow-down'"></i>
-                            </span>
-                        </div>
-                        <div class="col-meta">Date added</div>
-                        <div class="col-actions">Hành động</div>
-                    </div>
-                    <div class="user-item" v-for="user in paginatedUsers" :key="user.id"
-                        @click="openProfileModal(user)">
-                        <div class="user-details">
-                            <img :src="getImageUrl(user.profilePhoto)" alt="Ảnh đại diện" class="user-photo"
-                                @error="handleImageError" />
-                            <div class="user-info">
-                                <h3>{{ user.name }}</h3>
-                                <p>{{ user.email }}</p>
-                                <p><strong>Role:</strong> {{ user.role }}</p>
-                            </div>
-                        </div>
-                        <div class="user-meta">{{ formatDate(user.lastActive) }}</div>
-                        <div class="user-meta">{{ formatDate(user.dateAdded) }}</div>
-                        <div class="user-actions">
-                            <button @click.stop="openEditModal(user)" class="action-btn edit-btn"><i
-                                    class="fas fa-edit"></i></button>
-                            <button @click.stop="confirmDelete(user)" class="action-btn delete-btn"><i
-                                    class="fas fa-trash"></i></button>
-                        </div>
-                    </div>
-                    <div class="pagination" v-if="totalPages > 1">
-                        <button @click="changePage(1)" :disabled="currentPage === 1" class="pagination-btn first-btn"><i
-                                class="fas fa-angle-double-left"></i></button>
-                        <button @click="changePage(currentPage - 1)" :disabled="currentPage === 1"
-                            class="pagination-btn prev-btn"><i class="fas fa-angle-left"></i></button>
-                        <div class="page-numbers">
-                            <button v-for="page in displayedPages" :key="page" @click="changePage(page)"
-                                :class="{ 'pagination-btn': true, 'active': currentPage === page }">
-                                {{ page }}
-                            </button>
-                            <span v-if="showLastEllipsis">...</span>
-                            <button v-if="showLastPage" @click="changePage(totalPages)"
-                                :class="{ 'pagination-btn': true, 'active': currentPage === totalPages }">
-                                {{ totalPages }}
-                            </button>
-                        </div>
-                        <button @click="changePage(currentPage + 1)" :disabled="currentPage === totalPages"
-                            class="pagination-btn next-btn"><i class="fas fa-angle-right"></i></button>
-                        <button @click="changePage(totalPages)" :disabled="currentPage === totalPages"
-                            class="pagination-btn last-btn"><i class="fas fa-angle-double-right"></i></button>
-                    </div>
-                    <p v-if="!paginatedUsers.length && !pendingUsers.length">Không có người dùng nào để hiển thị.</p>
-                </div>
-
-                <!-- Danh sách người dùng đã xóa mềm -->
-                <div class="users-list" v-else>
-                    <div class="table-header">
-                        <div class="col-user">Người dùng</div>
-                        <div class="col-meta">
-                            <span @click="sortByLastActive" class="sort-link">
-                                Last active <i
-                                    :class="sortDirection === 'asc' ? 'fas fa-arrow-up' : 'fas fa-arrow-down'"></i>
-                            </span>
-                        </div>
-                        <div class="col-meta">Date added</div>
-                        <div class="col-actions">Hành động</div>
-                    </div>
-                    <div class="user-item deleted-user" v-for="user in paginatedDeletedUsers" :key="user.id">
-                        <div class="user-details">
-                            <img :src="getImageUrl(user.profilePhoto)" alt="Ảnh đại diện" class="user-photo"
-                                @error="handleImageError" />
-                            <div class="user-info">
-                                <h3>{{ user.name }}</h3>
-                                <p>{{ user.email }}</p>
-                                <p><strong>Vai trò:</strong> {{ user.role }}</p>
-                            </div>
-                        </div>
-                        <div class="user-meta">{{ formatDate(user.lastActive) }}</div>
-                        <div class="user-meta">{{ formatDate(user.dateAdded) }}</div>
-                        <div class="user-actions">
-                            <button @click.stop="confirmRestore(user)" class="action-btn restore-btn"><i
-                                    class="fas fa-undo"></i></button>
-                        </div>
-                    </div>
-                    <div class="pagination" v-if="deletedTotalPages > 1">
-                        <button @click="changeDeletedPage(1)" :disabled="currentDeletedPage === 1"
-                            class="pagination-btn first-btn"><i class="fas fa-angle-double-left"></i></button>
-                        <button @click="changeDeletedPage(currentDeletedPage - 1)" :disabled="currentDeletedPage === 1"
-                            class="pagination-btn prev-btn"><i class="fas fa-angle-left"></i></button>
-                        <div class="page-numbers">
-                            <button v-for="page in displayedDeletedPages" :key="page" @click="changeDeletedPage(page)"
-                                :class="{ 'pagination-btn': true, 'active': currentDeletedPage === page }">
-                                {{ page }}
-                            </button>
-                            <span v-if="showDeletedLastEllipsis">...</span>
-                            <button v-if="showDeletedLastPage" @click="changeDeletedPage(deletedTotalPages)"
-                                :class="{ 'pagination-btn': true, 'active': currentDeletedPage === deletedTotalPages }">
-                                {{ deletedTotalPages }}
-                            </button>
-                        </div>
-                        <button @click="changeDeletedPage(currentDeletedPage + 1)"
-                            :disabled="currentDeletedPage === deletedTotalPages" class="pagination-btn next-btn"><i
-                                class="fas fa-angle-right"></i></button>
-                        <button @click="changeDeletedPage(deletedTotalPages)"
-                            :disabled="currentDeletedPage === deletedTotalPages" class="pagination-btn last-btn"><i
-                                class="fas fa-angle-double-right"></i></button>
-                    </div>
-                    <p v-if="!paginatedDeletedUsers.length">Không có người dùng đã xóa để hiển thị.</p>
-                </div>
-
-                <!-- Modal chỉnh sửa/thêm người dùng -->
-                <div v-if="showUserModal" class="modal">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h2>{{ editingUser ? 'Chỉnh sửa người dùng' : 'Thêm người dùng mới' }}</h2>
-                            <button class="close-btn" @click="showUserModal = false">×</button>
-                        </div>
-                        <form @submit.prevent="saveUser" class="edit-form">
-                            <div class="form-group">
-                                <label>Tên</label>
-                                <input v-model="userForm.name" required />
-                            </div>
-                            <div class="form-group">
-                                <label>Số điện thoại</label>
-                                <input v-model="userForm.phoneNumber" required />
-                            </div>
-                            <div class="form-group">
-                                <label>Email</label>
-                                <input v-model="userForm.email" type="email" required />
-                            </div>
-                            <div class="form-group">
-                                <label>Địa chỉ</label>
-                                <input v-model="userForm.address" required />
-                            </div>
-                            <div class="form-group">
-                                <label>Mật khẩu (để trống nếu không thay đổi)</label>
-                                <input v-model="userForm.password" type="password" :required="!editingUser" />
-                            </div>
-                            <div class="form-group">
-                                <label>Vai trò</label>
-                                <select v-model="userForm.role" required>
-                                    <option value="staff">Nhân viên</option>
-                                    <option value="manager">Quản lý</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label>Ảnh đại diện</label>
-                                <div class="image-upload">
-                                    <div v-if="isValidPhoto(userForm.profilePhoto) && !previewPhoto"
-                                        class="current-image">
-                                        <p>Ảnh hiện tại:</p>
-                                        <img :src="getImageUrl(userForm.profilePhoto)" alt="Ảnh đại diện"
-                                            class="preview-image" @error="handleImageError" />
-                                    </div>
-                                    <div v-if="previewPhoto" class="preview-image-container">
-                                        <p>Ảnh xem trước:</p>
-                                        <img :src="previewPhoto" alt="Ảnh đại diện" class="preview-image" />
-                                        <button type="button" class="remove-preview" @click="removeUserPhoto">Xóa
-                                            ảnh</button>
-                                    </div>
-                                    <input type="file" @change="handleUserPhotoUpload"
-                                        accept="image/jpeg,image/jpg,image/png" />
+                        <div class="user-item pending-user" v-for="user in pendingUsers" :key="user.id"
+                            @click="openProfileModal(user)">
+                            <div class="user-details">
+                                <img :src="getImageUrl(user.profilePhoto)" alt="Ảnh đại diện" class="user-photo"
+                                    @error="handleImageError" />
+                                <div class="user-info">
+                                    <h3>{{ user.name }}</h3>
+                                    <p>{{ user.email }}</p>
+                                    <p><strong>Trạng thái:</strong> {{ user.status }}</p>
                                 </div>
                             </div>
-                            <div class="modal-actions">
-                                <div class="right-actions">
-                                    <button type="button" @click="showUserModal = false" class="cancel-btn">Hủy</button>
-                                    <button type="submit" class="submit-btn">Lưu thay đổi</button>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-
-                <!-- Modal hiển thị hồ sơ -->
-                <div v-if="showProfileModal" class="modal">
-                    <div class="modal-content profile-modal">
-                        <div class="modal-header">
-                            <h2>Hồ sơ người dùng</h2>
-                            <button class="close-btn" @click="showProfileModal = false">×</button>
-                        </div>
-                        <div class="profile-details">
-                            <img :src="getImageUrl(selectedUser.profilePhoto)" alt="Ảnh đại diện" class="profile-photo"
-                                @error="handleImageError" />
-                            <div class="profile-info">
-                                <p><strong>Tên:</strong> {{ selectedUser.name }}</p>
-                                <p><strong>Số điện thoại:</strong> {{ selectedUser.phoneNumber }}</p>
-                                <p><strong>Email:</strong> {{ selectedUser.email }}</p>
-                                <p><strong>Địa chỉ:</strong> {{ selectedUser.address }}</p>
-                                <p><strong>Trạng thái:</strong> {{ selectedUser.status }}</p>
-                                <p v-if="selectedUser.status === 'approved' || selectedUser.status === 'rejected'">
-                                    <strong>Vai trò:</strong> {{ selectedUser.role || 'Chưa gán' }}
-                                </p>
-                                <p><strong>Lần cuối hoạt động:</strong> {{ formatDate(selectedUser.lastActive) }}</p>
-                                <p><strong>Ngày thêm:</strong> {{ formatDate(selectedUser.dateAdded) }}</p>
-                            </div>
-                            <div class="profile-actions" v-if="selectedUser.status === 'approved'">
-                                <button @click="openEditModal(selectedUser)" class="action-btn edit-btn"><i
-                                        class="fas fa-edit"></i> Sửa</button>
-                                <button @click="confirmDelete(selectedUser)" class="action-btn delete-btn"><i
-                                        class="fas fa-trash"></i> Xóa</button>
-                            </div>
-                            <div class="profile-actions" v-else-if="selectedUser.status === 'pending'">
-                                <button @click="approveUser(selectedUser)" class="action-btn approve-btn"><i
+                            <div class="user-meta">{{ formatDate(user.lastActive) }}</div>
+                            <div class="user-meta">{{ formatDate(user.dateAdded) }}</div>
+                            <div class="user-actions">
+                                <button @click.stop="approveUser(user)" class="action-btn approve-btn"><i
                                         class="fas fa-check"></i> Duyệt</button>
-                                <button @click="rejectUser(selectedUser)" class="action-btn reject-btn"><i
+                                <button @click.stop="rejectUser(user)" class="action-btn reject-btn"><i
                                         class="fas fa-times"></i> Từ chối</button>
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <!-- Popup xác nhận xóa -->
-                <div v-if="showDeletePopup" class="popup">
-                    <div class="popup-content">
-                        <h3>Xác nhận xóa người dùng</h3>
-                        <div class="user-info">
-                            <p><strong>Tên:</strong> {{ userToDelete.name }}</p>
-                            <p><strong>Email:</strong> {{ userToDelete.email }}</p>
-                            <p><strong>Role:</strong> {{ userToDelete.role }}</p>
+                    <!-- Danh sách người dùng đang hoạt động -->
+                    <div class="users-list" v-if="!showDeletedUsers">
+                        <div class="table-header">
+                            <div class="col-user">Người dùng</div>
+                            <div class="col-meta">
+                                <span @click="sortByLastActive" class="sort-link">
+                                    Last active <i
+                                        :class="sortDirection === 'asc' ? 'fas fa-arrow-up' : 'fas fa-arrow-down'"></i>
+                                </span>
+                            </div>
+                            <div class="col-meta">Date added</div>
+                            <div class="col-actions">Hành động</div>
                         </div>
-                        <p class="warning-text">Bạn có chắc chắn muốn xóa người dùng này không? Hành động này không thể
-                            hoàn tác.</p>
-                        <div class="popup-actions">
-                            <button @click="showDeletePopup = false" class="cancel-btn">Hủy</button>
-                            <button @click="deleteUser" class="confirm-btn">Xóa</button>
+                        <div class="user-item" v-for="user in paginatedUsers" :key="user.id"
+                            @click="openProfileModal(user)">
+                            <div class="user-details">
+                                <img :src="getImageUrl(user.profilePhoto)" alt="Ảnh đại diện" class="user-photo"
+                                    @error="handleImageError" />
+                                <div class="user-info">
+                                    <h3>{{ user.name }}</h3>
+                                    <p>{{ user.email }}</p>
+                                    <p><strong>Role:</strong> {{ user.role }}</p>
+                                </div>
+                            </div>
+                            <div class="user-meta">{{ formatDate(user.lastActive) }}</div>
+                            <div class="user-meta">{{ formatDate(user.dateAdded) }}</div>
+                            <div class="user-actions">
+                                <button @click.stop="openEditModal(user)" class="action-btn edit-btn"><i
+                                        class="fas fa-edit"></i></button>
+                                <button @click.stop="confirmDelete(user)" class="action-btn delete-btn"><i
+                                        class="fas fa-trash"></i></button>
+                            </div>
+                        </div>
+                        <div class="pagination" v-if="totalPages > 1">
+                            <button @click="changePage(1)" :disabled="currentPage === 1" class="pagination-btn first-btn"><i
+                                    class="fas fa-angle-double-left"></i></button>
+                            <button @click="changePage(currentPage - 1)" :disabled="currentPage === 1"
+                                class="pagination-btn prev-btn"><i class="fas fa-angle-left"></i></button>
+                            <div class="page-numbers">
+                                <button v-for="page in displayedPages" :key="page" @click="changePage(page)"
+                                    :class="{ 'pagination-btn': true, 'active': currentPage === page }">
+                                    {{ page }}
+                                </button>
+                                <span v-if="showLastEllipsis">...</span>
+                                <button v-if="showLastPage" @click="changePage(totalPages)"
+                                    :class="{ 'pagination-btn': true, 'active': currentPage === totalPages }">
+                                    {{ totalPages }}
+                                </button>
+                            </div>
+                            <button @click="changePage(currentPage + 1)" :disabled="currentPage === totalPages"
+                                class="pagination-btn next-btn"><i class="fas fa-angle-right"></i></button>
+                            <button @click="changePage(totalPages)" :disabled="currentPage === totalPages"
+                                class="pagination-btn last-btn"><i class="fas fa-angle-double-right"></i></button>
+                        </div>
+                        <p v-if="!paginatedUsers.length && !pendingUsers.length">Không có người dùng nào để hiển thị.</p>
+                    </div>
+
+                    <!-- Danh sách người dùng đã xóa mềm -->
+                    <div class="users-list" v-else>
+                        <div class="table-header">
+                            <div class="col-user">Người dùng</div>
+                            <div class="col-meta">
+                                <span @click="sortByLastActive" class="sort-link">
+                                    Last active <i
+                                        :class="sortDirection === 'asc' ? 'fas fa-arrow-up' : 'fas fa-arrow-down'"></i>
+                                </span>
+                            </div>
+                            <div class="col-meta">Date added</div>
+                            <div class="col-actions">Hành động</div>
+                        </div>
+                        <div class="user-item deleted-user" v-for="user in paginatedDeletedUsers" :key="user.id">
+                            <div class="user-details">
+                                <img :src="getImageUrl(user.profilePhoto)" alt="Ảnh đại diện" class="user-photo"
+                                    @error="handleImageError" />
+                                <div class="user-info">
+                                    <h3>{{ user.name }}</h3>
+                                    <p>{{ user.email }}</p>
+                                    <p><strong>Vai trò:</strong> {{ user.role }}</p>
+                                </div>
+                            </div>
+                            <div class="user-meta">{{ formatDate(user.lastActive) }}</div>
+                            <div class="user-meta">{{ formatDate(user.dateAdded) }}</div>
+                            <div class="user-actions">
+                                <button @click.stop="confirmRestore(user)" class="action-btn restore-btn"><i
+                                        class="fas fa-undo"></i></button>
+                            </div>
+                        </div>
+                        <div class="pagination" v-if="deletedTotalPages > 1">
+                            <button @click="changeDeletedPage(1)" :disabled="currentDeletedPage === 1"
+                                class="pagination-btn first-btn"><i class="fas fa-angle-double-left"></i></button>
+                            <button @click="changeDeletedPage(currentDeletedPage - 1)" :disabled="currentDeletedPage === 1"
+                                class="pagination-btn prev-btn"><i class="fas fa-angle-left"></i></button>
+                            <div class="page-numbers">
+                                <button v-for="page in displayedDeletedPages" :key="page" @click="changeDeletedPage(page)"
+                                    :class="{ 'pagination-btn': true, 'active': currentDeletedPage === page }">
+                                    {{ page }}
+                                </button>
+                                <span v-if="showDeletedLastEllipsis">...</span>
+                                <button v-if="showDeletedLastPage" @click="changeDeletedPage(deletedTotalPages)"
+                                    :class="{ 'pagination-btn': true, 'active': currentDeletedPage === deletedTotalPages }">
+                                    {{ deletedTotalPages }}
+                                </button>
+                            </div>
+                            <button @click="changeDeletedPage(currentDeletedPage + 1)"
+                                :disabled="currentDeletedPage === deletedTotalPages" class="pagination-btn next-btn"><i
+                                    class="fas fa-angle-right"></i></button>
+                            <button @click="changeDeletedPage(deletedTotalPages)"
+                                :disabled="currentDeletedPage === deletedTotalPages" class="pagination-btn last-btn"><i
+                                    class="fas fa-angle-double-right"></i></button>
+                        </div>
+                        <p v-if="!paginatedDeletedUsers.length">Không có người dùng đã xóa để hiển thị.</p>
+                    </div>
+
+                    <!-- Popup xác nhận khôi phục -->
+                    <div v-if="showRestorePopup" class="popup">
+                        <div class="popup-content">
+                            <h3>Xác nhận khôi phục người dùng</h3>
+                            <div class="user-info">
+                                <p><strong>Tên:</strong> {{ userToRestore.name }}</p>
+                                <p><strong>Email:</strong> {{ userToRestore.email }}</p>
+                                <p><strong>Role:</strong> {{ userToRestore.role }}</p>
+                            </div>
+                            <p class="success-text">Bạn có muốn khôi phục người dùng này không?</p>
+                            <div class="popup-actions">
+                                <button @click="showRestorePopup = false" class="cancel-btn">Hủy</button>
+                                <button @click="restoreUser" class="confirm-btn">Khôi phục</button>
+                            </div>
                         </div>
                     </div>
+                </section>
+            </div>
+        </section>
+        <!-- Modal chỉnh sửa/thêm người dùng -->
+        <div v-if="showUserModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>{{ editingUser ? 'Chỉnh sửa người dùng' : 'Thêm người dùng mới' }}</h2>
+                    <button class="close-btn" @click="showUserModal = false">×</button>
                 </div>
-
-                <!-- Popup xác nhận khôi phục -->
-                <div v-if="showRestorePopup" class="popup">
-                    <div class="popup-content">
-                        <h3>Xác nhận khôi phục người dùng</h3>
-                        <div class="user-info">
-                            <p><strong>Tên:</strong> {{ userToRestore.name }}</p>
-                            <p><strong>Email:</strong> {{ userToRestore.email }}</p>
-                            <p><strong>Role:</strong> {{ userToRestore.role }}</p>
-                        </div>
-                        <p class="success-text">Bạn có muốn khôi phục người dùng này không?</p>
-                        <div class="popup-actions">
-                            <button @click="showRestorePopup = false" class="cancel-btn">Hủy</button>
-                            <button @click="restoreUser" class="confirm-btn">Khôi phục</button>
+                <form @submit.prevent="saveUser" class="edit-form">
+                    <div class="form-group">
+                        <label>Tên</label>
+                        <input v-model="userForm.name" required />
+                    </div>
+                    <div class="form-group">
+                        <label>Số điện thoại</label>
+                        <input v-model="userForm.phoneNumber" required />
+                    </div>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input v-model="userForm.email" type="email" required />
+                    </div>
+                    <div class="form-group">
+                        <label>Địa chỉ</label>
+                        <input v-model="userForm.address" required />
+                    </div>
+                    <div class="form-group">
+                        <label>Mật khẩu (để trống nếu không thay đổi)</label>
+                        <input v-model="userForm.password" type="password" :required="!editingUser" />
+                    </div>
+                    <div class="form-group">
+                        <label>Vai trò</label>
+                        <select v-model="userForm.role" required>
+                            <option value="staff">Nhân viên</option>
+                            <option value="manager">Quản lý</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Ảnh đại diện</label>
+                        <div class="image-upload">
+                            <div v-if="isValidPhoto(userForm.profilePhoto) && !previewPhoto"
+                                class="current-image">
+                                <p>Ảnh hiện tại:</p>
+                                <img :src="getImageUrl(userForm.profilePhoto)" alt="Ảnh đại diện"
+                                    class="preview-image" @error="handleImageError" />
+                            </div>
+                            <div v-if="previewPhoto" class="preview-image-container">
+                                <p>Ảnh xem trước:</p>
+                                <img :src="previewPhoto" alt="Ảnh đại diện" class="preview-image" />
+                                <button type="button" class="remove-preview" @click="removeUserPhoto">Xóa
+                                    ảnh</button>
+                            </div>
+                            <input type="file" @change="handleUserPhotoUpload"
+                                accept="image/jpeg,image/jpg,image/png" />
                         </div>
                     </div>
+                    <div class="modal-actions">
+                        <div class="right-actions">
+                            <button type="button" @click="showUserModal = false" class="cancel-btn">Hủy</button>
+                            <button type="submit" class="submit-btn">Lưu thay đổi</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!-- Modal hiển thị hồ sơ -->
+        <div v-if="showProfileModal" class="modal">
+            <div class="modal-content profile-modal">
+                <div class="modal-header">
+                    <h2>Hồ sơ người dùng</h2>
+                    <button class="close-btn" @click="showProfileModal = false">×</button>
                 </div>
-            </section>
+                <div class="profile-details">
+                    <img :src="getImageUrl(selectedUser.profilePhoto)" alt="Ảnh đại diện" class="profile-photo"
+                        @error="handleImageError" />
+                    <div class="profile-info">
+                        <p><strong>Tên:</strong> {{ selectedUser.name }}</p>
+                        <p><strong>Số điện thoại:</strong> {{ selectedUser.phoneNumber }}</p>
+                        <p><strong>Email:</strong> {{ selectedUser.email }}</p>
+                        <p><strong>Địa chỉ:</strong> {{ selectedUser.address }}</p>
+                        <p><strong>Trạng thái:</strong> {{ selectedUser.status }}</p>
+                        <p v-if="selectedUser.status === 'approved' || selectedUser.status === 'rejected'">
+                            <strong>Vai trò:</strong> {{ selectedUser.role || 'Chưa gán' }}
+                        </p>
+                        <p><strong>Lần cuối hoạt động:</strong> {{ formatDate(selectedUser.lastActive) }}</p>
+                        <p><strong>Ngày thêm:</strong> {{ formatDate(selectedUser.dateAdded) }}</p>
+                    </div>
+                    <div class="profile-actions" v-if="selectedUser.status === 'approved'">
+                        <button @click="openEditModal(selectedUser)" class="action-btn edit-btn"><i
+                                class="fas fa-edit"></i> Sửa</button>
+                        <button @click="confirmDelete(selectedUser)" class="action-btn delete-btn"><i
+                                class="fas fa-trash"></i> Xóa</button>
+                    </div>
+                    <div class="profile-actions" v-else-if="selectedUser.status === 'pending'">
+                        <button @click="approveUser(selectedUser)" class="action-btn approve-btn"><i
+                                class="fas fa-check"></i> Duyệt</button>
+                        <button @click="rejectUser(selectedUser)" class="action-btn reject-btn"><i
+                                class="fas fa-times"></i> Từ chối</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Popup xác nhận xóa -->
+        <div v-if="showDeletePopup" class="popup">
+            <div class="popup-content">
+                <h3>Xác nhận xóa người dùng</h3>
+                <div class="user-info">
+                    <p><strong>Tên:</strong> {{ userToDelete.name }}</p>
+                    <p><strong>Email:</strong> {{ userToDelete.email }}</p>
+                    <p><strong>Role:</strong> {{ userToDelete.role }}</p>
+                </div>
+                <p class="warning-text">Bạn có chắc chắn muốn xóa người dùng này không? Hành động này không thể
+                    hoàn tác.</p>
+                <div class="popup-actions">
+                    <button @click="showDeletePopup = false" class="cancel-btn">Hủy</button>
+                    <button @click="deleteUser" class="confirm-btn">Xóa</button>
+                </div>
+            </div>
+        </div>
+        <!-- Popup xác nhận khôi phục -->
+        <div v-if="showRestorePopup" class="popup">
+            <div class="popup-content">
+                <h3>Xác nhận khôi phục người dùng</h3>
+                <div class="user-info">
+                    <p><strong>Tên:</strong> {{ userToRestore.name }}</p>
+                    <p><strong>Email:</strong> {{ userToRestore.email }}</p>
+                    <p><strong>Role:</strong> {{ userToRestore.role }}</p>
+                </div>
+                <p class="success-text">Bạn có muốn khôi phục người dùng này không?</p>
+                <div class="popup-actions">
+                    <button @click="showRestorePopup = false" class="cancel-btn">Hủy</button>
+                    <button @click="restoreUser" class="confirm-btn">Khôi phục</button>
+                </div>
+            </div>
         </div>
     </div>
 </template>
@@ -786,27 +803,11 @@ export default {
     font-family: 'Arial', sans-serif;
 }
 
-.container-user {
+.dashboard {
     flex: 1;
-    margin: 0;
-    padding: 0;
+    padding: 2rem;
     background-color: #FFF8E7;
-    color: #3B2F2F;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    padding-right: 20px;
-    padding-left: 20px;
     transition: margin-left 0.3s ease;
-}
-
-.users-management {
-    padding: 0px;
-    color: #3B2F2F;
-    max-width: 1200px;
-    width: 100%;
-    margin: 0 auto;
-    z-index: 1;
 }
 
 .dashboard-header {
@@ -815,7 +816,7 @@ export default {
     background: linear-gradient(135deg, #8B5E3C, #6B4226);
     z-index: 3;
     padding: 1.5rem 2rem;
-    margin: 0 -20px 20px -20px;
+    margin: -2rem -2rem 2rem -2rem;
     border-bottom: 1px solid #E7C27D;
     box-shadow: 0 4px 15px rgba(107, 66, 38, 0.3);
 }
@@ -858,7 +859,7 @@ export default {
 
 .filter-section {
     display: flex;
-    gap: clamp(0.6rem, 1.5vw, 0.8rem);
+    gap: 0.5rem;
     align-items: center;
     flex-wrap: wrap;
 }
@@ -888,35 +889,34 @@ export default {
 
 .action-buttons {
     display: flex;
-    gap: clamp(0.4rem, 1vw, 0.5rem);
+    gap: 0.5rem;
     align-items: center;
     flex-wrap: wrap;
 }
 
 .action-button {
-    padding: clamp(0.5rem, 1.5vw, 0.6rem) clamp(1rem, 2.5vw, 1.2rem);
+    padding: 0.5rem 1rem;
     border: none;
     border-radius: 8px;
-    font-size: clamp(0.85rem, 2vw, 0.9rem);
+    font-size: 0.9rem;
     cursor: pointer;
     display: flex;
     align-items: center;
-    gap: clamp(0.3rem, 1vw, 0.5rem);
+    gap: 0.5rem;
     transition: all 0.3s ease;
     font-weight: 600;
     box-shadow: 0 2px 8px rgba(107, 66, 38, 0.3);
     border: 1px solid #E7C27D;
     white-space: nowrap;
-    min-height: 40px;
 }
 
 .add-user-btn {
-    background: linear-gradient(135deg, #8B5E3C, #6B4226);
+    background: #8B5E3C;
     color: #FFF8E7;
 }
 
 .add-user-btn:hover {
-    background: linear-gradient(135deg, #6B4226, #8B5E3C);
+    background: #6B4226;
     transform: translateY(-2px);
     box-shadow: 0 4px 15px rgba(107, 66, 38, 0.4);
 }
@@ -942,6 +942,27 @@ export default {
     box-shadow: 0 4px 15px rgba(231, 194, 125, 0.4);
 }
 
+.container-user {
+    flex: 1;
+    margin: 0;
+    padding: 0;
+    background-color: #FFF8E7;
+    color: #3B2F2F;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.users-management {
+    padding: 0px;
+    color: #3B2F2F;
+    max-width: 1200px;
+    width: 100%;
+    margin: 0 auto;
+    z-index: 1;
+}
+
+/* Phần còn lại của CSS giữ nguyên */
 .users-list {
     display: flex;
     flex-direction: column;
@@ -1701,167 +1722,43 @@ export default {
     background: #8B5E3C;
 }
 
-/* Enhanced Responsive Design */
-@media (max-width: 1024px) {
-    .container-user {
-        padding-right: 15px;
-        padding-left: 15px;
+/* Responsive Design */
+@media (max-width: 768px) {
+    .dashboard-header {
+        padding: 1rem;
+        margin: -1rem -1rem 1rem -1rem;
     }
     
-    .table-header,
-    .user-item {
-        grid-template-columns: 1fr minmax(90px, 110px) minmax(90px, 110px) minmax(90px, 110px);
-    }
-}
-
-@media (max-width: 768px) {
-    .users-management {
-        padding: 15px;
-        padding-top: clamp(140px, 18vw, 160px);
-    }
-
-    .table-header,
-    .user-item {
-        grid-template-columns: 1fr 80px 80px 70px;
-        gap: 8px;
-    }
-
-    .col-user {
-        padding-left: 30px;
-    }
-
     .header-top {
         flex-direction: column;
-        align-items: center;
+        align-items: flex-start;
         gap: 1rem;
-        text-align: center;
     }
     
     .header-top h2 {
-        position: static;
-        transform: none;
-        order: -1;
+        min-width: auto;
+        text-align: center;
         width: 100%;
-        margin-bottom: 0.5rem;
     }
     
     .header-actions {
-        margin-left: 0;
-        justify-content: center;
+        min-width: auto;
         width: 100%;
+        justify-content: center;
     }
     
     .filter-section {
         justify-content: center;
         width: 100%;
-        flex-direction: column;
     }
     
-    .search-input,
-    .role-filter {
-        width: 100%;
-        min-width: auto;
-    }
-
     .action-buttons {
         justify-content: center;
         width: 100%;
     }
-
-    .user-details {
-        gap: 12px;
-    }
-
-    .user-photo {
-        width: 40px;
-        height: 40px;
-    }
-
-    .user-info h3 {
-        font-size: 0.95rem;
-    }
-
-    .user-info p {
-        font-size: 0.8rem;
-    }
-
-    .user-meta {
-        font-size: 0.8rem;
-    }
-
-    .action-btn {
-        padding: 6px 10px;
-        font-size: 0.75rem;
-        min-width: 55px;
-    }
-
-    .pagination {
-        gap: 6px;
-    }
-
-    .pagination-btn {
-        padding: 8px 10px;
-        font-size: 0.8rem;
-        min-width: 35px;
-        min-height: 35px;
-    }
 }
 
 @media (max-width: 480px) {
-    .users-management {
-        padding-top: clamp(160px, 22vw, 180px);
-    }
-
-    .table-header,
-    .user-item {
-        grid-template-columns: 1fr 70px 70px 60px;
-        gap: 6px;
-        padding: 10px;
-    }
-
-    .col-user {
-        padding-left: 20px;
-    }
-
-    .user-details {
-        gap: 10px;
-        flex-direction: column;
-        align-items: flex-start;
-    }
-
-    .user-photo {
-        width: 35px;
-        height: 35px;
-    }
-
-    .user-info h3 {
-        font-size: 0.9rem;
-    }
-
-    .user-info p {
-        font-size: 0.75rem;
-    }
-
-    .user-meta {
-        font-size: 0.75rem;
-    }
-
-    .user-actions {
-        justify-content: flex-start;
-        width: 100%;
-    }
-
-    .action-btn {
-        padding: 5px 8px;
-        font-size: 0.7rem;
-        min-width: 50px;
-        min-height: 28px;
-    }
-
-    .header-top {
-        gap: 0.8rem;
-    }
-    
     .header-actions {
         flex-direction: column;
         gap: 0.8rem;
@@ -1881,74 +1778,5 @@ export default {
         width: 100%;
         justify-content: center;
     }
-
-    .pagination {
-        flex-direction: column;
-        gap: 8px;
-    }
-
-    .page-numbers {
-        order: -1;
-        width: 100%;
-        justify-content: center;
-    }
-
-    .pagination-info {
-        width: 100%;
-        text-align: center;
-    }
 }
-
-/* High contrast support */
-@media (prefers-contrast: high) {
-    .user-item {
-        border-width: 2px;
-    }
-    
-    .form-group input,
-    .form-group select {
-        border-width: 2px;
-    }
-}
-
-/* Reduced motion support */
-@media (prefers-reduced-motion: reduce) {
-    * {
-        transition: none !important;
-        animation: none !important;
-    }
-    
-    .user-item:hover,
-    .action-button:hover,
-    .action-btn:hover {
-        transform: none;
-    }
-}
-
-/* Zoom support */
-@media (max-width: 1200px) {
-    .container-user {
-        padding-right: clamp(10px, 2vw, 20px);
-        padding-left: clamp(10px, 2vw, 20px);
-    }
-}
-
-/* Touch device optimizations */
-@media (hover: none) and (pointer: coarse) {
-    .action-button,
-    .action-btn,
-    .pagination-btn {
-        min-height: 44px;
-        min-width: 44px;
-    }
-    
-    .user-item {
-        cursor: default;
-    }
-    
-    .user-item:active {
-        background: rgba(231, 194, 125, 0.15);
-        transform: translateY(-1px);
-    }
-}
-</style>
+</style> 
