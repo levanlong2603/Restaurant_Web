@@ -11,15 +11,15 @@
       <!-- Menu -->
       <nav>
         <ul>
-          <li><router-link to="/" active-class="active">{{ t('intro') }}</router-link></li>
-          <li><router-link to="/menu" active-class="active">{{ t('menu') }}</router-link></li>
-          <li><router-link to="/reservation" active-class="active">{{ t('reservation') }}</router-link></li>
-          <li><router-link to="/contact" active-class="active">{{ t('contact') }}</router-link></li>
+          <li><router-link to="/" active-class="active">{{ $t('header.home') }}</router-link></li>
+          <li><router-link to="/menu" active-class="active">{{ $t('header.menu') }}</router-link></li>
+          <li><router-link to="/reservation" active-class="active">{{ $t('header.reservation') }}</router-link></li>
+          <li><router-link to="/contact" active-class="active">{{ $t('header.contact') }}</router-link></li>
         </ul>
       </nav>
 
       <!-- Nút chuyển ngôn ngữ -->
-      <button class="lang-switch" @click="toggleLanguage">
+      <button type="button" class="lang-switch" @click="toggleLanguage">
         {{ language === 'vi' ? 'EN' : 'VI' }}
       </button>
     </div>
@@ -31,41 +31,73 @@ export default {
   name: 'Header',
   data() {
     return {
-      language: localStorage.getItem('lang') || 'vi',
       isScrolled: false,
-      translations: {
-        vi: {
-          intro: 'GIỚI THIỆU',
-          menu: 'THỰC ĐƠN',
-          reservation: 'ĐẶT BÀN',
-          contact: 'LIÊN HỆ',
-        },
-        en: {
-          intro: 'ABOUT',
-          menu: 'MENU',
-          reservation: 'RESERVATION',
-          contact: 'CONTACT',
-        },
-      },
+      currentLang: (localStorage.getItem('lang')) || ((this.$i18n && this.$i18n.locale) ? (this.$i18n.locale.value || this.$i18n.locale) : 'vi'),
     };
+  },
+  computed: {
+    language() {
+      return this.currentLang
+    }
   },
   methods: {
     toggleLanguage() {
-      this.language = this.language === 'vi' ? 'en' : 'vi';
-      localStorage.setItem('lang', this.language);
-    },
-    t(key) {
-      return this.translations[this.language][key];
+      // compute next language
+      const current = localStorage.getItem('lang') || (this.currentLang || 'vi')
+      const next = current === 'vi' ? 'en' : 'vi'
+
+      // persist and update local reactive copy
+      localStorage.setItem('lang', next)
+      this.currentLang = next
+
+      // Emit single source-of-truth event; main.js listener will update i18n.global.locale
+      try {
+        window.dispatchEvent(new CustomEvent('lang-changed', { detail: next }));
+      } catch (e) {
+        const evt = document.createEvent('CustomEvent');
+        evt.initCustomEvent('lang-changed', true, true, next);
+        window.dispatchEvent(evt);
+      }
+      // Reload the page so the whole site fully reflects the new language immediately
+      try {
+        window.location.reload()
+      } catch (err) {
+        // ignore if reload not permitted
+        console.warn('Could not reload page after language change', err)
+      }
     },
     handleScroll() {
       this.isScrolled = window.scrollY > 20;
     },
+    // xử lý khi event lang-changed được phát từ bên ngoài
+    onExternalLangChanged(e) {
+      const newLang = e && e.detail ? e.detail : null;
+      if (newLang) {
+        try {
+          if (this.$i18n && this.$i18n.locale && typeof this.$i18n.locale === 'object' && 'value' in this.$i18n.locale) {
+            this.$i18n.locale.value = newLang
+          } else if (this.$i18n) {
+            this.$i18n.locale = newLang
+          }
+        } catch (err) {
+          localStorage.setItem('lang', newLang)
+        }
+        // also update local reactive copy so template changes
+        this.currentLang = newLang
+      }
+    },
   },
   mounted() {
     window.addEventListener('scroll', this.handleScroll);
+
+    // Lắng nghe thay đổi ngôn ngữ toàn cục
+    window.addEventListener('lang-changed', this.onExternalLangChanged);
   },
   beforeUnmount() {
     window.removeEventListener('scroll', this.handleScroll);
+
+    // Hủy lắng nghe event ngôn ngữ
+    window.removeEventListener('lang-changed', this.onExternalLangChanged);
   },
 };
 </script>

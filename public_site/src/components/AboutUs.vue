@@ -2,18 +2,18 @@
     <section class="about">
       <div class="about-item">
         <h3>01</h3>
-        <h2>NHÀ HÀNG</h2>
-        <p>Trải nghiệm không gian ấm cúng và tinh tế của nhà hàng Việt, nơi hội tụ tinh hoa ẩm thực truyền thống kết hợp cùng phong cách hiện đại. Chúng tôi tự hào mang đến cho thực khách những giây phút thư giãn và thưởng thức món ăn tuyệt vời.</p>
+        <h2>{{ $t('about.section1.title') || 'NHÀ HÀNG' }}</h2>
+        <p>{{ $t('about.section1.content') || 'Trải nghiệm không gian ấm cúng và tinh tế của nhà hàng Việt, nơi hội tụ tinh hoa ẩm thực truyền thống kết hợp cùng phong cách hiện đại. Chúng tôi tự hào mang đến cho thực khách những giây phút thư giãn và thưởng thức món ăn tuyệt vời.' }}</p>
       </div>
       <div class="about-item">
         <h3>02</h3>
-        <h2>NHỮNG MÓN ĂN TINH TÚY NHẤT</h2>
-        <p>Đầu bếp của chúng tôi lựa chọn kỹ lưỡng những nguyên liệu tươi ngon nhất, chế biến theo công thức truyền thống để mang lại hương vị đậm đà, khó quên. Hãy thưởng thức những món ăn đặc trưng mà ai cũng yêu thích!</p>
+        <h2>{{ $t('about.section2.title') || 'NHỮNG MÓN ĂN TINH TÚY NHẤT' }}</h2>
+        <p>{{ $t('about.section2.content') || 'Đầu bếp của chúng tôi lựa chọn kỹ lưỡng những nguyên liệu tươi ngon nhất, chế biến theo công thức truyền thống để mang lại hương vị đậm đà, khó quên. Hãy thưởng thức những món ăn đặc trưng mà ai cũng yêu thích!' }}</p>
       </div>
       <div class="about-item">
         <h3>03</h3>
-        <h2>NẰM GIỮA LÒNG THÀNH PHỐ</h2>
-        <p>Nhà hàng nằm ngay trung tâm sôi động, là điểm dừng chân lý tưởng để bạn tận hưởng một bữa ăn ngon sau những giờ làm việc hay khám phá thành phố. Chúng tôi luôn sẵn sàng phục vụ bạn!</p>
+        <h2>{{ $t('about.section3.title') || 'NẰM GIỮA LÒNG THÀNH PHỐ' }}</h2>
+        <p>{{ $t('about.section3.content') || 'Nhà hàng nằm ngay trung tâm sôi động, là điểm dừng chân lý tưởng để bạn tận hưởng một bữa ăn ngon sau những giờ làm việc hay khám phá thành phố. Chúng tôi luôn sẵn sàng phục vụ bạn!' }}</p>
       </div>
     </section>
   </template>
