@@ -94,17 +94,4 @@
     "inputPlaceholder": "Nhập câu hỏi...",
     "error": "Lỗi kết nối server, vui lòng thử lại!"
   }
-  ,
-  "aboutUs": {
-    "title": "Về Chúng Tôi",
-    "intro1": "LONG QUÂN AN",
-    "intro2": "NHÀ HÀNG CƠM VIỆT, QUÁN CƠM GIA ĐÌNH NGON TẠI HÀ NỘI.",
-    "p1": "Tại Long Quân An, triết lý của chúng tôi rất đơn giản: chia sẻ hương vị và văn hóa thưởng thức cơm Việt tới tất cả mọi người. Chúng tôi làm điều này bằng việc sử dụng nguồn nguyên liệu tươi sạch nhất, và chế biến chúng qua đôi tay của những người đầu bếp tận tâm.",
-    "p2": "Không gian tại nhà hàng cơm Long Quân An được lấy cảm hứng từ những giá trị truyền thống của Việt Nam kết hợp với những nét hiện đại để tạo nên một cảm giác xưa cũ kết hợp cùng những điều mới mẻ.",
-    "p3": "Với chủ đạo là gỗ và cây, những thứ gắn liền nhất với thiên nhiên sẽ khiến trải nghiệm dùng bữa thực sự khác biệt!",
-    "lang": {
-      "vi": "VI",
-      "en": "EN"
-    }
-  }
 }

@@ -9,20 +9,16 @@
       :style="{ backgroundImage: `url(${image.url})` }"
     ></div>
     
-    <!-- Overlay với gradient tinh tế hơn -->
+    <!-- Overlay với gradient tinh tế -->
     <div class="hero-overlay"></div>
     
     <!-- Nội dung hero -->
     <div class="hero-content">
       <div class="content-wrapper">
-        <transition name="fade-up" mode="out-in">
-          <div :key="currentIndex" class="text-content">
-            <h1 class="hero-title">{{ currentContent.title }}</h1>
-            <h2 class="hero-subtitle">{{ currentContent.subtitle }}</h2>
-            <div class="hero-divider"></div>
-            <p class="hero-description">{{ currentContent.description }}</p>
-          </div>
-        </transition>
+        <div class="text-content">
+          <h1 class="hero-title">{{ currentContent.title }}</h1>
+          <h2 class="hero-subtitle">{{ currentContent.subtitle }}</h2>
+        </div>
         
         <!-- Nút CTA với router-link -->
         <div class="hero-actions">
@@ -76,20 +72,17 @@ export default {
         { 
           url: hero1, 
           title: 'LONG QUÂN AN', 
-          subtitle: 'Tinh Hoa Ẩm Thực Việt',
-          description: 'Trải nghiệm hương vị truyền thống trong không gian hiện đại'
+          subtitle: 'Tinh Hoa Ẩm Thực Việt'
         },
         { 
           url: hero2, 
           title: 'LONG QUÂN AN', 
-          subtitle: 'Hương Vị Quê Hương',
-          description: 'Nguyên liệu tươi ngon - Chế biến tận tâm - Phục vụ chu đáo'
+          subtitle: 'Hương Vị Quê Hương'
         },
         { 
           url: hero3, 
           title: 'LONG QUÂN AN', 
-          subtitle: 'Bữa Cơm Gia Đình',
-          description: 'Nơi hương vị gia đình hòa quyện cùng không gian ấm cúng'
+          subtitle: 'Bữa Cơm Gia Đình'
         }
       ],
       currentIndex: 0,
@@ -98,11 +91,7 @@ export default {
   },
   computed: {
     currentContent() {
-      return {
-        title: this.images[this.currentIndex].title,
-        subtitle: this.images[this.currentIndex].subtitle,
-        description: this.images[this.currentIndex].description
-      };
+      return this.images[this.currentIndex];
     }
   },
   methods: {
@@ -217,24 +206,6 @@ export default {
   color: #F5E3B3;
   text-shadow: 2px 2px 4px rgba(107, 66, 38, 0.6);
   letter-spacing: 1px;
-}
-
-.hero-divider {
-  width: 100px;
-  height: 3px;
-  background: linear-gradient(90deg, transparent, #E7C27D, transparent);
-  margin: 1.5rem auto;
-  border-radius: 2px;
-}
-
-.hero-description {
-  font-size: 1.3rem;
-  font-weight: 400;
-  line-height: 1.6;
-  color: #FFF8E7;
-  text-shadow: 1px 1px 2px rgba(107, 66, 38, 0.5);
-  max-width: 600px;
-  margin: 0 auto;
 }
 
 .hero-actions {
@@ -354,38 +325,14 @@ export default {
   border: 0;
 }
 
-/* Transition animations */
-.fade-up-enter-active,
-.fade-up-leave-active {
-  transition: all 0.8s ease;
-}
-
-.fade-up-enter-from {
-  opacity: 0;
-  transform: translateY(30px);
-}
-
-.fade-up-leave-to {
-  opacity: 0;
-  transform: translateY(-30px);
-}
-
 /* Responsive Design */
 @media (max-width: 1024px) {
-  .hero {
-    height: 80vh;
-  }
-  
   .hero-title {
-    font-size: 3.8rem;
+    font-size: 3.5rem;
   }
   
   .hero-subtitle {
     font-size: 1.8rem;
-  }
-  
-  .hero-description {
-    font-size: 1.2rem;
   }
   
   .nav-btn {
@@ -408,17 +355,12 @@ export default {
   }
   
   .hero-title {
-    font-size: 3.2rem;
-    letter-spacing: 2px;
+    font-size: 2.5rem;
+    letter-spacing: 1px;
   }
   
   .hero-subtitle {
-    font-size: 1.5rem;
-  }
-  
-  .hero-description {
-    font-size: 1.1rem;
-    padding: 0 1rem;
+    font-size: 1.3rem;
   }
   
   .content-wrapper {
@@ -445,16 +387,11 @@ export default {
   }
   
   .hero-title {
-    font-size: 2.5rem;
-    letter-spacing: 1px;
+    font-size: 2rem;
   }
   
   .hero-subtitle {
-    font-size: 1.3rem;
-  }
-  
-  .hero-description {
-    font-size: 1rem;
+    font-size: 1.1rem;
   }
   
   .content-wrapper {

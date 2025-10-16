@@ -1,317 +1,461 @@
 <template>
-  <footer class="footer">
-    <div class="footer-content">
-      <!-- Thông tin nhà hàng -->
-      <div class="restaurant-info">
-        <h2 class="restaurant-name">{{ $t('footer.name') }}</h2>
-        
-        <div class="contact-info">
-          <div class="location">
-            <h3>{{ $t('contact.address') }}</h3>
-            <p>{{ $t('footer.hotline') || 'Hotline: 0348 047 350' }}</p>
+    <div class="search-bar">
+      <div class="search-bar-header">
+        <div class="tab-group">
+          <a>Đặt bàn</a>
+          <button @click="resetAll" class="reset-button">
+            <img src="@/assets/reset-icon.svg" alt="Reset Icon" class="icon" />
+          </button>
+        </div>
+      </div>
+  
+      <div class="search-bar-content">
+        <div class="reserve-content">
+          <input type="datetime-local" v-model="timeSearch" />
+          <div class="phone-number-input">
+              <input
+                type="tel"
+                v-model="phoneNumber"
+                placeholder="Nhập số điện thoại"
+                maxlength="11"
+              />
+              <p v-if="phoneError" style="color: red; font-size: small; margin-bottom: 0;">
+                Số điện thoại không hợp lệ
+              </p>
+
+              <img 
+                src="@/assets/search-icon.svg" 
+                alt="Search Icon" 
+                class="search-icon" 
+                @click="searchReservation"
+              />
           </div>
-        </div>
-        
-        <p class="email">Email: {{ $t('contact.email') }}</p>
-      </div>
-
-      <div class="divider"></div>
-
-      <!-- Giờ mở cửa -->
-      <div class="opening-hours">
-        <h3>{{ $t('footer.openingHoursTitle') || 'Giờ mở cửa' }}</h3>
-        <p>{{ $t('footer.openingMorning') || 'Sáng: 10h - 14h' }}</p>
-        <p>{{ $t('footer.openingEvening') || 'Chiều: 18h - 22h' }}</p>
-        <p>{{ $t('footer.openingEveryday') || 'Tất cả các ngày trong tuần' }}</p>
-      </div>
-
-      <div class="divider"></div>
-
-      <!-- Mạng xã hội -->
-      <div class="social-media">
-        <h3>{{ $t('footer.social') || 'Mạng xã hội' }}</h3>
-        <div class="social-icons">
-          <a href="https://www.facebook.com/codai2004" target="_blank" rel="noopener noreferrer" aria-label="Facebook" class="social-icon">
-            <i class="fab fa-facebook-f"></i>
-          </a>
-          <a href="https://www.instagram.com/co3d_ok/" target="_blank" rel="noopener noreferrer" aria-label="Instagram" class="social-icon">
-            <i class="fab fa-instagram"></i>
-          </a>
-          <a href="https://www.tiktok.com/@red.chicken.ptit" target="_blank" rel="noopener noreferrer" aria-label="TikTok" class="social-icon">
-            <i class="fab fa-tiktok"></i>
-          </a>
+          <input v-model="name" placeholder="Nhập tên" />
+          <input v-model="num_people" placeholder="Nhập số người ăn" type="number" min="1" />
+          <select v-model="reservation_status" @change="filterReservations" >
+            <option value="">Trạng thái</option>
+            <option value="pending">Chờ duyệt</option>
+            <option value="preparing">Đặt trước</option>
+            <option value="serving">Đang phục vụ</option>
+            <option value="completed">Hoàn thành</option>
+            <option value="cancelled">Đã hủy</option>
+          </select>
+          <button @click="updateReservation">Xác nhận</button>
         </div>
       </div>
     </div>
+  </template>
+  
+  <script>
+  import axios from 'axios';
+  
+  
+  export default {
+    props: {
+      reservation_id: {
+        type: Number,
+        default: 0  // Cung cấp giá trị mặc định
+      },
+      selected_tables: {
+        type: Array,
+        default: () => []
+      },
+    },
+    data() {
+      return {
+        phoneNumber: '',
+        name: '',
+        timeSearch: '',
+        num_people: '',
+        reserved_table: [],
+        tables: [],
+        reservation_status: '',
+        reservations: [],
+        cur_reservation: '',
+        phoneError: false
+      };
+    },
+    methods: {
+      validatePhone() {
+        const pattern = /^[0-9]{10,11}$/;
+        this.phoneError = !pattern.test(this.phoneNumber);
+      },
 
-    <!-- Bản quyền và liên kết -->
-    <div class="footer-bottom">
-      <div class="footer-bottom-content">
-        <p class="copyright">{{ $t('footer.copyright') }} <strong>{{ $t('footer.name') }}</strong> All rights reserved.</p>
-        <div class="footer-links">
-          <a href="#">{{ $t('footer.privacy') }}</a>
-          <span class="separator">|</span>
-          <router-link to="/contact">{{ $t('footer.contact') }}</router-link>
-        </div>
-      </div>
-    </div>
-  </footer>
-</template>
+      async searchTables() {
+        try {
+          const response = await axios.get('http://localhost:3000/table', {
+            params: { searchTime: this.timeSearch },
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem('token')}`,
+            },
+          });
+  
+          this.tables = response.data.tables.map((table) => ({
+            id: table.id,
+            name: `Bàn ${table.id}`,
+            seats: table.id % 2 === 0 ? 4 : 2,
+            status: table.status.toLowerCase(),
+            reservationTime: table.reservationTime,
+            reservation_id: table.reservation_id || '',
+          }));
+  
+          // Phát ra sự kiện để truyền tables lên component cha
+          this.$emit('update:tables', this.tables);
+          this.$emit('update:mode', "table");
+        } catch (error) {
+          console.error('Lỗi khi tải danh sách bàn:', error);
+        }
+      },
+      async resetSearch() {
+        this.name = '';
+        this.timeSearch = getCurrentVNTime();
+        this.num_people = '';
+        await this.searchTables();
+        this.$emit('update:tables', this.tables); // Cập nhật lại tables rỗng khi reset
+        this.$emit('update:mode', 'table');
+      },
+      resetAll(){
+        window.location.reload();
+      },
+      UpdateReservationID() {
+        this.name = this.reservations.find(reservation => reservation.id === this.reservation_id)?.customer?.name || '';
+        this.num_people = this.reservations.find(reservation => reservation.id === this.reservation_id)?.num_people || '';
+        this.timeSearch = this.reservations.find(res => res.id === this.reservation_id)?.reservation_time
+        ? this.formatDate(this.reservations.find(res => res.id === this.reservation_id)?.reservation_time)
+        : this.getCurrentVNTime();
+        this.tables = this.reservations.find(reservation => reservation.id === this.reservation_id)?.tables || [];
+        this.reservation_status = this.reservations.find(reservation => reservation.id === this.reservation_id)?.status || '';
+      },
+      async searchReservation() {
+        if (!this.phoneNumber.trim()) {
+          alert("Vui lòng nhập số điện thoại!");
+          return;
+        }
+        try {          
+          const response = await axios.get(`http://localhost:3000/reservation/search?phoneNumber=${this.phoneNumber}`, {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem('token')}`,
+            },
+          });
+          this.reservations = response.data.reservations.map((reservation) => ({
+            ...reservation,
+            tableNumber: reservation.details?.length
+              ? reservation.details.map((table) => table.table_id).join(', ')
+              : 'Chưa xác định',
+          }));
+          this.$emit('update:reservations', this.reservations);
+          this.$emit('update:mode', 'reservation');
+        } catch (error) {
+          this.reservations = [];
+          this.$emit('update:reservations', this.reservations);
+          this.$emit('update:mode','table');
+          // window.location.reload();
+          if (error.response) {
+            console.error("Chi tiết lỗi từ server:", error.response.data);
+            alert(`${error.response.data.message || "Không thể tìm kiếm đặt bàn"}`);
+          } else {
+            alert("Không thể kết nối đến server, vui lòng thử lại!");
+          }        
+        }
+      },
+      async reserve(){
+        try {
+          console.log("Đặt bàn tại thời gian", this.timeSearch);
+          const response = await axios.post('http://localhost:3000/reservation', {
+            name: this.name,
+            phoneNumber: this.phoneNumber,
+            reservation_time: this.timeSearch,
+            num_people: this.num_people,
+            tables: this.selected_tables,
+            status: this.reservation_status,
+          }, {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem('token')}`,
+            },
+          });
+          alert('Đặt bàn thành công!');
+          this.searchTables();
+          window.location.reload();
+        } catch (error) {
+          console.error('Lỗi khi đặt bàn:', error);
+          if (error.response) {
+            console.error("Chi tiết lỗi từ server:", error.response.data);
+            alert(`${error.response.data.message || "Không thể đặt bàn"}`);
+          } else {
+            alert("Không thể kết nối đến server, vui lòng thử lại!");
+          }
+        }
+      },
+      async updateReservation() {
+        try {
+          if (!this.reservation_id && !this.cur_reservation) {
+            this.reserve();
+            return;
+          }
+          const response = await axios.put(`http://localhost:3000/reservation/update/${
+            this.cur_reservation 
+              ? this.cur_reservation 
+              : this.reservation_id
+          }`, {
+            status: this.reservation_status,
+            reservation_time: this.timeSearch,
+            num_people: this.num_people,
+            tables: this.selected_tables,
+          }, {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem('token')}`,
+            },
+          });
+          this.cur_reservation = null;
+          if(response){
+            alert(response.data.message);
+          }
+          window.location.reload();
+        } catch (error) {
+          console.error('Lỗi khi cập nhật đặt bàn:', error);
+          if (error.response) {
+            console.error("Chi tiết lỗi từ server:", error.response.data);
+            alert(`${error.response.data.message || "Không thể cập nhật đặt bàn"}`);
+          } else {
+            alert("Không thể kết nối đến server, vui lòng thử lại!");
+          }
+        }
+      },
+      async cancelReservation(){
+        try {
+          if (!this.reservation_id) {
+            alert('Vui lòng chọn đặt bàn cần hủy!');
+            return;
+          }
+        const response = await axios.put(`http://localhost:3000/reservation/cancel`, {
+            reservation_id: this.reservation_id,
+        }, {
+            headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+            },
+        });
+        if(response){
+            alert(response.data.message);
+        }
+        window.location.reload();
+        } catch (error) {
+        console.error('Lỗi khi cập nhật đặt bàn:', error);
+        if (error.response) {
+          console.error("Chi tiết lỗi từ server:", error.response.data);
+          alert(`${error.response.data.message || "Không thể hủy đặt bàn"}`);
+        } else {
+            alert("Không thể kết nối đến server, vui lòng thử lại!");
+        }
+        }
+      },
+      
+      getCurrentVNTime() {
+        const now = new Date();
+        const vnOffset = 7 * 60 * 60 * 1000;
+        return new Date(now.getTime() + vnOffset).toISOString().slice(0, 16);
+      },
+      formatDate(dateString) {
+        const date = new Date(dateString);
+        if (isNaN(date.getTime())) {
+          throw new Error('Invalid date input');
+        }
+        // Điều chỉnh múi giờ Việt Nam (Asia/Ho_Chi_Minh)
+        const vnDate = new Date(date.toLocaleString('en-US', { timeZone: 'Asia/Ho_Chi_Minh' }));
+        const year = vnDate.getFullYear();
+        const month = String(vnDate.getMonth() + 1).padStart(2, '0');
+        const day = String(vnDate.getDate()).padStart(2, '0');
+        const hours = String(vnDate.getHours()).padStart(2, '0');
+        const minutes = String(vnDate.getMinutes()).padStart(2, '0');
+        return `${year}-${month}-${day}T${hours}:${minutes}`;
+      },
+      async getallReservations(){
+        try {
+          const token = localStorage.getItem('token');
+          const response = await axios.get('http://localhost:3000/reservation/all', {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+          console.log("get all:",response.data);
 
-<script>
-export default {
-  name: 'AppFooter'
-}
-</script>
+          this.reservations = response.data;
+        } catch (error) {
+          console.error('Error fetching reservations:', error);
+        }
+      },
+      async fetchReservaion(){
+        console.log(localStorage);
+        if(localStorage.getItem('selectedReservation')){
+          const reservation = JSON.parse(localStorage.getItem('selectedReservation'));
+          this.cur_reservation = reservation.id;
+          this.phoneNumber = reservation.customer?.phoneNumber || '';
+          this.name = reservation.customer?.name || '';
+          this.num_people = reservation?.num_people || '';
+          this.timeSearch = reservation?.reservation_time
+          ? this.formatDate(reservation?.reservation_time)
+          : this.getCurrentVNTime();
+          this.tables = reservation?.tables || [];
+          this.reservation_status = reservation?.status || '';
+          localStorage.removeItem('selectedReservation');
+        }
+      },
+    },
+    mounted() {
+      this.searchTables(); // Tự động tải danh sách bàn khi component được gắn
+      this.searchTime = this.getCurrentVNTime();
+      this.fetchReservaion();
+      if(!this.phoneNumber){
+        this.getallReservations()
+      };
+
+    },
+    watch: {
+      timeSearch() {
+        this.searchTables();
+      },
+      reservation_id: {
+        handler(newVal, oldVal) {
+          if (newVal !== oldVal) {
+            console.log(`reservation_id thay đổi: ${oldVal} -> ${newVal}`);
+            this.UpdateReservationID();
+          }
+        },
+        immediate: true, 
+        deep: true,
+      },
+    },
+  }
+
+  </script>
 
 <style scoped>
-.footer {
-  background: linear-gradient(135deg, #6B4226 0%, #8B5E3C 100%);
-  color: #FFF8E7;
-  padding: 40px 20px 20px;
-  font-family: 'Arial', sans-serif;
-  box-shadow: 0 -4px 15px rgba(107, 66, 38, 0.4);
-  border-top: 2px solid #E7C27D;
+.search-bar { 
+  display: flex; 
+  flex-direction: column; 
+  gap: 15px; 
+  padding: 15px; 
+  background: linear-gradient(135deg, #8B5E3C, #6B4226); /* Nâu gỗ đến nâu đất */
+  border-radius: 10px; 
+  box-shadow: 0 4px 15px rgba(107, 66, 38, 0.3); /* Shadow màu nâu */
+  width: 200px; 
+  border: 1px solid rgba(139, 94, 60, 0.5); /* Viền nâu gỗ */
 }
 
-.footer-content {
-  max-width: 1100px;
-  margin: 0 auto;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 30px;
-  padding-bottom: 30px;
-}
-
-.restaurant-info {
-  flex: 1;
-  min-width: 300px;
-}
-
-.restaurant-name {
-  font-size: 24px;
-  color: #E7C27D;
-  margin-bottom: 20px;
-  text-transform: uppercase;
-  font-weight: 700;
-  letter-spacing: 0.5px;
-  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
-}
-
-.contact-info {
-  margin-bottom: 15px;
-}
-
-.location {
-  margin-bottom: 15px;
-}
-
-.location h3 {
-  font-size: 16px;
-  margin-bottom: 5px;
-  font-weight: 600;
-  color: #FFF8E7;
-}
-
-.location p, .email {
-  font-size: 14px;
-  opacity: 0.9;
-  margin-bottom: 5px;
-  color: #F5E3B3;
-}
-
-.divider {
-  width: 1px;
-  background: linear-gradient(to bottom, transparent, #E7C27D, transparent);
-  margin: 0 20px;
-}
-
-.opening-hours {
-  flex: 0 0 200px;
-}
-
-.opening-hours h3, .social-media h3 {
-  font-size: 18px;
-  margin-bottom: 15px;
-  color: #E7C27D;
-  font-weight: 600;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
-}
-
-.opening-hours p {
-  font-size: 14px;
-  margin-bottom: 8px;
-  opacity: 0.9;
-  color: #F5E3B3;
-}
-
-.social-media {
-  flex: 0 0 200px;
-}
-
-.social-icons {
-  display: flex;
-  gap: 15px;
-}
-
-.social-icon {
-  display: flex;
-  align-items: center;
+.tab-group { 
+  display: flex; 
+  gap: 20px; 
+  border-bottom: 2px solid #E7C27D; /* Vàng nhạt */
+  padding-bottom: 5px; 
+  margin-bottom: 10px; 
   justify-content: center;
-  width: 40px;
-  height: 40px;
-  background: linear-gradient(135deg, #E7C27D 0%, #8B5E3C 100%);
-  border-radius: 50%;
-  color: #FFF8E7;
-  font-size: 18px;
-  transition: all 0.3s ease;
-  text-decoration: none;
-  border: 1px solid #FFF8E7;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
-.social-icon:hover {
-  background: linear-gradient(135deg, #FFF8E7 0%, #E7C27D 100%);
-  color: #6B4226;
-  transform: scale(1.1) translateY(-2px);
-  box-shadow: 0 4px 12px rgba(231, 194, 125, 0.4);
+.tab-group a { 
+  color: #FFF8E7; /* Trắng kem */
+  text-decoration: none; 
+  font-size: 16px; 
+  font-weight: 500; 
+  padding-bottom: 5px; 
+  transition: color 0.3s; 
 }
 
-.footer-bottom {
-  max-width: 1100px;
-  margin: 20px auto 0;
-  padding-top: 20px;
-  border-top: 1px solid rgba(231, 194, 125, 0.3);
+.tab-group a:hover {
+  color: #E7C27D; /* Vàng nhạt khi hover */
 }
 
-.footer-bottom-content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 15px;
-  text-align: center;
+.reset-button { 
+  display: inline;
+  background: none; 
+  border: none; 
+  cursor: pointer; 
+  padding: 0; 
+  color: #FFF8E7; /* Trắng kem */
 }
 
-.copyright {
-  font-size: 14px;
-  opacity: 0.9;
-  margin: 0;
-  color: #F5E3B3;
+.search-content, .reserve-content { 
+  display: flex; 
+  flex-direction: column; 
+  gap: 13px; 
 }
 
-.copyright strong {
-  color: #E7C27D;
-  font-weight: 700;
+.search-bar-content input { 
+  padding: 8px; 
+  border: 1px solid #E7C27D; /* Viền vàng nhạt */
+  border-radius: 5px; 
+  font-size: 14px; 
+  background: rgba(255, 248, 231, 0.2); /* Nền trắng kem trong suốt */
+  color: #FFF8E7; /* Chữ trắng kem */
+  width: 90%; 
+  outline: none;
 }
 
-.footer-links {
-  display: flex;
-  gap: 10px;
-  align-items: center;
+.search-bar-content input::placeholder {
+  color: rgba(255, 248, 231, 0.6); /* Placeholder trắng kem mờ */
 }
 
-.footer-links a {
-  color: #F5E3B3;
-  text-decoration: none;
-  font-size: 14px;
-  opacity: 0.9;
-  transition: all 0.3s ease;
-  font-weight: 500;
+.phone-number-input { 
+  position: relative;
+  width: 100%;
 }
 
-.footer-links a:hover {
-  opacity: 1;
-  color: #E7C27D;
-  transform: translateY(-1px);
+.phone-number-input input{
+  width: 90%;
+  outline: none;
 }
 
-.separator {
-  opacity: 0.5;
-  color: #E7C27D;
+.phone-number-input .search-icon { 
+  position: absolute; 
+  right: 10px; 
+  top: 50%; 
+  transform: translateY(-50%); 
+  width: 20px; 
+  height: 20px; 
+  cursor: pointer; 
+  color: #FFF8E7; /* Icon trắng kem */
 }
 
-/* Hiệu ứng cho toàn bộ footer */
-.footer-content > div {
-  transition: transform 0.3s ease;
+select {
+  padding: 8px; 
+  border: 1px solid #E7C27D; /* Viền vàng nhạt */
+  border-radius: 5px; 
+  font-size: 14px; 
+  background: rgba(255, 248, 231, 0.2); /* Nền trắng kem trong suốt */
+  color: #FFF8E7; /* Chữ trắng kem */
+  cursor: pointer;
+  outline: none;
 }
 
-.footer-content > div:hover {
-  transform: translateY(-5px);
+option {
+  background: #8B5E3C;  /* Nền nâu gỗ */
+  color: #FFF8E7;       /* Chữ trắng kem */
 }
 
-/* Responsive */
-@media (max-width: 768px) {
-  .footer-content {
-    flex-direction: column;
-    text-align: center;
-    gap: 30px;
-  }
-  
-  .divider {
-    width: 100%;
-    height: 1px;
-    margin: 10px 0;
-    background: linear-gradient(to right, transparent, #E7C27D, transparent);
-  }
-  
-  .restaurant-name {
-    font-size: 20px;
-  }
-  
-  .social-icons {
-    justify-content: center;
-  }
-  
-  .footer-links {
-    flex-wrap: wrap;
-    justify-content: center;
-  }
-  
-  .opening-hours, .social-media {
-    flex: 1;
-    min-width: 100%;
-  }
+option:checked {
+  background: #6B4226; /* Nâu đất khi chọn */
+  color: #E7C27D; /* Vàng nhạt khi chọn */
 }
 
-@media (max-width: 480px) {
-  .footer {
-    padding: 30px 15px 15px;
-  }
-  
-  .restaurant-name {
-    font-size: 18px;
-  }
-  
-  .footer-content {
-    gap: 25px;
-  }
-  
-  .social-icon {
-    width: 35px;
-    height: 35px;
-    font-size: 16px;
-  }
+.search-bar-content button { 
+  padding: 10px; 
+  border: none; 
+  background: #E7C27D; /* Nền vàng nhạt */
+  color: #3B2F2F; /* Chữ nâu đậm */
+  border-radius: 5px; 
+  cursor: pointer; 
+  transition: background 0.3s; 
+  font-weight: bold;
 }
 
-/* Animation subtle */
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+.search-bar-content button:hover { 
+  background: #D4B15F; /* Vàng đậm hơn khi hover */
 }
 
-.footer-content > div {
-  animation: fadeInUp 0.6s ease forwards;
+.reserve-content button { 
+  background: #6B4226; /* Nâu đất */
+  color: #FFF8E7; /* Chữ trắng kem */
 }
 
-.footer-content > div:nth-child(1) { animation-delay: 0.1s; }
-.footer-content > div:nth-child(2) { animation-delay: 0.2s; }
-.footer-content > div:nth-child(3) { animation-delay: 0.3s; }
+.reserve-content button:hover { 
+  background: #5A3620; /* Nâu đậm hơn khi hover */
+}
 </style>
