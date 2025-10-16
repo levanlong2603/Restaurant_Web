@@ -10,6 +10,7 @@ const routes = [
   { path: '/menu', component: Menu },
   { path: '/reservation', component: Reservation },
   { path: '/contact', component: Contact },
+  
 ];
 
 const router = createRouter({
@@ -18,3 +19,4 @@ const router = createRouter({
 });
 
 export default router;
+

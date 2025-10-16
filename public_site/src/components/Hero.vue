@@ -5,18 +5,61 @@
       v-for="(image, index) in images"
       :key="index"
       class="slide"
-      :style="{ backgroundImage: `url(${image.url})`, animationDelay: `${index * 5}s` }"
+      :class="{ active: currentIndex === index }"
+      :style="{ backgroundImage: `url(${image.url})` }"
     ></div>
+    
+    <!-- Overlay với gradient tinh tế hơn -->
+    <div class="hero-overlay"></div>
     
     <!-- Nội dung hero -->
     <div class="hero-content">
       <div class="content-wrapper">
-        <h1 class="hero-title">{{ currentContent.title }}</h1>
-        <h2 class="hero-subtitle">{{ currentContent.subtitle }}</h2>
-        <div class="hero-divider"></div>
-        <p class="hero-description">{{ currentContent.description }}</p>
+        <transition name="fade-up" mode="out-in">
+          <div :key="currentIndex" class="text-content">
+            <h1 class="hero-title">{{ currentContent.title }}</h1>
+            <h2 class="hero-subtitle">{{ currentContent.subtitle }}</h2>
+            <div class="hero-divider"></div>
+            <p class="hero-description">{{ currentContent.description }}</p>
+          </div>
+        </transition>
+        
+        <!-- Nút CTA với router-link -->
+        <div class="hero-actions">
+          <router-link to="/reservation" class="btn btn-primary">
+            Đặt bàn ngay
+          </router-link>
+          <router-link to="/menu" class="btn btn-secondary">
+            Xem thực đơn
+          </router-link>
+        </div>
       </div>
     </div>
+    
+    <!-- Điều hướng slide -->
+    <div class="slide-nav">
+      <button 
+        v-for="(image, index) in images" 
+        :key="index"
+        :class="{ active: currentIndex === index }"
+        @click="setCurrentIndex(index)"
+        class="nav-dot"
+      >
+        <span class="sr-only">Chuyển tới slide {{ index + 1 }}</span>
+      </button>
+    </div>
+    
+    <!-- Nút điều hướng trước/sau -->
+    <button class="nav-btn prev" @click="prevSlide">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
+    <button class="nav-btn next" @click="nextSlide">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
   </section>
 </template>
 
@@ -49,7 +92,8 @@ export default {
           description: 'Nơi hương vị gia đình hòa quyện cùng không gian ấm cúng'
         }
       ],
-      currentIndex: 0
+      currentIndex: 0,
+      autoPlayInterval: null
     };
   },
   computed: {
@@ -61,18 +105,41 @@ export default {
       };
     }
   },
-  mounted() {
-    // Cập nhật currentIndex đồng bộ với animation
-    setInterval(() => {
+  methods: {
+    nextSlide() {
       this.currentIndex = (this.currentIndex + 1) % this.images.length;
-    }, 5000); // 5s mỗi ảnh
+      this.resetAutoPlay();
+    },
+    prevSlide() {
+      this.currentIndex = (this.currentIndex - 1 + this.images.length) % this.images.length;
+      this.resetAutoPlay();
+    },
+    setCurrentIndex(index) {
+      this.currentIndex = index;
+      this.resetAutoPlay();
+    },
+    resetAutoPlay() {
+      clearInterval(this.autoPlayInterval);
+      this.startAutoPlay();
+    },
+    startAutoPlay() {
+      this.autoPlayInterval = setInterval(() => {
+        this.nextSlide();
+      }, 5000);
+    }
+  },
+  mounted() {
+    this.startAutoPlay();
+  },
+  beforeDestroy() {
+    clearInterval(this.autoPlayInterval);
   }
 };
 </script>
 
 <style scoped>
 .hero {
-  height: 85vh; /* Giảm từ 100vh xuống 85vh */
+  height: 85vh;
   position: relative;
   overflow: hidden;
   display: flex;
@@ -83,33 +150,33 @@ export default {
 .slide {
   position: absolute;
   top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
   background: no-repeat center center/cover;
-  animation: slideLeft 15s infinite; /* 15s = 5s mỗi ảnh x 3 ảnh */
+  opacity: 0;
+  transition: opacity 1s ease-in-out, transform 8s ease;
+  transform: scale(1);
 }
 
-@keyframes slideLeft {
-  0% {
-    transform: translateX(100%);
-    opacity: 0;
-  }
-  6.67% {
-    transform: translateX(0);
-    opacity: 1;
-  }
-  33.33% {
-    transform: translateX(0);
-    opacity: 1;
-  }
-  40% {
-    transform: translateX(-100%);
-    opacity: 0;
-  }
-  100% {
-    transform: translateX(-100%);
-    opacity: 0;
-  }
+.slide.active {
+  opacity: 1;
+  transform: scale(1.05);
+}
+
+.hero-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    to bottom,
+    rgba(107, 66, 38, 0.3) 0%,
+    rgba(107, 66, 38, 0.5) 50%,
+    rgba(107, 66, 38, 0.7) 100%
+  );
+  z-index: 1;
 }
 
 .hero-content {
@@ -118,8 +185,7 @@ export default {
   color: #FFF8E7;
   height: 100%;
   width: 100%;
-  background: rgba(107, 66, 38, 0.4); /* Nâu đất với độ trong suốt */
-  z-index: 1;
+  z-index: 2;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -129,27 +195,28 @@ export default {
 .content-wrapper {
   max-width: 800px;
   padding: 0 2rem;
-  animation: fadeInUp 1s ease-out;
+}
+
+.text-content {
+  margin-bottom: 2rem;
 }
 
 .hero-title {
   font-size: 4.5rem;
   font-weight: 700;
   margin-bottom: 1rem;
-  color: #E7C27D; /* Vàng nhạt */
+  color: #E7C27D;
   text-shadow: 2px 2px 4px rgba(107, 66, 38, 0.8);
   letter-spacing: 3px;
-  transition: all 0.5s ease;
 }
 
 .hero-subtitle {
   font-size: 2.2rem;
   font-weight: 600;
   margin-bottom: 1.5rem;
-  color: #F5E3B3; /* Be sáng */
+  color: #F5E3B3;
   text-shadow: 2px 2px 4px rgba(107, 66, 38, 0.6);
   letter-spacing: 1px;
-  transition: all 0.5s ease;
 }
 
 .hero-divider {
@@ -168,19 +235,139 @@ export default {
   text-shadow: 1px 1px 2px rgba(107, 66, 38, 0.5);
   max-width: 600px;
   margin: 0 auto;
-  transition: all 0.5s ease;
 }
 
-/* Animation cho nội dung */
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+.hero-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-top: 2rem;
+}
+
+.btn {
+  padding: 0.75rem 2rem;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  text-decoration: none;
+  display: inline-block;
+  text-align: center;
+}
+
+.btn-primary {
+  background-color: #E7C27D;
+  color: #6B4226;
+}
+
+.btn-primary:hover {
+  background-color: #F5E3B3;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.btn-secondary {
+  background-color: transparent;
+  color: #FFF8E7;
+  border: 2px solid #E7C27D;
+}
+
+.btn-secondary:hover {
+  background-color: rgba(231, 194, 125, 0.1);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.slide-nav {
+  position: absolute;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 0.75rem;
+  z-index: 3;
+}
+
+.nav-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: none;
+  background-color: rgba(255, 248, 231, 0.5);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.nav-dot.active {
+  background-color: #E7C27D;
+  transform: scale(1.2);
+}
+
+.nav-dot:hover {
+  background-color: #F5E3B3;
+}
+
+.nav-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(107, 66, 38, 0.5);
+  border: none;
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #FFF8E7;
+  cursor: pointer;
+  z-index: 3;
+  transition: all 0.3s ease;
+}
+
+.nav-btn:hover {
+  background: rgba(107, 66, 38, 0.8);
+  transform: translateY(-50%) scale(1.1);
+}
+
+.nav-btn.prev {
+  left: 2rem;
+}
+
+.nav-btn.next {
+  right: 2rem;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Transition animations */
+.fade-up-enter-active,
+.fade-up-leave-active {
+  transition: all 0.8s ease;
+}
+
+.fade-up-enter-from {
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+.fade-up-leave-to {
+  opacity: 0;
+  transform: translateY(-30px);
 }
 
 /* Responsive Design */
@@ -199,6 +386,19 @@ export default {
   
   .hero-description {
     font-size: 1.2rem;
+  }
+  
+  .nav-btn {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .nav-btn.prev {
+    left: 1rem;
+  }
+  
+  .nav-btn.next {
+    right: 1rem;
   }
 }
 
@@ -224,6 +424,19 @@ export default {
   .content-wrapper {
     padding: 0 1.5rem;
   }
+  
+  .hero-actions {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .btn {
+    width: 200px;
+  }
+  
+  .nav-btn {
+    display: none;
+  }
 }
 
 @media (max-width: 480px) {
@@ -247,18 +460,9 @@ export default {
   .content-wrapper {
     padding: 0 1rem;
   }
-}
-
-/* Hiệu ứng hover cho các phần tử */
-.hero-content:hover .hero-title {
-  transform: scale(1.02);
-}
-
-.hero-content:hover .hero-subtitle {
-  transform: scale(1.01);
-}
-
-.hero-content:hover .hero-description {
-  transform: translateY(-2px);
+  
+  .slide-nav {
+    bottom: 1rem;
+  }
 }
 </style>

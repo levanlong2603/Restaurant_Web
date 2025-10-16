@@ -1075,8 +1075,8 @@ export default defineComponent({
     top: 0;
     background: linear-gradient(135deg, #8B5E3C, #6B4226); /* Gradient nâu */
     z-index: 3;
-    padding-bottom: 1rem;
-    margin-bottom: 2rem;
+    padding: 1.5rem 2rem;
+    margin: -2rem -2rem 2rem -2rem;
     border-bottom: 1px solid #E7C27D; /* Vàng nhạt */
     box-shadow: 0 4px 15px rgba(107, 66, 38, 0.3); /* Bóng nâu */
 }
@@ -1085,21 +1085,26 @@ export default defineComponent({
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 0.5rem;
+    flex-wrap: wrap;
+    gap: 1rem;
 }
 
 .header-top h2 {
-    font-size: 1.8rem;
+    font-size: clamp(1.5rem, 4vw, 1.8rem); /* Responsive font size */
     font-weight: 600;
     color: #FFF8E7; /* Trắng kem */
-    margin-left: 350px;
     text-shadow: 0 0 5px #E7C27D, 0 0 30px #E7C27D; /* Hiệu ứng vàng */
+    margin: 0;
+    flex: 1;
+    min-width: 200px;
+    margin-left: 1cm;
 }
 
 .header-top span {
-    font-size: 1rem;
+    font-size: clamp(0.9rem, 2vw, 1rem); /* Responsive font size */
     color: #F5E3B3; /* Be nhạt */
     opacity: 0.8;
+    white-space: nowrap;
 }
 
 .header-actions {
@@ -1107,7 +1112,16 @@ export default defineComponent({
     gap: 1rem;
     align-items: center;
     flex-wrap: wrap;
-    margin-left: 200px;
+    justify-content: flex-end;
+    flex: 2;
+    min-width: 300px;
+}
+
+.filter-section {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    flex-wrap: wrap;
 }
 
 .filter-section select,
@@ -1121,6 +1135,7 @@ export default defineComponent({
     font-size: 0.9rem;
     transition: all 0.3s ease;
     font-weight: 500;
+    min-width: 120px;
 }
 
 .filter-section select:focus,
@@ -1136,23 +1151,34 @@ export default defineComponent({
     display: flex;
     align-items: center;
     gap: 0.5rem;
+    flex-wrap: wrap;
 }
 
 .date-filter label {
     font-size: 0.9rem;
     color: #FFF8E7; /* Trắng kem */
     font-weight: 500;
+    white-space: nowrap;
 }
 
 .custom-date-range {
     display: flex;
     align-items: center;
     gap: 0.5rem;
+    flex-wrap: wrap;
 }
 
 .custom-date-range span {
     color: #F5E3B3; /* Be nhạt */
     opacity: 0.8;
+    white-space: nowrap;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    flex-wrap: wrap;
 }
 
 .action-button {
@@ -1168,6 +1194,7 @@ export default defineComponent({
     font-weight: 600;
     box-shadow: 0 2px 8px rgba(107, 66, 38, 0.3); /* Bóng nâu */
     border: 1px solid #E7C27D; /* Viền vàng */
+    white-space: nowrap;
 }
 
 .refresh-button {
@@ -1192,6 +1219,7 @@ export default defineComponent({
     box-shadow: 0 4px 15px rgba(231, 194, 125, 0.4);
 }
 
+/* Phần còn lại của CSS giữ nguyên */
 .stats-grid {
     display: flex;
     flex-direction: column;
@@ -1747,18 +1775,58 @@ export default defineComponent({
 }
 
 /* Responsive adjustments */
-@media (max-width: 768px) {
-    .header-top h2 {
-        margin-left: 0;
-        font-size: 1.5rem;
+@media (max-width: 1024px) {
+    .dashboard-header {
+        padding: 1.5rem;
     }
-
+    
+    .header-top {
+        gap: 0.8rem;
+    }
+    
     .header-actions {
-        margin-left: 0;
+        min-width: 250px;
+    }
+}
+
+@media (max-width: 768px) {
+    .dashboard {
+        padding: 1rem;
+    }
+    
+    .dashboard-header {
+        padding: 1rem;
+        margin: -1rem -1rem 1rem -1rem;
+    }
+    
+    .header-top {
         flex-direction: column;
         align-items: flex-start;
+        gap: 1rem;
     }
-
+    
+    .header-top h2 {
+        min-width: auto;
+        text-align: center;
+        width: 100%;
+    }
+    
+    .header-actions {
+        min-width: auto;
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .filter-section {
+        justify-content: center;
+        width: 100%;
+    }
+    
+    .action-buttons {
+        justify-content: center;
+        width: 100%;
+    }
+    
     .customer-item {
         flex-direction: column;
         align-items: flex-start;
@@ -1795,6 +1863,37 @@ export default defineComponent({
         width: 95%;
         max-width: 400px;
         padding: 1.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .dashboard-header {
+        padding: 0.8rem;
+    }
+    
+    .header-actions {
+        flex-direction: column;
+        gap: 0.8rem;
+    }
+    
+    .filter-section {
+        flex-direction: column;
+        width: 100%;
+    }
+    
+    .date-filter {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .action-buttons {
+        flex-direction: column;
+        width: 100%;
+    }
+    
+    .action-button {
+        width: 100%;
+        justify-content: center;
     }
 }
 </style>

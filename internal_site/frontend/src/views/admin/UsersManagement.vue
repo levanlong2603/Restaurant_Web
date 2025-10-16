@@ -10,7 +10,7 @@
                     </div>
                     <div class="header-actions">
                         <div class="filter-section">
-                            <input type="text" v-model="searchQuery" placeholder="Tìm kiếm..." class="search-input" />
+                            <input type="text" v-model="searchQuery" placeholder="Tìm kiếm..." class="search-input" ref="searchInput" />
                             <select v-model="roleFilter" class="role-filter">
                                 <option value="">Tất cả vai trò</option>
                                 <option value="manager">Quản lý</option>
@@ -20,7 +20,7 @@
                         <button class="action-button add-user-btn" @click="openAddUserModal">
                             <i class="fa-solid fa-plus"></i> Thêm
                         </button>
-                        <button class="action-button show-deleted-btn" @click="showDeletedUsers = !showDeletedUsers">
+                        <button class="action-button show-deleted-btn" ref="deletedBtn" @click="toggleDeletedUsers">
                             {{ showDeletedUsers ? "Ẩn người dùng đã xóa" : "Xem người dùng đã xóa" }}
                         </button>
                         <button class="action-button refresh-button" @click="refreshUsers">
@@ -451,6 +451,21 @@ export default {
         },
     },
     methods: {
+        syncSearchWidth() {
+            this.$nextTick(() => {
+                const btn = this.$refs.deletedBtn;
+                const input = this.$refs.searchInput;
+                if (btn && input) {
+                    const rect = btn.getBoundingClientRect();
+                    input.style.width = `${rect.width}px`;
+                    input.style.height = `${rect.height}px`;
+                }
+            });
+        },
+        toggleDeletedUsers() {
+            this.showDeletedUsers = !this.showDeletedUsers;
+            this.syncSearchWidth();
+        },
         handleSidebarToggle(isCollapsed) {
             this.isSidebarCollapsed = isCollapsed;
         },
@@ -749,8 +764,16 @@ export default {
         this.updateDateTime();
         this.updateDateTimeInterval = setInterval(this.updateDateTime, 60000);
     },
+    mounted() {
+        this.syncSearchWidth();
+        this._onResize = () => this.syncSearchWidth();
+        window.addEventListener('resize', this._onResize);
+    },
     beforeDestroy() {
         clearInterval(this.updateDateTimeInterval);
+        if (this._onResize) {
+            window.removeEventListener('resize', this._onResize);
+        }
     },
 };
 </script>
@@ -784,43 +807,43 @@ export default {
     width: 100%;
     margin: 0 auto;
     z-index: 1;
-    padding-top: 130px;
 }
 
 .dashboard-header {
-    position: fixed;
+    position: sticky;
     top: 0;
     background: linear-gradient(135deg, #8B5E3C, #6B4226);
     z-index: 3;
-    padding-bottom: 1rem;
-    margin-bottom: 2rem;
-    border-bottom: 2px solid #E7C27D;
-    width: 95%;
-    box-shadow: 0 6px 20px rgba(107, 66, 38, 0.3);
+    padding: 1.5rem 2rem;
+    margin: 0 -20px 20px -20px;
+    border-bottom: 1px solid #E7C27D;
+    box-shadow: 0 4px 15px rgba(107, 66, 38, 0.3);
 }
 
 .header-top {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 0.5rem;
-    padding: 0 20px;
+    flex-wrap: wrap;
+    gap: 1rem;
 }
 
 .header-top h2 {
-    font-size: 1.8rem;
-    font-weight: 700;
+    font-size: clamp(1.5rem, 4vw, 1.8rem);
+    font-weight: 600;
     color: #FFF8E7;
-    margin-left: 350px;
     text-shadow: 0 0 5px #E7C27D, 0 0 30px #E7C27D;
+    margin: 0;
+    flex: 1;
+    min-width: 200px;
+    margin-left: 1cm;
 }
 
 .header-top span {
-    font-size: 1rem;
+    font-size: clamp(0.9rem, 2vw, 1rem);
     color: #F5E3B3;
-    margin-right: 20px;
     opacity: 0.8;
-    font-weight: 500;
+    white-space: nowrap;
 }
 
 .header-actions {
@@ -828,24 +851,31 @@ export default {
     gap: 1rem;
     align-items: center;
     flex-wrap: wrap;
-    margin-left: 200px;
+    justify-content: flex-end;
+    flex: 2;
+    min-width: 300px;
 }
 
 .filter-section {
     display: flex;
-    gap: 0.8rem;
+    gap: clamp(0.6rem, 1.5vw, 0.8rem);
+    align-items: center;
+    flex-wrap: wrap;
 }
 
 .search-input,
 .role-filter {
-    padding: 0.6rem;
+    padding: clamp(0.5rem, 1.5vw, 0.6rem);
     border: 1px solid #8B5E3C;
     border-radius: 8px;
     background: rgba(255, 248, 231, 0.8);
     color: #3B2F2F;
-    font-size: 0.9rem;
+    font-size: clamp(0.85rem, 2vw, 0.9rem);
     transition: all 0.3s ease;
     font-weight: 500;
+    min-width: 120px;
+    min-height: 40px;
+    box-sizing: border-box;
 }
 
 .search-input:focus,
@@ -856,24 +886,33 @@ export default {
     box-shadow: 0 0 0 3px rgba(231, 194, 125, 0.3);
 }
 
+.action-buttons {
+    display: flex;
+    gap: clamp(0.4rem, 1vw, 0.5rem);
+    align-items: center;
+    flex-wrap: wrap;
+}
+
 .action-button {
-    padding: 0.6rem 1.2rem;
+    padding: clamp(0.5rem, 1.5vw, 0.6rem) clamp(1rem, 2.5vw, 1.2rem);
     border: none;
     border-radius: 8px;
-    font-size: 0.9rem;
+    font-size: clamp(0.85rem, 2vw, 0.9rem);
     cursor: pointer;
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: clamp(0.3rem, 1vw, 0.5rem);
     transition: all 0.3s ease;
-    color: #FFF8E7;
     font-weight: 600;
     box-shadow: 0 2px 8px rgba(107, 66, 38, 0.3);
     border: 1px solid #E7C27D;
+    white-space: nowrap;
+    min-height: 40px;
 }
 
 .add-user-btn {
     background: linear-gradient(135deg, #8B5E3C, #6B4226);
+    color: #FFF8E7;
 }
 
 .add-user-btn:hover {
@@ -909,14 +948,14 @@ export default {
     gap: 15px;
     background: rgba(255, 248, 231, 0.5);
     border-radius: 12px;
-    padding: 20px;
+    padding: clamp(15px, 3vw, 20px);
     margin-bottom: 20px;
     border: 2px solid rgba(231, 194, 125, 0.3);
     box-shadow: 0 4px 15px rgba(107, 66, 38, 0.1);
 }
 
 .users-list h2 {
-    font-size: 1.5rem;
+    font-size: clamp(1.3rem, 3vw, 1.5rem);
     font-weight: 700;
     color: #6B4226;
     margin-bottom: 15px;
@@ -926,25 +965,26 @@ export default {
 
 .users-list p {
     color: #D32F2F;
-    font-size: 16px;
+    font-size: clamp(0.9rem, 2vw, 1rem);
     font-weight: 600;
 }
 
 .table-header {
     display: grid;
-    grid-template-columns: 1fr 120px 120px 120px;
+    grid-template-columns: 1fr minmax(100px, 120px) minmax(100px, 120px) minmax(100px, 120px);
     align-items: center;
     background: rgba(139, 94, 60, 0.3);
-    padding: 15px;
+    padding: clamp(12px, 2vw, 15px);
     border-radius: 10px;
     font-weight: 700;
     color: #6B4226;
     border-bottom: 2px solid #E7C27D;
+    gap: 10px;
 }
 
 .col-user {
     text-align: left;
-    padding-left: 60px;
+    padding-left: clamp(40px, 5vw, 60px);
 }
 
 .col-meta {
@@ -962,6 +1002,7 @@ export default {
     display: flex;
     align-items: center;
     gap: 5px;
+    font-size: clamp(0.85rem, 2vw, 0.9rem);
 }
 
 .sort-link:hover {
@@ -970,15 +1011,16 @@ export default {
 
 .user-item {
     display: grid;
-    grid-template-columns: 1fr 120px 120px 120px;
+    grid-template-columns: 1fr minmax(100px, 120px) minmax(100px, 120px) minmax(100px, 120px);
     align-items: center;
     background: rgba(255, 248, 231, 0.3);
-    padding: 15px;
+    padding: clamp(12px, 2vw, 15px);
     border-radius: 10px;
     cursor: pointer;
     border-bottom: 1px solid rgba(231, 194, 125, 0.3);
     transition: all 0.3s ease;
     margin-bottom: 8px;
+    gap: 10px;
 }
 
 .user-item:hover {
@@ -1008,13 +1050,14 @@ export default {
 .user-details {
     display: flex;
     align-items: center;
-    gap: 20px;
+    gap: clamp(15px, 3vw, 20px);
     width: 100%;
+    min-width: 0;
 }
 
 .user-photo {
-    width: 50px;
-    height: 50px;
+    width: clamp(45px, 6vw, 50px);
+    height: clamp(45px, 6vw, 50px);
     object-fit: cover;
     border-radius: 50%;
     border: 2px solid #E7C27D;
@@ -1029,7 +1072,7 @@ export default {
 }
 
 .user-info h3 {
-    font-size: 1.1rem;
+    font-size: clamp(1rem, 2vw, 1.1rem);
     font-weight: 700;
     margin-bottom: 5px;
     color: #6B4226;
@@ -1039,7 +1082,7 @@ export default {
 }
 
 .user-info p {
-    font-size: 0.9rem;
+    font-size: clamp(0.8rem, 1.8vw, 0.9rem);
     color: #3B2F2F;
     opacity: 0.8;
     font-weight: 500;
@@ -1051,7 +1094,7 @@ export default {
 .user-meta {
     text-align: center;
     color: #3B2F2F;
-    font-size: 0.9rem;
+    font-size: clamp(0.8rem, 1.8vw, 0.9rem);
     opacity: 0.8;
     font-weight: 500;
 }
@@ -1059,20 +1102,23 @@ export default {
 .user-actions {
     display: flex;
     justify-content: center;
-    gap: 8px;
+    gap: clamp(6px, 1vw, 8px);
+    flex-wrap: wrap;
 }
 
 .action-btn {
-    padding: 8px 12px;
+    padding: clamp(6px, 1.5vw, 8px) clamp(10px, 2vw, 12px);
     background: rgba(255, 248, 231, 0.6);
     border: 1px solid #8B5E3C;
     border-radius: 6px;
     color: #6B4226;
     cursor: pointer;
-    font-size: 0.8rem;
+    font-size: clamp(0.75rem, 1.8vw, 0.8rem);
     font-weight: 600;
     transition: all 0.3s ease;
     box-shadow: 0 2px 4px rgba(107, 66, 38, 0.2);
+    min-height: 32px;
+    min-width: 60px;
 }
 
 .edit-btn {
@@ -1147,29 +1193,32 @@ export default {
     align-items: center;
     z-index: 1000;
     backdrop-filter: blur(5px);
+    padding: 20px;
 }
 
 .modal-content {
     background: linear-gradient(135deg, #FFF8E7, #F5E3B3);
-    padding: 30px;
+    padding: clamp(20px, 4vw, 30px);
     border-radius: 15px;
-    width: 500px;
+    width: min(500px, 95vw);
     color: #3B2F2F;
     box-shadow: 0 15px 35px rgba(107, 66, 38, 0.4);
     border: 2px solid #E7C27D;
+    max-height: 90vh;
+    overflow-y: auto;
 }
 
 .modal-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 25px;
+    margin-bottom: clamp(20px, 3vw, 25px);
     padding-bottom: 15px;
     border-bottom: 2px solid #E7C27D;
 }
 
 .modal-header h2 {
-    font-size: 1.5rem;
+    font-size: clamp(1.3rem, 3vw, 1.5rem);
     color: #6B4226;
     text-align: center;
     flex: 1;
@@ -1180,12 +1229,17 @@ export default {
 .close-btn {
     background: none;
     border: none;
-    font-size: 24px;
+    font-size: clamp(1.25rem, 3vw, 1.5rem);
     cursor: pointer;
     color: #6B4226;
     transition: all 0.3s ease;
     padding: 5px;
     border-radius: 4px;
+    min-width: 30px;
+    min-height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .close-btn:hover {
@@ -1196,7 +1250,7 @@ export default {
 .edit-form {
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: clamp(15px, 2.5vw, 20px);
     max-height: 500px;
     overflow-y: auto;
     padding-right: 10px;
@@ -1209,21 +1263,22 @@ export default {
 }
 
 .form-group label {
-    font-size: 14px;
+    font-size: clamp(0.85rem, 2vw, 0.9rem);
     font-weight: 600;
     color: #6B4226;
 }
 
 .form-group input,
 .form-group select {
-    padding: 12px;
+    padding: clamp(10px, 2vw, 12px);
     border: 1px solid #8B5E3C;
     border-radius: 8px;
-    font-size: 14px;
+    font-size: clamp(0.85rem, 2vw, 0.9rem);
     transition: all 0.3s ease;
     background: rgba(255, 248, 231, 0.8);
     color: #3B2F2F;
     font-weight: 500;
+    min-height: 44px;
 }
 
 .form-group input:focus,
@@ -1249,14 +1304,14 @@ export default {
 
 .current-image p,
 .preview-image-container p {
-    font-size: 14px;
+    font-size: clamp(0.85rem, 2vw, 0.9rem);
     color: #6B4226;
     font-weight: 600;
 }
 
 .preview-image {
-    width: 120px;
-    height: 120px;
+    width: clamp(100px, 12vw, 120px);
+    height: clamp(100px, 12vw, 120px);
     object-fit: cover;
     border-radius: 10px;
     border: 2px solid #E7C27D;
@@ -1264,16 +1319,17 @@ export default {
 }
 
 .remove-preview {
-    padding: 8px 16px;
+    padding: clamp(6px, 1.5vw, 8px) clamp(12px, 2vw, 16px);
     background: #D32F2F;
     color: #FFF8E7;
     border: none;
     border-radius: 6px;
     cursor: pointer;
-    font-size: 12px;
+    font-size: clamp(0.75rem, 1.8vw, 0.8rem);
     width: fit-content;
     transition: all 0.3s ease;
     font-weight: 600;
+    min-height: 32px;
 }
 
 .remove-preview:hover {
@@ -1285,25 +1341,28 @@ export default {
 .modal-actions {
     display: flex;
     justify-content: flex-end;
-    margin-top: 25px;
+    margin-top: clamp(20px, 3vw, 25px);
     padding-top: 15px;
     border-top: 1px solid rgba(231, 194, 125, 0.3);
 }
 
 .right-actions {
     display: flex;
-    gap: 12px;
+    gap: clamp(10px, 2vw, 12px);
+    flex-wrap: wrap;
 }
 
 .right-actions button {
-    padding: 12px 24px;
+    padding: clamp(10px, 2vw, 12px) clamp(20px, 3vw, 24px);
     border-radius: 8px;
-    font-size: 14px;
+    font-size: clamp(0.85rem, 2vw, 0.9rem);
     cursor: pointer;
     transition: all 0.3s ease;
     font-weight: 600;
     box-shadow: 0 2px 8px rgba(107, 66, 38, 0.3);
     border: 1px solid;
+    min-height: 44px;
+    min-width: 80px;
 }
 
 .cancel-btn {
@@ -1331,8 +1390,8 @@ export default {
 
 /* Modal Profile */
 .profile-modal {
-    max-width: 500px;
-    width: 90%;
+    max-width: min(500px, 95vw);
+    width: 100%;
     max-height: 90vh;
     overflow-y: auto;
 }
@@ -1348,7 +1407,7 @@ export default {
 }
 
 .profile-modal .modal-header h2 {
-    font-size: 1.5rem;
+    font-size: clamp(1.3rem, 3vw, 1.5rem);
     color: #6B4226;
     font-weight: 700;
     margin: 0;
@@ -1359,7 +1418,7 @@ export default {
 .profile-modal .close-btn {
     background: none;
     border: none;
-    font-size: 24px;
+    font-size: clamp(1.25rem, 3vw, 1.5rem);
     cursor: pointer;
     color: #6B4226;
     transition: all 0.3s ease;
@@ -1368,6 +1427,8 @@ export default {
     position: absolute;
     right: 0;
     top: 0;
+    min-width: 30px;
+    min-height: 30px;
 }
 
 .profile-modal .close-btn:hover {
@@ -1384,8 +1445,8 @@ export default {
 }
 
 .profile-details .profile-photo {
-    width: 120px;
-    height: 120px;
+    width: clamp(100px, 15vw, 120px);
+    height: clamp(100px, 15vw, 120px);
     object-fit: cover;
     border-radius: 50%;
     margin-bottom: 20px;
@@ -1400,7 +1461,7 @@ export default {
 
 .profile-details p {
     margin: 12px 0;
-    font-size: 14px;
+    font-size: clamp(0.85rem, 2vw, 0.9rem);
     color: #3B2F2F;
     font-weight: 500;
     padding: 8px 0;
@@ -1431,20 +1492,21 @@ export default {
     align-items: center;
     z-index: 1000;
     backdrop-filter: blur(5px);
+    padding: 20px;
 }
 
 .popup-content {
     background: linear-gradient(135deg, #FFF8E7, #F5E3B3);
-    padding: 30px;
+    padding: clamp(20px, 4vw, 30px);
     border-radius: 15px;
-    width: 450px;
+    width: min(450px, 95vw);
     text-align: center;
     box-shadow: 0 15px 35px rgba(107, 66, 38, 0.4);
     border: 2px solid #E7C27D;
 }
 
 .popup-content h3 {
-    font-size: 1.3rem;
+    font-size: clamp(1.2rem, 3vw, 1.3rem);
     font-weight: 700;
     margin-bottom: 20px;
     color: #D32F2F;
@@ -1464,14 +1526,14 @@ export default {
 
 .user-info p {
     margin: 8px 0;
-    font-size: 14px;
+    font-size: clamp(0.85rem, 2vw, 0.9rem);
     color: #3B2F2F;
     font-weight: 500;
 }
 
 .warning-text,
 .success-text {
-    font-size: 14px;
+    font-size: clamp(0.85rem, 2vw, 0.9rem);
     margin-bottom: 25px;
     font-weight: 500;
     line-height: 1.5;
@@ -1485,11 +1547,12 @@ export default {
 .popup-actions {
     display: flex;
     justify-content: center;
-    gap: 12px;
+    gap: clamp(10px, 2vw, 12px);
+    flex-wrap: wrap;
 }
 
 .popup-actions .cancel-btn {
-    padding: 12px 24px;
+    padding: clamp(10px, 2vw, 12px) clamp(20px, 3vw, 24px);
     background: rgba(139, 94, 60, 0.2);
     border: 1px solid #8B5E3C;
     border-radius: 8px;
@@ -1497,6 +1560,8 @@ export default {
     cursor: pointer;
     transition: all 0.3s ease;
     font-weight: 600;
+    min-height: 44px;
+    min-width: 80px;
 }
 
 .popup-actions .cancel-btn:hover {
@@ -1505,7 +1570,7 @@ export default {
 }
 
 .popup-actions .confirm-btn {
-    padding: 12px 24px;
+    padding: clamp(10px, 2vw, 12px) clamp(20px, 3vw, 24px);
     border: none;
     border-radius: 8px;
     color: #FFF8E7;
@@ -1513,6 +1578,8 @@ export default {
     transition: all 0.3s ease;
     font-weight: 600;
     border: 1px solid;
+    min-height: 44px;
+    min-width: 80px;
 }
 
 .popup-actions .confirm-btn {
@@ -1541,26 +1608,29 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 10px;
+    gap: clamp(8px, 1.5vw, 10px);
     margin-top: 25px;
     color: #3B2F2F;
-    padding: 15px;
+    padding: clamp(12px, 2vw, 15px);
     background: rgba(255, 248, 231, 0.5);
     border-radius: 10px;
     border: 1px solid rgba(231, 194, 125, 0.3);
+    flex-wrap: wrap;
 }
 
 .pagination-btn {
-    padding: 10px 15px;
+    padding: clamp(8px, 1.5vw, 10px) clamp(12px, 2vw, 15px);
     background: rgba(255, 248, 231, 0.8);
     border: 1px solid #8B5E3C;
     border-radius: 8px;
     color: #6B4226;
     cursor: pointer;
-    font-size: 14px;
+    font-size: clamp(0.85rem, 2vw, 0.9rem);
     font-weight: 600;
     transition: all 0.3s ease;
     box-shadow: 0 2px 4px rgba(107, 66, 38, 0.2);
+    min-height: 40px;
+    min-width: 40px;
 }
 
 .pagination-btn:hover:not(:disabled) {
@@ -1587,122 +1657,119 @@ export default {
 .prev-btn,
 .next-btn,
 .last-btn {
-    padding: 10px 12px;
+    padding: clamp(8px, 1.5vw, 10px) clamp(10px, 1.8vw, 12px);
 }
 
 .page-numbers {
     display: flex;
-    gap: 8px;
+    gap: clamp(6px, 1vw, 8px);
     align-items: center;
+    flex-wrap: wrap;
 }
 
 .page-numbers span {
     color: #3B2F2F;
-    font-size: 14px;
-    margin: 0 8px;
+    font-size: clamp(0.85rem, 2vw, 0.9rem);
+    margin: 0 clamp(6px, 1vw, 8px);
     font-weight: 500;
 }
 
-.edit-form::-webkit-scrollbar {
-    width: 6px;
-}
-
-.edit-form::-webkit-scrollbar-track {
-    background: rgba(231, 194, 125, 0.1);
-    border-radius: 3px;
-}
-
-.edit-form::-webkit-scrollbar-thumb {
-    background: #E7C27D;
-    border-radius: 3px;
-}
-
-.edit-form::-webkit-scrollbar-thumb:hover {
-    background: #8B5E3C;
-}
-
+/* Scrollbar Styling */
+.edit-form::-webkit-scrollbar,
+.modal-content::-webkit-scrollbar,
 .profile-modal::-webkit-scrollbar {
     width: 6px;
 }
 
+.edit-form::-webkit-scrollbar-track,
+.modal-content::-webkit-scrollbar-track,
 .profile-modal::-webkit-scrollbar-track {
     background: rgba(231, 194, 125, 0.1);
     border-radius: 3px;
 }
 
+.edit-form::-webkit-scrollbar-thumb,
+.modal-content::-webkit-scrollbar-thumb,
 .profile-modal::-webkit-scrollbar-thumb {
     background: #E7C27D;
     border-radius: 3px;
 }
 
+.edit-form::-webkit-scrollbar-thumb:hover,
+.modal-content::-webkit-scrollbar-thumb:hover,
 .profile-modal::-webkit-scrollbar-thumb:hover {
     background: #8B5E3C;
+}
+
+/* Enhanced Responsive Design */
+@media (max-width: 1024px) {
+    .container-user {
+        padding-right: 15px;
+        padding-left: 15px;
+    }
+    
+    .table-header,
+    .user-item {
+        grid-template-columns: 1fr minmax(90px, 110px) minmax(90px, 110px) minmax(90px, 110px);
+    }
 }
 
 @media (max-width: 768px) {
     .users-management {
         padding: 15px;
-        padding-top: 150px;
+        padding-top: clamp(140px, 18vw, 160px);
     }
 
     .table-header,
     .user-item {
-        grid-template-columns: 1fr 100px 100px 80px;
-    }
-
-    .col-user {
-        padding-left: 40px;
-    }
-
-    .header-actions {
-        flex-direction: column;
-        gap: 10px;
-        margin-left: 0;
-    }
-
-    .filter-section {
-        flex-direction: column;
-        width: 100%;
-    }
-
-    .search-input,
-    .role-filter {
-        width: 100%;
-    }
-
-    .modal-content {
-        width: 90%;
-        padding: 20px;
-    }
-
-    .popup-content {
-        width: 90%;
-        padding: 20px;
-    }
-
-    .dashboard-header {
-        height: 140px;
-    }
-
-    .pagination {
-        flex-wrap: wrap;
+        grid-template-columns: 1fr 80px 80px 70px;
         gap: 8px;
     }
 
-    .header-top h2 {
-        margin-left: 0;
-        font-size: 1.5rem;
-    }
-}
-
-@media (max-width: 480px) {
-    .table-header,
-    .user-item {
-        grid-template-columns: 1fr 80px 80px 60px;
-    }
-
     .col-user {
-        padding-left: 20px;
+        padding-left: 30px;
+    }
+
+    .header-top {
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+        text-align: center;
+    }
+    
+    .header-top h2 {
+        position: static;
+        transform: none;
+        order: -1;
+        width: 100%;
+        margin-bottom: 0.5rem;
+    }
+    
+    .header-actions {
+        margin-left: 0;
+        justify-content: center;
+        width: 100%;
+    }
+    
+    .filter-section {
+        justify-content: center;
+        width: 100%;
+        flex-direction: column;
+    }
+    
+    .search-input,
+    .role-filter {
+        width: 100%;
+        min-width: auto;
+    }
+
+    .action-buttons {
+        justify-content: center;
+        width: 100%;
+    }
+
+    .user-details {
+        gap: 12px;
     }
 
     .user-photo {
@@ -1711,7 +1778,7 @@ export default {
     }
 
     .user-info h3 {
-        font-size: 1rem;
+        font-size: 0.95rem;
     }
 
     .user-info p {
@@ -1724,26 +1791,164 @@ export default {
 
     .action-btn {
         padding: 6px 10px;
-        font-size: 0.7rem;
+        font-size: 0.75rem;
+        min-width: 55px;
+    }
+
+    .pagination {
+        gap: 6px;
     }
 
     .pagination-btn {
         padding: 8px 10px;
         font-size: 0.8rem;
+        min-width: 35px;
+        min-height: 35px;
+    }
+}
+
+@media (max-width: 480px) {
+    .users-management {
+        padding-top: clamp(160px, 22vw, 180px);
     }
 
-    .users-management {
-        padding-top: 160px;
+    .table-header,
+    .user-item {
+        grid-template-columns: 1fr 70px 70px 60px;
+        gap: 6px;
+        padding: 10px;
+    }
+
+    .col-user {
+        padding-left: 20px;
+    }
+
+    .user-details {
+        gap: 10px;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .user-photo {
+        width: 35px;
+        height: 35px;
+    }
+
+    .user-info h3 {
+        font-size: 0.9rem;
+    }
+
+    .user-info p {
+        font-size: 0.75rem;
+    }
+
+    .user-meta {
+        font-size: 0.75rem;
+    }
+
+    .user-actions {
+        justify-content: flex-start;
+        width: 100%;
+    }
+
+    .action-btn {
+        padding: 5px 8px;
+        font-size: 0.7rem;
+        min-width: 50px;
+        min-height: 28px;
     }
 
     .header-top {
+        gap: 0.8rem;
+    }
+    
+    .header-actions {
         flex-direction: column;
-        gap: 10px;
-        text-align: center;
+        gap: 0.8rem;
+    }
+    
+    .filter-section {
+        flex-direction: column;
+        width: 100%;
+    }
+    
+    .action-buttons {
+        flex-direction: column;
+        width: 100%;
+    }
+    
+    .action-button {
+        width: 100%;
+        justify-content: center;
     }
 
-    .header-top h2 {
-        margin-left: 0;
+    .pagination {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .page-numbers {
+        order: -1;
+        width: 100%;
+        justify-content: center;
+    }
+
+    .pagination-info {
+        width: 100%;
+        text-align: center;
+    }
+}
+
+/* High contrast support */
+@media (prefers-contrast: high) {
+    .user-item {
+        border-width: 2px;
+    }
+    
+    .form-group input,
+    .form-group select {
+        border-width: 2px;
+    }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        transition: none !important;
+        animation: none !important;
+    }
+    
+    .user-item:hover,
+    .action-button:hover,
+    .action-btn:hover {
+        transform: none;
+    }
+}
+
+/* Zoom support */
+@media (max-width: 1200px) {
+    .container-user {
+        padding-right: clamp(10px, 2vw, 20px);
+        padding-left: clamp(10px, 2vw, 20px);
+    }
+}
+
+/* Touch device optimizations */
+@media (hover: none) and (pointer: coarse) {
+    .action-button,
+    .action-btn,
+    .pagination-btn {
+        min-height: 44px;
+        min-width: 44px;
+    }
+    
+    .user-item {
+        cursor: default;
+    }
+    
+    .user-item:active {
+        background: rgba(231, 194, 125, 0.15);
+        transform: translateY(-1px);
     }
 }
 </style>
