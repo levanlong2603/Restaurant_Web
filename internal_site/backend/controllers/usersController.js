@@ -80,14 +80,15 @@ exports.getDeletedUsers = async (req, res) => {
 
 exports.getUser = async (req, res) => {
   try {
-    const userId = parseInt(req.params.id);
-    const user = await User.findByPk(userId);
+  const userId = parseInt(req.params.user_id || req.params.id);
+  const user = await User.findByPk(userId);
     if (!user || user.deleted) {
       return res.status(404).json({ message: "Người dùng không tồn tại" });
     }
 
     // Kiểm tra quyền truy cập
-    if (req.user.role !== "manager" && req.user.id !== userId) {
+    const currentUserId = req.user?.user_id || req.user?.id;
+    if (req.user.role !== "manager" && currentUserId !== userId) {
       return res.status(403).json({ message: "Không có quyền truy cập" });
     }
 
@@ -151,7 +152,7 @@ exports.createUser = async (req, res) => {
 
 exports.updateUser = async (req, res) => {
   try {
-    const { id } = req.params;
+  const { user_id } = req.params;
     const {
       name,
       phoneNumber,
@@ -163,7 +164,7 @@ exports.updateUser = async (req, res) => {
       profilePhotoPublicId,
     } = req.body;
 
-    const user = await User.findByPk(id);
+  const user = await User.findByPk(user_id || req.params.id);
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
@@ -198,8 +199,8 @@ exports.updateUser = async (req, res) => {
 
 exports.deleteUser = async (req, res) => {
   try {
-    const userId = parseInt(req.params.id);
-    const user = await User.findByPk(userId);
+  const userId = parseInt(req.params.user_id || req.params.id);
+  const user = await User.findByPk(userId);
 
     if (!user || user.deleted) {
       return res.status(404).json({ message: "Người dùng không tồn tại" });
@@ -229,7 +230,7 @@ exports.deleteUser = async (req, res) => {
 
 exports.restoreUser = async (req, res) => {
   try {
-    const userId = parseInt(req.params.id);
+  const userId = parseInt(req.params.user_id || req.params.id);
 
     if (!req.user || req.user.role !== "manager") {
       console.error("Không có quyền truy cập:", req.user);
@@ -291,7 +292,7 @@ exports.changePassword = async (req, res) => {
 
 exports.approveUser = async (req, res) => {
   try {
-    const userId = parseInt(req.params.id);
+  const userId = parseInt(req.params.user_id || req.params.id);
 
     if (!req.user || req.user.role !== "manager") {
       return res.status(403).json({ message: "Không có quyền truy cập" });
@@ -312,7 +313,7 @@ exports.approveUser = async (req, res) => {
     res.status(200).json({
       message: "Duyệt người dùng thành công",
       user: {
-        id: user.id,
+        user_id: user.user_id,
         email: user.email,
         role: user.role,
         status: user.status,
@@ -326,7 +327,7 @@ exports.approveUser = async (req, res) => {
 
 exports.rejectUser = async (req, res) => {
   try {
-    const userId = parseInt(req.params.id);
+    const userId = parseInt(req.params.user_id || req.params.id);
 
     if (!req.user || req.user.role !== "manager") {
       return res.status(403).json({ message: "Không có quyền truy cập" });
@@ -346,7 +347,7 @@ exports.rejectUser = async (req, res) => {
 
     res.status(200).json({
       message: "Từ chối người dùng thành công",
-      user: { id: user.id, email: user.email, status: user.status },
+      user: { user_id: user.user_id, email: user.email, status: user.status },
     });
   } catch (error) {
     console.error("Lỗi khi từ chối người dùng:", error);

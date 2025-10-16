@@ -6,105 +6,11 @@
     "contact": "LIÊN HỆ"
   },
   "hero": {
-    "title": "Nhà Hàng Long Quân An",
+    "title": "Nhà Hàng Tinh Hoa Việt",
     "subtitle": "Hương vị truyền thống - Tinh hoa ẩm thực"
-  },
-  "heroSlides": {
-    "slide1": { "title": "Long Quân An", "subtitle": "Dấu ấn Việt - Tròn vị quê hương" },
-    "slide2": { "title": "Hương Vị Quê", "subtitle": "Hương vị truyền thống – Đậm đà bản sắc" },
-    "slide3": { "title": "Thực Đơn Đặc Sắc", "subtitle": "Món ngon mỗi ngày – Phục vụ tận tâm" }
   },
   "about": {
     "title": "Về Chúng Tôi",
-    "content": "Nhà hàng Tinh Hoa Việt mang đến những món ăn truyền thống với hương vị đặc trưng...",
-    "section1": {
-      "title": "NHÀ HÀNG",
-      "content": "Trải nghiệm không gian ấm cúng và tinh tế của nhà hàng Việt..."
-    },
-    "section2": {
-      "title": "NHỮNG MÓN ĂN TINH TÚY NHẤT",
-      "content": "Đầu bếp của chúng tôi lựa chọn kỹ lưỡng những nguyên liệu tươi ngon nhất..."
-    },
-    "section3": {
-      "title": "NẰM GIỮA LÒNG THÀNH PHỐ",
-      "content": "Nhà hàng nằm ngay trung tâm sôi động, là điểm dừng chân lý tưởng..."
-    }
-  },
-  "menu": {
-    "title": "THỰC ĐƠN NHÀ HÀNG",
-    "description": "Menu nhà hàng mang đến hương vị đậm đà, hòa quyện giữa truyền thống và tinh tế.",
-    "featured": "Món ăn nổi bật",
-    "allCategories": "Tất cả danh mục",
-    "searchPlaceholder": "Tìm kiếm món...",
-    "refresh": "Làm mới",
-    "prevPage": "Trước",
-    "nextPage": "Sau",
-    "pageInfo": "Trang",
-    "noItems": "Không có món ăn nào để hiển thị."
-  },
-  "categories": {
-    "appetizer": "Khai vị",
-    "main_dish": "Món chính",
-    "side_dish": "Món ăn kèm",
-    "regional_specialty": "Đặc sản vùng miền",
-    "vegetarian": "Món chay",
-    "dessert": "Tráng miệng",
-    "beverage": "Đồ uống"
-  },
-  "reservation": {
-    "title": "ĐẶT BÀN",
-    "description": "Đặt bàn trước sẽ giúp quý khách lựa chọn được chỗ ngồi ứng ý và sự chuẩn bị chu đáo nhất.",
-    "formTitle": "THÔNG TIN NGƯỜI ĐẶT",
-    "name": "Họ tên",
-    "phone": "Số điện thoại",
-    "date": "Ngày đặt",
-    "time": "Giờ đặt",
-    "num_people": "Số lượng khách",
-    "notes": "Lưu ý",
-    "submit": "ĐẶT BÀN",
-    "submitting": "ĐANG XỬ LÝ...",
-    "submitted": "ĐÃ GỬI THÀNH CÔNG",
-    "successTitle": "ĐẶT BÀN THÀNH CÔNG!",
-    "successThanks": "Cảm ơn quý khách đã đặt bàn tại nhà hàng chúng tôi.",
-    "close": "Đóng",
-    "noteTitle": "LƯU Ý ĐẶT BÀN",
-    "note1": "Quý khách vui lòng đến trước thời gian đặt 15 phút để nhà hàng phục vụ quý khách được tốt nhất.",
-    "note2": "Cảm ơn quý khách!"
-  },
-  "contact": {
-    "title": "LIÊN HỆ",
-    "openMap": "Mở bản đồ",
-    "address": "Địa chỉ : Số 33, đường Đại Mỗ, phường Đại Mỗ, quận Nam Từ Liêm, TP. Hà Nội",
-    "email": "nhahanglongquanan@gmail.com"
-  },
-  "footer": {
-    "name": "LONG QUÂN AN - ẨM THỰC TINH TÚY",
-    "social": "Mạng xã hội",
-    "privacy": "Bảo mật thông tin",
-    "contact": "Liên hệ",
-    "copyright": "Copyright © 2025 LONG QUÂN AN - Ẩm thực tinh túy",
-    "hotline": "Hotline: 0348 047 350",
-    "openingHoursTitle": "Giờ mở cửa",
-    "openingMorning": "Sáng: 10h - 14h",
-    "openingEvening": "Chiều: 18h - 22h",
-    "openingEveryday": "Tất cả các ngày trong tuần"
-  },
-  "chatbot": {
-    "title": "Chatbot Tư Vấn",
-    "inputPlaceholder": "Nhập câu hỏi...",
-    "error": "Lỗi kết nối server, vui lòng thử lại!"
-  }
-  ,
-  "aboutUs": {
-    "title": "Về Chúng Tôi",
-    "intro1": "LONG QUÂN AN",
-    "intro2": "NHÀ HÀNG CƠM VIỆT, QUÁN CƠM GIA ĐÌNH NGON TẠI HÀ NỘI.",
-    "p1": "Tại Long Quân An, triết lý của chúng tôi rất đơn giản: chia sẻ hương vị và văn hóa thưởng thức cơm Việt tới tất cả mọi người. Chúng tôi làm điều này bằng việc sử dụng nguồn nguyên liệu tươi sạch nhất, và chế biến chúng qua đôi tay của những người đầu bếp tận tâm.",
-    "p2": "Không gian tại nhà hàng cơm Long Quân An được lấy cảm hứng từ những giá trị truyền thống của Việt Nam kết hợp với những nét hiện đại để tạo nên một cảm giác xưa cũ kết hợp cùng những điều mới mẻ.",
-    "p3": "Với chủ đạo là gỗ và cây, những thứ gắn liền nhất với thiên nhiên sẽ khiến trải nghiệm dùng bữa thực sự khác biệt!",
-    "lang": {
-      "vi": "VI",
-      "en": "EN"
-    }
+    "content": "Nhà hàng Tinh Hoa Việt mang đến những món ăn truyền thống với hương vị đặc trưng..."
   }
 }

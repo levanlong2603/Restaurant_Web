@@ -2,7 +2,7 @@ const { DataTypes } = require('sequelize');
 
 module.exports = (sequelize) => {
     const Table = sequelize.define('Table', {
-        id: { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true },
+    table_id: { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true },
         capacity: { type: DataTypes.INTEGER, allowNull: false }
     }, {
         tableName: 'table' 

@@ -35,10 +35,10 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="reservation in filteredReservations" :key="reservation.id">
-              <td class="col-id">{{ reservation.id }}</td>
+            <tr v-for="reservation in filteredReservations" :key="reservation.reservation_id">
+              <td class="col-id">{{ reservation.reservation_id }}</td>
               <td class="col-customer">{{ reservation.customerName }}</td>
-              <td class="col-time">{{ formatDate(reservation.reservation_time) }}</td>
+                <td class="col-time">{{ formatDate(reservation.reservation_time) }}</td>
               <td class="col-people">{{ reservation.num_people }}</td>
               <td class="col-table">{{ reservation.tableNumber }}</td>
               <td class="col-status">
@@ -175,16 +175,17 @@ export default {
         console.error('Error fetching reservations:', error);
       }
     },
-    async cancelReservation(reservation) {
-            try {
-                console.log("ID:", reservation.id);
-                const response = await axios.put(`http://localhost:3000/reservation/cancel`, {
-                    reservation_id: reservation.id,
-                }, {
-                    headers: {
-                        Authorization: `Bearer ${localStorage.getItem('token')}`,
-                    },
-                });
+  async cancelReservation(reservation) {
+      try {
+        const resId = reservation.reservation_id || reservation.id;
+        console.log("ID:", resId);
+        const response = await axios.put(`http://localhost:3000/reservation/cancel`, {
+          reservation_id: resId,
+        }, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        });
                 if (response) {
                     alert(response.data.message);
                 }
@@ -203,10 +204,11 @@ export default {
         async checkin(reservation) {
             // Thêm logic check-in tại đây
             try {
-                console.log("ID:", reservation.id);
-                console.log(localStorage.getItem('token'));
-                const response = await axios.put(
-                    `http://localhost:3000/reservation/checkin/${reservation.id}`,
+        const resId = reservation.reservation_id || reservation.id;
+        console.log("ID:", resId);
+        console.log(localStorage.getItem('token'));
+        const response = await axios.put(
+          `http://localhost:3000/reservation/checkin/${resId}`,
                     null, // nếu không có data body
                     {
                         headers: {
@@ -230,14 +232,17 @@ export default {
       this.$router.push(`/reserve`);
     },
     async checkout(reservation){
-      if(reservation.status === 'serving'){
-        localStorage.setItem('selectedReservation', JSON.stringify(reservation));
+          if(reservation.status === 'serving'){
+        localStorage.setItem('selectedReservation', JSON.stringify({
+          ...reservation,
+          reservation_id: reservation.reservation_id  // Đảm bảo lưu reservation_id
+        }));
         this.$router.push(`/checkout`);
       }
       else {
         try{
-          console.log("ID:", reservation.id);
-          const response = await axios.put(`http://localhost:3000/reservation/left/${reservation.id}`, null, {
+          console.log("Processing checkout for reservation:", reservation.reservation_id);
+          const response = await axios.put(`http://localhost:3000/reservation/left/${reservation.reservation_id}`, null, {
             headers: {
               Authorization: `Bearer ${localStorage.getItem('token')}`,
             },
@@ -260,9 +265,9 @@ export default {
     },
     async cancel(reservation) {
         try {
-            console.log("ID:", reservation.id);
+            console.log("Cancelling reservation:", reservation.reservation_id);
             const response = await axios.put(`http://localhost:3000/reservation/cancel`, {
-                reservation_id: reservation.id,
+                reservation_id: reservation.reservation_id,
             }, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -284,8 +289,9 @@ export default {
     },
     async checkin(reservation) {
       try {
+        console.log("Checking in reservation:", reservation.reservation_id);
         const response = await axios.put(
-          `http://localhost:3000/reservation/checkin/${reservation.id}`,
+          `http://localhost:3000/reservation/checkin/${reservation.reservation_id}`,
           null,
           {
             headers: {

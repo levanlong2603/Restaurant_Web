@@ -2,21 +2,21 @@
     <div class="menu-page">
       <Header />
       <section class="menu">
-  <!-- Bộ lọc, tìm kiếm và làm mới -->
-  <h2>{{ $t('menuTitle') || ( (this.$i18n && (this.$i18n.locale.value || this.$i18n.locale)) === 'en' ? 'Restaurant Menu' : 'Thực đơn nhà hàng' ) }}</h2>
+        <!-- Bộ lọc, tìm kiếm và làm mới -->
+        <h2>Thực đơn nhà hàng</h2>
         <div class="filter-search">
           <select v-model="selectedCategory" @change="fetchMenu">
-            <option value="">{{ $t('allCategories') || (this.$i18n && (this.$i18n.locale.value || this.$i18n.locale)) === 'en' ? 'All categories' : 'Tất cả danh mục' }}</option>
-            <option value="appetizer">{{ $t('category.appetizer') || 'Khai vị' }}</option>
-            <option value="main_dish">{{ $t('category.main_dish') || 'Món chính' }}</option>
-            <option value="side_dish">{{ $t('category.side_dish') || 'Món ăn kèm' }}</option>
-            <option value="regional_specialty">{{ $t('category.regional_specialty') || 'Đặc sản vùng miền' }}</option>
-            <option value="vegetarian">{{ $t('category.vegetarian') || 'Món chay' }}</option>
-            <option value="dessert">{{ $t('category.dessert') || 'Tráng miệng' }}</option>
-            <option value="beverage">{{ $t('category.beverage') || 'Đồ uống' }}</option>
+            <option value="">Tất cả danh mục</option>
+            <option value="appetizer">Khai vị</option>
+            <option value="main_dish">Món chính</option>
+            <option value="side_dish">Món ăn kèm</option>
+            <option value="regional_specialty">Đặc sản vùng miền</option>
+            <option value="vegetarian">Món chay</option>
+            <option value="dessert">Tráng miệng</option>
+            <option value="beverage">Đồ uống</option>
           </select>
-          <input v-model="searchQuery" @input="debouncedFetchMenu" :placeholder="$t('searchPlaceholder') || 'Tìm kiếm món...'" />
-          <button @click="fetchMenu" class="refresh-button">{{ $t('refresh') || 'Làm mới' }}</button>
+          <input v-model="searchQuery" @input="debouncedFetchMenu" placeholder="Tìm kiếm món..." />
+          <button @click="fetchMenu" class="refresh-button">Làm mới</button>
         </div>
   
         <!-- Danh sách món ăn phân trang -->
@@ -31,22 +31,22 @@
               <h3>{{ item.name }}</h3>
               <p>{{ item.description }}</p>
             </div>
-            <span class="price">{{ formatPrice(item.price) }} {{ (this.$i18n && (this.$i18n.locale.value || this.$i18n.locale)) === 'en' ? 'VND' : 'VNĐ' }}</span>
+            <span class="price">{{ formatPrice(item.price) }} VNĐ</span>
             <div v-if="mode === 'staff'" class="item-quantity">
-              <p>{{ $t('quantity') || 'Số lượng' }}</p>
+              <p>Số lượng</p>
               <input type="number" v-model="item.quantity" min="0" required/>
             </div>
-              <button v-if="mode === 'staff'" @click="addToCart(item)">
-              <img src="../assets/images/plus-icon.svg" :alt="$t('addToCartAlt') || 'Thêm vào giỏ hàng'" />
+            <button v-if="mode === 'staff'" @click="addToCart(item)">
+              <img src="../assets/images/plus-icon.svg" alt="Thêm vào giỏ hàng" />
             </button>
           </div>
         </div>
   
         <!-- Phân trang -->
         <div class="pagination" v-if="totalPages > 1">
-          <button @click="changePage(currentPage - 1)" :disabled="currentPage === 1">{{ $t('prevPage') || 'Trang trước' }}</button>
-          <span>{{ $t('pageInfo') || 'Trang' }} {{ currentPage }} / {{ totalPages }}</span>
-          <button @click="changePage(currentPage + 1)" :disabled="currentPage === totalPages">{{ $t('nextPage') || 'Trang sau' }}</button>
+          <button @click="changePage(currentPage - 1)" :disabled="currentPage === 1">Trang trước</button>
+          <span>Trang {{ currentPage }} / {{ totalPages }}</span>
+          <button @click="changePage(currentPage + 1)" :disabled="currentPage === totalPages">Trang sau</button>
         </div>
       </section>
       <Footer />

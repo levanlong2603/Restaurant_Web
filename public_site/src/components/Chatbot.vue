@@ -8,7 +8,7 @@
     <div name="fade">
       <div v-if="isChatOpen" class="chat-container">
         <div class="chat-header">
-          <h3>{{ $t('chatbot.title') }}</h3>
+          <h3>Chatbot Tư Vấn</h3>
           <span class="close-button" @click="toggleChat">✖</span>
         </div>
         <div class="chat-window" ref="chatWindow">
@@ -41,11 +41,11 @@
             </div>
           </div>
         </div>
-          <input
+        <input
           v-model="userInput"
           @keyup.enter="sendMessage"
           :disabled="loading"
-          :placeholder="$t('chatbot.inputPlaceholder')"
+          placeholder="Nhập câu hỏi..."
         />
       </div>
     </div>
@@ -89,7 +89,7 @@ export default {
         this.messages.push({
           role: 'bot',
           content: {
-            message: error.response?.data?.message || this.$t('chatbot.error')
+            message: error.response?.data?.message || 'Lỗi kết nối server, vui lòng thử lại!',
           },
         });
       } finally {

@@ -132,18 +132,51 @@ export default {
         if (!token) {
           throw new Error('No token found. Please login again.');
         }
-        const user = JSON.parse(localStorage.getItem('user'));
-        const userId = user['id'];
-        const response = await axios.get(`http://localhost:3000/users/${userId}`, {
+        
+        const userStr = localStorage.getItem('user');
+        if (!userStr) {
+          throw new Error('No user data found. Please login again.');
+        }
+
+        const user = JSON.parse(userStr);
+        if (!user.user_id) {
+          throw new Error('Invalid user data. Please login again.');
+        }
+
+        const response = await axios.get(`http://localhost:3000/users/${user.user_id}`, {
           headers: { 'Authorization': `Bearer ${token}` },
         });
+
+        if (!response.data.user) {
+          throw new Error('No user data received from server.');
+        }
+
         this.user = response.data.user;
+
+        // Cập nhật lại user trong localStorage nếu có thay đổi
+        if (JSON.stringify(user) !== JSON.stringify(response.data.user)) {
+          localStorage.setItem('user', JSON.stringify(response.data.user));
+        }
+
       } catch (error) {
         console.error('Error fetching user:', error);
-        if (error.response?.status === 401 || error.response?.status === 403) {
+        
+        if (error.message.includes('login again')) {
+          // Clear invalid data
+          localStorage.removeItem('token');
+          localStorage.removeItem('user');
           this.$router.push('/login');
+          return;
         }
-        Swal.fire('Lỗi!', 'Không thể lấy thông tin người dùng.', 'error');
+
+        if (error.response?.status === 401 || error.response?.status === 403) {
+          localStorage.removeItem('token');
+          localStorage.removeItem('user');
+          this.$router.push('/login');
+          return;
+        }
+
+        Swal.fire('Lỗi!', 'Không thể lấy thông tin người dùng. Vui lòng thử lại sau.', 'error');
       }
     },
     startEditing() {
@@ -183,8 +216,8 @@ export default {
       try {
         Swal.fire({ title: 'Đang xử lý...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
 
-        const user = JSON.parse(localStorage.getItem('user'));
-        const userId = user['id'];
+  const user = JSON.parse(localStorage.getItem('user'));
+  const userId = user['user_id'];
 
         let profilePhotoUrl = this.user.profilePhoto;
         let profilePhotoPublicId = this.user.profilePhotoPublicId;
@@ -248,8 +281,8 @@ export default {
             return;
           }
 
-          const user = JSON.parse(localStorage.getItem('user'));
-          const userId = user['id'];
+    const user = JSON.parse(localStorage.getItem('user'));
+    const userId = user['user_id'];
           await axios.delete(`http://localhost:3000/users/${userId}`, {
             headers: { 'Authorization': `Bearer ${token}` },
           });

@@ -81,19 +81,37 @@ export default {
                 console.log("API Response:", response.data);
 
                 if (response.status === 200) {
-                    alert("Đăng nhập thành công!");
-                    
-                    // Lưu token và thông tin user vào localStorage
+                    // Kiểm tra và chuẩn hóa dữ liệu từ server
+                    if (!response.data.token) {
+                        throw new Error('Không nhận được token từ server');
+                    }
+                    if (!response.data.user) {
+                        throw new Error('Không nhận được thông tin người dùng từ server');
+                    }
+
+                    // Chuẩn hóa dữ liệu user, đảm bảo có user_id
+                    const userData = response.data.user;
+                    if (!userData.user_id && userData.id) {
+                        userData.user_id = userData.id;
+                    }
+                    if (!userData.user_id) {
+                        throw new Error('Dữ liệu người dùng không hợp lệ');
+                    }
+
+                    // Lưu token và thông tin user đã chuẩn hóa vào localStorage
                     localStorage.setItem("token", response.data.token);
-                    localStorage.setItem("user", JSON.stringify(response.data.user));
+                    localStorage.setItem("user", JSON.stringify(userData));
+
+                    alert("Đăng nhập thành công!");
 
                     // Redirect dựa trên role
-                    const role = response.data.user.role;
+                    const role = userData.role;
                     if (role === 'manager') {
                         this.$router.push('/manager');
                     } else if (role === 'staff') {
                         this.$router.push('/reserve');
                     } else {
+                        console.warn('Role không hợp lệ:', role);
                         this.$router.push('/'); // Default route nếu không có role hợp lệ
                     }
                 }

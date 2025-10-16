@@ -2,16 +2,16 @@ const { DataTypes } = require('sequelize');
 
 module.exports = (sequelize) => {
     const Bill = sequelize.define('Bill', {
-        id: { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true },
+        bill_id: { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true },
         reservation_id: { 
             type: DataTypes.INTEGER, 
             allowNull: false, 
-            references: { model: 'reservation', key: 'id' } 
+            references: { model: 'reservation', key: 'reservation_id' } 
         },
         staff_id: { 
             type: DataTypes.INTEGER, 
             allowNull: false, 
-            references: { model: 'user', key: 'id' } 
+            references: { model: 'user', key: 'user_id' } 
         },
         payment_method: { 
             type: DataTypes.ENUM('cash', 'credit_card', 'bank_transfer'), 

@@ -114,7 +114,7 @@ export default {
 
     if (!this.billDetails?.total_amount) throw new Error('Hóa đơn không hợp lệ hoặc số tiền bằng 0');
 
-    const reservationId = this.reservation.id || this.reservation;
+    const reservationId = this.reservation.reservation_id || this.reservation;
 
     const payload = {
       amount: parseInt(this.billDetails.total_amount),
@@ -122,7 +122,7 @@ export default {
       orderType: 'billpayment',
       language: 'vn',
       bankCode: '',
-      reservationId: this.reservation.id,
+      reservationId: this.reservation.reservation_id,
     };
 
     // Gửi yêu cầu tới backend để tạo link thanh toán
@@ -175,7 +175,7 @@ export default {
     },
     async customerLeave() {
       try {
-        const reservationId = this.reservation.id || this.reservation;
+        const reservationId = this.reservation.reservation_id || this.reservation;
         const response = await axios.put(`http://localhost:3000/reservation/left/${reservationId}`, null, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -190,7 +190,7 @@ export default {
     },
     async created() {
       try {
-        const reservationId = this.reservation.id || this.reservation;
+        const reservationId = this.reservation.reservation_id || this.reservation;
         const response = await axios.get(`http://localhost:3000/reservation/${reservationId}`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`,

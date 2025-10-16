@@ -53,7 +53,7 @@ exports.register = async (req, res) => {
 
     res.status(201).json({
       message: "Đăng ký thành công. Yêu cầu của bạn đang chờ quản lý duyệt.",
-      user: { id: newUser.id, email: newUser.email, status: newUser.status },
+      user: { user_id: newUser.user_id, email: newUser.email, status: newUser.status },
     });
   } catch (error) {
     console.error(error);
@@ -104,7 +104,7 @@ exports.login = async (req, res) => {
     user.lastActive = new Date();
     await user.save();
 
-    const token = jwt.sign({ id: user.id, role: user.role }, JWT_SECRET, {
+    const token = jwt.sign({ user_id: user.user_id, role: user.role }, JWT_SECRET, {
       expiresIn: "4h",
     });
 
@@ -112,7 +112,7 @@ exports.login = async (req, res) => {
       message: "Đăng nhập thành công",
       token,
       user: {
-        id: user.id,
+        user_id: user.user_id,
         name: user.name,
         email: user.email,
         role: user.role,

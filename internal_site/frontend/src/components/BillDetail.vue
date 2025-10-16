@@ -24,7 +24,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="item in aggregatedItems" :key="item.menu.id">
+          <tr v-for="item in aggregatedItems" :key="item.menu.menu_id">
             <td>{{ item.menu.name }}</td>
             <td>{{ item.quantity }}</td>
             <td>{{ formatPrice(item.menu.price) }} </td>
@@ -54,7 +54,7 @@ export default {
       if (!this.billDetails || !this.billDetails.orderItems) return [];
       const itemMap = new Map();
       this.billDetails.orderItems.forEach(item => {
-        const menuId = item.menu.id;
+        const menuId = item.menu.menu_id;
         if (itemMap.has(menuId)) {
           const existing = itemMap.get(menuId);
           existing.quantity += item.quantity;

@@ -65,7 +65,7 @@ export default {
     },
     updateReservationID(reservation_id) {
       this.reservation_id = reservation_id;
-      const reservation = this.reservations.find(res => res.id === reservation_id);
+      const reservation = this.reservations.find(res => res.reservation_id === reservation_id);
       this.selected_tables = reservation ? reservation.tables : [];
     },
     updateNewSelectedTables(newSelectedTables) {

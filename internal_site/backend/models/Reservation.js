@@ -4,11 +4,11 @@ module.exports = (sequelize) => {
   const Reservation = sequelize.define(
     "Reservation",
     {
-      id: { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true },
+      reservation_id: { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true },
       customer_id: {
         type: DataTypes.INTEGER,
         allowNull: false,
-        references: { model: "customer", key: "id" },
+        references: { model: "customer", key: "customer_id" },
       },
       reservation_time: { type: DataTypes.DATE, allowNull: false },
       checkin_time: { type: DataTypes.DATE, allowNull: true },
@@ -21,7 +21,7 @@ module.exports = (sequelize) => {
       staff_id: {
         type: DataTypes.INTEGER,
         allowNull: true,
-        references: { model: "user", key: "id" },
+        references: { model: "user", key: "user_id" },
       },
       status: {
         type: DataTypes.ENUM(

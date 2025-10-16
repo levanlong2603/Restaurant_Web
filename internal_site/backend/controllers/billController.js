@@ -42,7 +42,7 @@ exports.checkout = async (req, res) => {
     }
 
     const reservation = await Reservation.findOne({
-      where: { id: reservation_id },
+      where: { reservation_id: reservation_id },
     });
 
     if (!reservation) {
@@ -60,8 +60,8 @@ exports.checkout = async (req, res) => {
     console.log(paymethod);
 
     const bill = await Bill.create({
-      reservation_id: reservation.id,
-      staff_id: staff.id,
+      reservation_id: reservation.reservation_id,
+      staff_id: staff.user_id,
       payment_method: paymethod,
       total_amount: total_amount,
       time: time,
@@ -72,7 +72,7 @@ exports.checkout = async (req, res) => {
     if (reservation_status === "completed") {
       updates.checkout_time = new Date(); // Cập nhật checkout_time nếu khách rời đi ngay
     }
-    await Reservation.update(updates, { where: { id: reservation.id } });
+  await Reservation.update(updates, { where: { reservation_id: reservation.reservation_id } });
 
     return res.status(200).json({ message: "Checkout successful", bill });
   } catch (error) {
@@ -91,7 +91,7 @@ exports.getBillDetail = async (req, res) => {
         .json({ message: "Chỉ nhân viên mới có thể xem hóa đơn" });
     }
     const reservation = await Reservation.findOne({
-      where: { id: reservationId },
+      where: { reservation_id: reservationId },
       include: [
         {
           model: Customer,
@@ -110,7 +110,7 @@ exports.getBillDetail = async (req, res) => {
             {
               model: Menu,
               as: "menu",
-              attributes: ["id", "name", "price"],
+              attributes: ["menu_id", "name", "price"],
             },
           ],
         },
@@ -157,9 +157,9 @@ exports.getAllBills = async (req, res) => {
         },
       ],
       order: [["time", "DESC"]],
-      attributes: ["id", "time", "payment_method", "total_amount"],
+      attributes: ["bill_id", "time", "payment_method", "total_amount"],
       where: {
-        staff_id: req.user.id,
+        staff_id: req.user.user_id,
       },
     });
 

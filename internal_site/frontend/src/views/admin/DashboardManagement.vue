@@ -839,7 +839,7 @@ export default defineComponent({
                     throw new Error('Không tìm thấy món ăn trong menu');
                 }
 
-                await axios.patch(`http://localhost:3000/menu/${menuItem.id}`, {
+                await axios.patch(`http://localhost:3000/menu/${menuItem.menu_id}`, {
                     image: newImageUrl,
                     imagePublicId: publicId
                 }, {

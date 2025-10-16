@@ -297,7 +297,7 @@ const paymentController = {
   cashPayment: async function (req, res) {
     const transaction = await sequelize.transaction();
     try {
-      const reservationId = req.params.id;
+      const { reservation_id } = req.params;
       const { amount, status } = req.body;
 
       // Kiểm tra dữ liệu đầu vào
@@ -309,12 +309,12 @@ const paymentController = {
           'Trạng thái không hợp lệ (chỉ chấp nhận "paid" hoặc "completed")'
         );
       }
-      if (isNaN(reservationId)) {
+      if (isNaN(reservation_id)) {
         throw new Error("Reservation ID không hợp lệ");
       }
 
       // Lấy thông tin reservation hiện tại
-      const reservation = await Reservation.findByPk(reservationId, {
+      const reservation = await Reservation.findByPk(reservation_id, {
         transaction,
       });
       if (!reservation) {
@@ -322,11 +322,11 @@ const paymentController = {
       }
 
       // Tạo bản ghi mới trong bảng Bill
-      const staffId = req.user?.id || 1; // Lấy từ authMiddleware hoặc mặc định
+      const staff_id = req.user?.id || 1; // Lấy từ authMiddleware hoặc mặc định
       await Bill.create(
         {
-          reservation_id: reservationId,
-          staff_id: staffId,
+          reservation_id,
+          staff_id,
           payment_method: "cash",
           total_amount: amount,
         },
@@ -336,14 +336,14 @@ const paymentController = {
       // Cập nhật trạng thái reservation
       await Reservation.update(
         { status: status },
-        { where: { id: reservationId }, transaction }
+        { where: { id: reservation_id }, transaction }
       );
 
       await transaction.commit();
 
       res.json({
         message: "Thanh toán bằng tiền mặt thành công",
-        reservationId,
+        reservation_id,
         amount,
         status,
       });

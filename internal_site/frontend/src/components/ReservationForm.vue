@@ -91,9 +91,9 @@
           });
   
           this.tables = response.data.tables.map((table) => ({
-            id: table.id,
-            name: `Bàn ${table.id}`,
-            seats: table.id % 2 === 0 ? 4 : 2,
+            table_id: table.table_id,
+            name: `Bàn ${table.table_id}`,
+            seats: table.table_id % 2 === 0 ? 4 : 2,
             status: table.status.toLowerCase(),
             reservationTime: table.reservationTime,
             reservation_id: table.reservation_id || '',
@@ -118,13 +118,13 @@
         window.location.reload();
       },
       UpdateReservationID() {
-        this.name = this.reservations.find(reservation => reservation.id === this.reservation_id)?.customer?.name || '';
-        this.num_people = this.reservations.find(reservation => reservation.id === this.reservation_id)?.num_people || '';
-        this.timeSearch = this.reservations.find(res => res.id === this.reservation_id)?.reservation_time
-        ? this.formatDate(this.reservations.find(res => res.id === this.reservation_id)?.reservation_time)
+        this.name = this.reservations.find(reservation => reservation.reservation_id === this.reservation_id)?.customer?.name || '';
+        this.num_people = this.reservations.find(reservation => reservation.reservation_id === this.reservation_id)?.num_people || '';
+        this.timeSearch = this.reservations.find(res => res.reservation_id === this.reservation_id)?.reservation_time
+        ? this.formatDate(this.reservations.find(res => res.reservation_id === this.reservation_id)?.reservation_time)
         : this.getCurrentVNTime();
-        this.tables = this.reservations.find(reservation => reservation.id === this.reservation_id)?.tables || [];
-        this.reservation_status = this.reservations.find(reservation => reservation.id === this.reservation_id)?.status || '';
+        this.tables = this.reservations.find(reservation => reservation.reservation_id === this.reservation_id)?.tables || [];
+        this.reservation_status = this.reservations.find(reservation => reservation.reservation_id === this.reservation_id)?.status || '';
       },
       async searchReservation() {
         if (!this.phoneNumber.trim()) {
@@ -286,8 +286,8 @@
       async fetchReservaion(){
         console.log(localStorage);
         if(localStorage.getItem('selectedReservation')){
-          const reservation = JSON.parse(localStorage.getItem('selectedReservation'));
-          this.cur_reservation = reservation.id;
+            const reservation = JSON.parse(localStorage.getItem('selectedReservation'));
+          this.cur_reservation = reservation.reservation_id;
           this.phoneNumber = reservation.customer?.phoneNumber || '';
           this.name = reservation.customer?.name || '';
           this.num_people = reservation?.num_people || '';

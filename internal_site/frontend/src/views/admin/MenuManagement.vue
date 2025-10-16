@@ -51,7 +51,7 @@
           <h2>Món vừa thêm/sửa</h2>
           <div class="recent-items-wrapper">
             <ul class="recent-items">
-              <li v-for="item in recentItems" :key="item.id">
+              <li v-for="item in recentItems" :key="item.menu_id">
                 <span>{{ item.name }} - {{ formatPrice(item.price) }} VNĐ</span>
                 <img :src="getImageUrl(item.image)" :alt="item.name" class="preview-image" />
               </li>
@@ -84,16 +84,16 @@
             <div v-for="(group, category) in groupedMenuItems" :key="category" class="category-group">
               <h3 class="category-title">{{ categoryDisplayNames[category] || category }}</h3>
               <ul>
-                <li v-for="item in group" :key="item.id" class="menu-item">
+                <li v-for="item in group" :key="item.menu_id" class="menu-item">
                   <div class="item-info">
                     <span>{{ item.name }} - {{ formatPrice(item.price) }} VNĐ</span>
                     <img :src="getImageUrl(item.image)" :alt="item.name" class="preview-image" />
                   </div>
                   <div class="item-actions">
                     <button @click="openEditPopup(item)" class="action-button">Sửa</button>
-                    <button v-if="item.deleted" @click="restoreItem(item.id)" class="action-button restore-button">Khôi
+                    <button v-if="item.deleted" @click="restoreItem(item.menu_id)" class="action-button restore-button">Khôi
                       phục</button>
-                    <button v-else @click="deleteItem(item.id)" class="action-button delete-button">Xóa</button>
+                    <button v-else @click="deleteItem(item.menu_id)" class="action-button delete-button">Xóa</button>
                   </div>
                 </li>
               </ul>
@@ -422,7 +422,7 @@ export default {
         const token = localStorage.getItem('token');
         if (!token) throw new Error('No token found.');
         const response = await axios.patch(
-          `http://localhost:3000/menu/${this.editItem.id}`,
+          `http://localhost:3000/menu/${this.editItem.menu_id}`,
           {
             name: this.editItem.name,
             price: this.editItem.price,
@@ -435,7 +435,7 @@ export default {
         );
 
         const updatedItem = response.data;
-        const index = this.menuItems.findIndex((i) => i.id === this.editItem.id);
+        const index = this.menuItems.findIndex((i) => i.menu_id === this.editItem.menu_id);
         this.menuItems[index] = updatedItem;
         this.recentItems.unshift(updatedItem);
         if (this.recentItems.length > 5) this.recentItems.pop();
@@ -469,8 +469,8 @@ export default {
               'Authorization': `Bearer ${token}`,
             },
           });
-          this.menuItems = this.menuItems.filter((item) => item.id !== id);
-          this.recentItems = this.recentItems.filter((item) => item.id !== id);
+          this.menuItems = this.menuItems.filter((item) => item.menu_id !== id);
+          this.recentItems = this.recentItems.filter((item) => item.menu_id !== id);
           Swal.fire('Thành công!', 'Món ăn đã được xóa.', 'success');
           await this.fetchMenu();
         } catch (error) {
@@ -498,7 +498,7 @@ export default {
           },
         });
         const updatedItem = response.data.item;
-        const index = this.menuItems.findIndex((i) => i.id === id);
+        const index = this.menuItems.findIndex((i) => i.menu_id === id);
         if (index !== -1) this.menuItems[index] = updatedItem;
         this.recentItems.unshift(updatedItem);
         if (this.recentItems.length > 5) this.recentItems.pop();

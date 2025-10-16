@@ -19,7 +19,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="(item, index) in orderItems" :key="item.id">
+                        <tr v-for="(item, index) in orderItems" :key="item.order_item_id">
                             <td>{{ item.menu.name }}</td>
                             <td>
                                 <input
@@ -39,7 +39,7 @@
                                     @click="updateOrderItem(item)"
                                 />
                             </td>
-                            <td><img src="@/assets/trash-icon.svg" alt="Reset Icon" class="icon" @click="deleteOrderItem(item.id)"/></td>
+                            <td><img src="@/assets/trash-icon.svg" alt="Reset Icon" class="icon" @click="deleteOrderItem(item.order_item_id)"/></td>
                         </tr>
                     </tbody>
                 </table>
@@ -63,7 +63,7 @@
                 </thead>
 
                 <tbody>
-                <tr v-for="(item, index) in localCartItems" :key="item.id">
+                <tr v-for="(item, index) in localCartItems" :key="item.menu_id">
                     <td>{{ item.name }}</td>
                     <td>
                     <input
@@ -82,7 +82,7 @@
                         src="@/assets/trash-icon.svg"
                         alt="Xóa món"
                         class="icon"
-                        @click="removeLocalCartItem(item.id)"
+                        @click="removeLocalCartItem(item.menu_id)"
                     />
                     </td>
                 </tr>
@@ -166,7 +166,7 @@ export default {
                 const orderData = {
                     reservation_id: this.reservation_id,
                     items: this.localCartItems.map(item => ({
-                        menu_id: item.id,
+                        menu_id: item.menu_id,
                         quantity: item.quantity,
                         note: item.note,
                     })),
@@ -188,11 +188,11 @@ export default {
             }
         },
         editItem(item) {
-            this.editingItem = item.id;
+            this.editingItem = item.order_item_id;
         },
         async updateOrderItem(item) {
             try {
-                const response = await axios.put(`http://localhost:3000/order-item/update/${item.id}`, {
+                const response = await axios.put(`http://localhost:3000/order-item/update/${item.order_item_id}`, {
                     quantity: item.quantity,
                     note: item.note,
                 },
@@ -207,21 +207,21 @@ export default {
                 console.log(error.response?.data?.message || 'Lỗi khi cập nhật món ăn', 'error');
             }
         },
-        async deleteOrderItem(id) {
+        async deleteOrderItem(order_item_id) {
             try {
-                await axios.delete(`http://localhost:3000/order-item/${id}`, {
+                await axios.delete(`http://localhost:3000/order-item/${order_item_id}`, {
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem('token')}`,
                     },
                 });
-                this.orderItems = this.orderItems.filter(item => item.id !== id);
+                this.orderItems = this.orderItems.filter(item => item.order_item_id !== order_item_id);
                 console.log('Xóa món ăn thành công!', 'success');
             } catch (error) {
                 console.log(error.response?.data?.message || 'Lỗi khi xóa món ăn', 'error');
             }
         },
-        removeLocalCartItem(id) {
-            this.localCartItems = this.localCartItems.filter(item => item.id !== id);
+        removeLocalCartItem(menu_id) {
+            this.localCartItems = this.localCartItems.filter(item => item.menu_id !== menu_id);
             this.$emit('update:cartItems', this.localCartItems);
         },
         
@@ -281,7 +281,7 @@ export default {
                     this.localCartItems = [];
                     return;
                 }
-                this.reservation_id = newReservation.id;
+                this.reservation_id = newReservation.reservation_id;
                 this.fetchOrderItems();
                 console.log('reservation_id:', this.reservation_id);
             },

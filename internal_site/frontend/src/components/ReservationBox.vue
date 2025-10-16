@@ -5,7 +5,7 @@
             <div 
                 class="item" 
                 v-for="reservation in reservations" 
-                :key="reservation.id" 
+                :key="reservation.reservation_id" 
                 :class="{'clickable': reservation.status === 'pending' || reservation.status === 'preparing' ||  reservation.status === 'serving'}"
                 @click="(reservation.status === 'pending' || reservation.status === 'preparing' ||  reservation.status === 'serving') && showDetails(reservation)"
             >
@@ -67,13 +67,13 @@ export default {
         },
         showDetails(reservation) {
             this.$emit('update:mode', 'table');
-            this.$emit('update:reservation_id', reservation.id);
+            this.$emit('update:reservation_id', reservation.reservation_id);
         },
         async cancelReservation(reservation) {
             try {
-                console.log("ID:", reservation.id);
+                console.log("ID:", reservation.reservation_id);
                 const response = await axios.put(`http://localhost:3000/reservation/cancel`, {
-                    reservation_id: reservation.id,
+                    reservation_id: reservation.reservation_id,
                 }, {
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -100,10 +100,10 @@ export default {
         async checkin(reservation) {
             // Thêm logic check-in tại đây
             try {
-                console.log("ID:", reservation.id);
+                console.log("ID:", reservation.reservation_id);
                 console.log(localStorage.getItem('token'));
                 const response = await axios.put(
-                    `http://localhost:3000/reservation/checkin/${reservation.id}`,
+                    `http://localhost:3000/reservation/checkin/${reservation.reservation_id}`,
                     null, // nếu không có data body
                     {
                         headers: {

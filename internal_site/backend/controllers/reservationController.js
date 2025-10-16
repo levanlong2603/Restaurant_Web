@@ -6,7 +6,7 @@ exports.bookTable = async (req, res) => {
     const { name, phoneNumber, reservation_time, num_people, tables, status } = req.body;
     let staff_id = null;
     if (req.user){
-      staff_id = req.user.id;
+      staff_id = req.user?.user_id || req.user.id;
     }
     console.log(reservation_time);
     if (!name || !phoneNumber || !reservation_time || !num_people) {
@@ -21,7 +21,7 @@ exports.bookTable = async (req, res) => {
 
     if (!staff_id) {
       const reservation = await Reservation.create({
-        customer_id: customer.id, 
+        customer_id: customer.customer_id, 
         reservation_time,
         num_people,
         staff_id: null,
@@ -30,7 +30,7 @@ exports.bookTable = async (req, res) => {
 
       return {
         status: 200,
-        reservationId: reservation.id,
+        reservation_id: reservation.reservation_id,
         message: 'Đặt bàn thành công!',
       };
     }
@@ -57,7 +57,7 @@ exports.bookTable = async (req, res) => {
       console.log(checkin_time);
 
       const reservation = await Reservation.create({
-        customer_id: customer.id, 
+        customer_id: customer.customer_id, 
         reservation_time,
         checkin_time,
         num_people,
@@ -66,11 +66,11 @@ exports.bookTable = async (req, res) => {
       });
 
       const existingTables = await Table.findAll({
-        where: { id: tables }, 
-        attributes: ['id']
+        where: { table_id: tables }, 
+        attributes: ['table_id']
       });
 
-      const validTableIds = existingTables.map(t => t.id);
+      const validTableIds = existingTables.map(t => t.table_id);
 
       const invalidTableIds = tables.filter(id => !validTableIds.includes(id));
 
@@ -82,7 +82,7 @@ exports.bookTable = async (req, res) => {
       }
 
       const reservationDetails = validTableIds.map(tableId => ({
-        reservation_id: reservation.id,
+        reservation_id: reservation.reservation_id,
         table_id: tableId
       }));
 
@@ -90,8 +90,8 @@ exports.bookTable = async (req, res) => {
 
       return res.status(201).json({ 
         message: "Đặt bàn thành công!", 
-        reservation_id: reservation.id, 
-        customer_id: customer.id
+        reservation_id: reservation.reservation_id, 
+        customer_id: customer.customer_id
       });
     }
   } catch (error) {
@@ -101,11 +101,11 @@ exports.bookTable = async (req, res) => {
 
 
 exports.approveReservation = async (req, res) => {
-  const reservation_id = req.params.id;
-  const staff_id = req.user.id;
+  const reservation_id = req.params.reservation_id || req.params.id;
+  const staff_id = req.user?.user_id || req.user?.id;
   const { tables } = req.body; 
   try {
-    const reservation = await Reservation.findByPk(reservation_id);
+  const reservation = await Reservation.findByPk(reservation_id);
     if (!reservation) {
       return res.status(404).json({ message: "Đơn đặt bàn không tồn tại" });
     }
@@ -131,7 +131,7 @@ exports.approveReservation = async (req, res) => {
     res.status(200).json({
       message: "Duyệt đơn thành công!",
       reservation: {
-        id: reservation.id,
+        reservation_id: reservation.reservation_id,
         status: reservation.status,
         staff_id: reservation.staff_id,
         reservation_time: reservation.reservation_time,
@@ -162,9 +162,9 @@ exports.getReservationsByPhone = async (req, res) => {
         }
 
         const reservations = await Reservation.findAll({
-            where: {
-                customer_id: customer.id,
-            },
+      where: {
+        customer_id: customer.customer_id,
+      },
             include: [
               {
                 model: Customer,
@@ -226,27 +226,27 @@ exports.cancelReservation = async (req, res) => {
           where: { reservation_id: reservation_id }
       });
 
-      const tableIds = reservationDetails.map(rd => rd.table_id);
-      const tables = await Table.findAll({
-          where: { id: { [Sequelize.Op.in]: tableIds } }
-      });
+    const tableIds = reservationDetails.map(rd => rd.table_id);
+    const tables = await Table.findAll({
+      where: { table_id: { [Sequelize.Op.in]: tableIds } }
+    });
       
       const customer = await Customer.findByPk(reservation.customer_id);
 
-      const formattedReservation = {
-          id: reservation.id,
-          start_time: reservation.start_time,
-          status: reservation.status,
-          customer: customer ? {
-              id: customer.id,
-              name: customer.name,
-              phone_number: customer.phone_number
-          } : null,
-          tables: reservationDetails.map(detail => {
-              const table = tables.find(t => t.id === detail.table_id);
-              return { id: table.id, name: table.name };
-          })
-      };
+    const formattedReservation = {
+      reservation_id: reservation.reservation_id,
+      start_time: reservation.start_time,
+      status: reservation.status,
+      customer: customer ? {
+        customer_id: customer.customer_id,
+        name: customer.name,
+        phone_number: customer.phone_number
+      } : null,
+      tables: reservationDetails.map(detail => {
+        const table = tables.find(t => t.table_id === detail.table_id);
+        return { table_id: table.table_id, name: table.name };
+      })
+    };
 
       await reservation.update({ status: 'cancelled' });
 
@@ -262,10 +262,10 @@ exports.cancelReservation = async (req, res) => {
 
 exports.updateReservation = async (req, res) => {
   try {
-      const { id } = req.params; 
+      const { reservation_id } = req.params; 
 
       if (req.user){
-        staff_id = req.user.id;
+        staff_id = req.user?.user_id || req.user.id;
       }
       else{
         return res.status(401).json({ error: "Vui Lòng đăng nhập" });
@@ -273,12 +273,12 @@ exports.updateReservation = async (req, res) => {
 
       const { status, reservation_time, num_people, tables } = req.body; 
 
-      const reservation = await Reservation.findByPk(id);
+  const reservation = await Reservation.findByPk(reservation_id);
       if (!reservation) {
           return res.status(404).json({ error: "Không tìm thấy" });
       }
 
-      await ReservationDetail.destroy({ where: { reservation_id: id } });
+      await ReservationDetail.destroy({ where: { reservation_id } });
 
       if(!reservation.staff_id){
         await reservation.update({staff_id})
@@ -288,7 +288,7 @@ exports.updateReservation = async (req, res) => {
 
       if (tables && tables.length > 0) {
           const newDetails = tables.map(table => ({
-              reservation_id: id,
+              reservation_id,
               table_id: table 
           }));
           await ReservationDetail.bulkCreate(newDetails);
@@ -297,7 +297,7 @@ exports.updateReservation = async (req, res) => {
         return res.status(400).json({ message: "Vui lòng chọn bàn!" });
       }
 
-      return res.status(200).json({ message: "Reservation updated successfully", reservation });
+    return res.status(200).json({ message: "Reservation updated successfully", reservation });
   } catch (error) {
       console.error("Error updating reservation:", error);
       return res.status(500).json({ error: "Internal server error" });
@@ -358,7 +358,7 @@ exports.getReservationByTableId = async (req, res) => {
 
 exports.checkin = async (req, res) => {
   try {
-    const { id:reservation_id } = req.params;
+    const { reservation_id } = req.params;
 
     const reservation = await Reservation.findByPk(reservation_id);
 
@@ -378,7 +378,7 @@ exports.checkin = async (req, res) => {
     res.status(200).json({
       message: "Đã xác nhận đơn đặt bàn!",
       reservation: {
-        id: reservation.id,
+        reservation_id: reservation.reservation_id,
         status: reservation.status,
         staff_id: reservation.staff_id,
         reservation_time: reservation.reservation_time,
@@ -423,7 +423,7 @@ exports.getAllReservations = async (req, res) => {
 
 exports.customerLeft = async (req, res) => {
   try {
-    const { id: reservation_id } = req.params;
+    const { reservation_id } = req.params;
     let { checkout_time } = req.body; // Nhận checkout_time từ request
 
     const reservation = await Reservation.findByPk(reservation_id);
@@ -449,7 +449,7 @@ exports.customerLeft = async (req, res) => {
     res.status(200).json({
       message: "Khách đã rời khỏi bàn!",
       reservation: {
-        id: reservation.id,
+        reservation_id: reservation.reservation_id,
         status: reservation.status,
         staff_id: reservation.staff_id,
         reservation_time: reservation.reservation_time,

@@ -6,12 +6,12 @@
         <div class="table-grid floor-1">
           <div
             v-for="table in floor1Tables"
-            :key="table.id"
+            :key="table.table_id"
             :class="[
               'table',
               table.seats === 2 ? 'table-2' : 'table-4',
               getStatusClass(table.status),
-              newSelectedTables.includes(table.id) ? 'selected' : ''
+              newSelectedTables.includes(table.table_id) ? 'selected' : ''
             ]"
             @click="UpdateTable(table)"
           >
@@ -32,12 +32,12 @@
       <div class="table-grid floor-2">
         <div
           v-for="table in floor2Tables"
-          :key="table.id"
+          :key="table.table_id"
           :class="[
             'table',
             table.seats === 2 ? 'table-2' : 'table-4',
             getStatusClass(table.status),
-            newSelectedTables.includes(table.id) ? 'selected' : ''
+            newSelectedTables.includes(table.table_id) ? 'selected' : ''
           ]"
           @click="UpdateTable(table)"
         >
@@ -70,10 +70,10 @@ export default {
   },
   computed: {
     floor1Tables() {
-      return this.updateTableStatus.filter((table) => table.id <= 8);
+      return this.updateTableStatus.filter((table) => table.table_id <= 8);
     },
     floor2Tables() {
-      return this.updateTableStatus.filter((table) => table.id > 8);
+      return this.updateTableStatus.filter((table) => table.table_id > 8);
     },
   },
   methods: {
@@ -90,15 +90,15 @@ export default {
       if (table.status === 'occupied' || table.status === 'booked') {
         return;
       }
-      if (updatedSelected.includes(table.id)) {
-        updatedSelected = updatedSelected.filter((id) => id !== table.id);
+      if (updatedSelected.includes(table.table_id)) {
+        updatedSelected = updatedSelected.filter((id) => id !== table.table_id);
         updatedTables = updatedTables.map((item) =>
-          item.id === table.id ? { ...item, status: 'available' } : item
+          item.table_id === table.table_id ? { ...item, status: 'available' } : item
         );
       } else {
-        updatedSelected.push(table.id);
+        updatedSelected.push(table.table_id);
         updatedTables = updatedTables.map((item) =>
-          item.id === table.id ? { ...item, status: 'booked' } : item
+          item.table_id === table.table_id ? { ...item, status: 'booked' } : item
         );
       }
 

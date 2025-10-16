@@ -2,14 +2,15 @@
   <div class="menu-page">
     <Header />
     <section class="menu">
-      <h1>{{ $t('menu.title') }}</h1>
+      <h1>MENU LONG QUÂN AN</h1>
       <p class="description">
-        {{ $t('menu.description') || 'Menu nhà hàng mang đến hương vị đậm đà, hòa quyện giữa truyền thống và tinh tế. Mỗi món ăn đều được chế biến tỉ mỉ, giữ trọn tinh hoa ẩm thực Việt.' }}
+        Menu nhà hàng mang đến hương vị đậm đà, hòa quyện giữa truyền thống và tinh tế. <br>Mỗi món ăn đều được chế biến
+        tỉ mỉ, giữ trọn tinh hoa ẩm thực Việt.
       </p>
 
       <!-- Món ăn nổi bật (Slide tự động) -->
       <section class="featured-dishes">
-  <h2>{{ $t('menu.featured') }}</h2>
+        <h2>Món ăn nổi bật</h2>
         <carousel :items-to-show="1" :wrap-around="true" :autoplay="5000" :transition="500">
           <slide v-for="item in featuredItems" :key="item.id">
             <div class="featured-item">
@@ -32,11 +33,11 @@
       <section class="menu-items-section">
         <div class="filter-section">
           <select v-model="selectedCategory" @change="fetchMenu" class="category-select">
-            <option value="">{{ $t('menu.allCategories') }}</option>
-            <option v-for="cat in categoryOrder" :key="cat" :value="cat">{{ $t(`categories.${cat}`) || getCategoryName(cat) }}</option>
+            <option value="">Tất cả danh mục</option>
+            <option v-for="cat in categoryOrder" :key="cat" :value="cat">{{ getCategoryName(cat) }}</option>
           </select>
-          <input v-model="searchQuery" @input="debouncedFetchMenu" :placeholder="$t('menu.searchPlaceholder')" class="search-input" />
-          <button @click="refresh" class="refresh-button">{{ $t('menu.refresh') }}</button>
+          <input v-model="searchQuery" @input="debouncedFetchMenu" placeholder="Tìm kiếm món..." class="search-input" />
+          <button @click="refresh" class="refresh-button">Làm mới</button>
         </div>
 
         <div v-if="paginatedItems.length" class="menu-items">
@@ -54,12 +55,12 @@
             </div>
           </div>
         </div>
-  <div v-else class="no-items">{{ $t('menu.noItems') || 'Không có món ăn nào để hiển thị.' }}</div>
+        <div v-else class="no-items">Không có món ăn nào để hiển thị.</div>
 
         <div class="pagination" v-if="totalPages > 1">
-          <button @click="changePage(currentPage - 1)" :disabled="currentPage === 1">{{ $t('menu.prevPage') }}</button>
-          <span>{{ $t('menu.pageInfo') }} {{ currentPage }} / {{ totalPages }}</span>
-          <button @click="changePage(currentPage + 1)" :disabled="currentPage === totalPages">{{ $t('menu.nextPage') }}</button>
+          <button @click="changePage(currentPage - 1)" :disabled="currentPage === 1">Trước</button>
+          <span>Trang {{ currentPage }} / {{ totalPages }}</span>
+          <button @click="changePage(currentPage + 1)" :disabled="currentPage === totalPages">Sau</button>
         </div>
       </section>
     </section>

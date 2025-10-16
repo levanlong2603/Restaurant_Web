@@ -48,8 +48,10 @@ exports.addOrderItem = async (req, res) => {
         res.status(201).json({
             message: "Món ăn đã được thêm vào danh sách gọi món!",
             order: orderItems.map(item => ({
+                order_item_id: item.order_item_id,
                 reservation_id: item.reservation_id,
-                menu: menu.find(m => m.id === item.menu_id),
+                menu_id: item.menu_id,
+                menu: menu.find(m => m.menu_id === item.menu_id),
                 quantity: item.quantity,
                 note: item.note,
                 status: item.status,
@@ -64,13 +66,13 @@ exports.addOrderItem = async (req, res) => {
 // API Cập nhật món ăn
 exports.updateOrderItem = async (req, res) => {
     try {
-        const { id } = req.params; // Lấy ID từ URL
+        const { order_item_id } = req.params; // Lấy ID từ URL
         const { quantity, note } = req.body; 
 
-        if (!id) {
+        if (!order_item_id) {
             return res.status(400).json({ message: "Thiếu ID đặt món!" });
         }
-        const orderItem = await OrderItem.findByPk(id);
+        const orderItem = await OrderItem.findByPk(order_item_id);
         if (!orderItem) {
             return res.status(404).json({ message: "Không tìm thấy món đã đặt này!" });
         }
@@ -97,13 +99,13 @@ exports.updateOrderItem = async (req, res) => {
 // API Xóa món ăn
 exports.deleteOrderItem = async (req, res) => {
     try {
-        const { id } = req.params; // Lấy ID từ URL
+        const { order_item_id } = req.params; // Lấy ID từ URL
 
-        if (!id) {
+        if (!order_item_id) {
             return res.status(400).json({ message: "Thiếu ID đặt món!" });
         }
 
-        const orderItem = await OrderItem.findByPk(id);
+        const orderItem = await OrderItem.findByPk(order_item_id);
         if (!orderItem) {
             return res.status(404).json({ message: "Không tìm thấy đặt món này!" });
         }
@@ -145,10 +147,10 @@ exports.getOrderItems = async (req, res) => {
         });
 
         const mappedOrderItems = orderItems.map(item => ({
-            id: item.id,
+            order_item_id: item.order_item_id,
             reservation_id: item.reservation_id,
             menu_id: item.menu_id,
-            menu: menu.find(m => m.id === item.menu_id),
+            menu: menu.find(m => m.menu_id === item.menu_id),
             quantity: item.quantity,
             note: item.note,
             status: item.status,

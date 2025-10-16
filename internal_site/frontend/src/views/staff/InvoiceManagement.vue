@@ -39,7 +39,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="(bill, index) in filteredBills" :key="bill.id">              
+            <tr v-for="(bill, index) in filteredBills" :key="bill.bill_id">              
                 <td class="col-id">{{ index + 1 }}</td>
               <td class="col-customer">{{ bill.customerName }}</td>
               <td class="col-time">{{ formatDate(bill.time) }}</td>

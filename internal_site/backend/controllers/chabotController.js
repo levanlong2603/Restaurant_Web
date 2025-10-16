@@ -638,7 +638,7 @@ exports.processChat = async (req, res) => {
             }
           });
 
-          const overlappingIds = overlapping.map(r => r.id);
+          const overlappingIds = overlapping.map(r => r.reservation_id);
           let reservedCount = 0;
           if (overlappingIds.length > 0) {
             reservedCount = await ReservationDetail.count({ where: { reservation_id: overlappingIds } });
@@ -741,10 +741,10 @@ async function handleMenuRequest(functionArgs, res) {
     const selectedItems = shuffledItems.slice(0, Math.min(3, menuItems.length));
     const filterDesc = `${lightDish ? 'thanh đạm' : region ? `thuộc ${region}` : category ? `trong danh mục ${category}` : keyword ? `liên quan đến ${keyword}` : 'ăn'}`;
     const menuMessage = `Chúng tôi đề xuất cho quý khách một số món ${filterDesc}:\n` +
-      selectedItems
+          selectedItems
         .map(item => {
           const imageTag = isValidImageUrl(item.image)
-            ? `<img src="${item.image}" alt="${item.name}" width="100" class="clickable-image" data-id="${item.id}">`
+            ? `<img src="${item.image}" alt="${item.name}" width="100" class="clickable-image" data-id="${item.menu_id}">`
             : 'Chưa có ảnh';
           return `${item.name} (${parseFloat(item.price).toLocaleString('vi-VN')} VNĐ): ${item.description} <br>${imageTag}`;
         })

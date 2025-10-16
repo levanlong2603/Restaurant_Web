@@ -96,11 +96,11 @@ exports.createMenuItem = async (req, res) => {
 // Cập nhật món
 exports.updateMenuItem = async (req, res) => {
   try {
-    const { id } = req.params;
+  const { menu_id } = req.params;
     const { name, price, description, category, image, imagePublicId } =
       req.body;
 
-    const item = await Menu.findByPk(id);
+  const item = await Menu.findByPk(menu_id);
     if (!item) {
       return res.status(404).json({ message: "Món không tồn tại" });
     }
@@ -139,8 +139,8 @@ exports.updateMenuItem = async (req, res) => {
 // Xóa món (soft delete)
 exports.deleteMenuItem = async (req, res) => {
   try {
-    const { id } = req.params;
-    const item = await Menu.findByPk(id);
+  const { menu_id } = req.params;
+  const item = await Menu.findByPk(menu_id);
     if (!item) {
       return res.status(404).json({ message: "Món không tồn tại" });
     }
@@ -166,8 +166,8 @@ exports.deleteMenuItem = async (req, res) => {
 // Khôi phục món đã xóa
 exports.restoreMenuItem = async (req, res) => {
   try {
-    const { id } = req.params;
-    const item = await Menu.findByPk(id);
+  const { menu_id } = req.params;
+  const item = await Menu.findByPk(menu_id);
     if (!item) {
       return res.status(404).json({ message: "Món không tồn tại" });
     }

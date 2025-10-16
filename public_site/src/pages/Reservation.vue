@@ -3,17 +3,19 @@
     <Header />
     <section class="reservation">
       <div class="reservation-content">
-        <h1>{{ $t('reservation.title') }}</h1>
-        <p class="description">{{ $t('reservation.description') || 'Đặt bàn trước sẽ giúp quý khách lựa chọn được chỗ ngồi ứng ý và sự chuẩn bị chu đáo nhất.' }}</p>
+        <h1>ĐẶT BÀN</h1>
+        <p class="description">
+          Đặt bàn trước sẽ giúp quý khách lựa chọn được chỗ ngồi ứng ý và sự chuẩn bị chu đáo nhất.
+        </p>
 
         <div class="divider"></div>
 
         <div class="reservation-form">
-          <h2>{{ $t('reservation.formTitle') }}</h2>
+          <h2>THÔNG TIN NGƯỜI ĐẶT</h2>
           <form @submit.prevent="submitReservation">
             <div class="form-group">
               <div class="form-field">
-                <label>{{ $t('reservation.name') }} <span class="required">*</span></label>
+                <label>Họ tên <span class="required">*</span></label>
                 <input
                   type="text"
                   v-model="form.name"
@@ -23,7 +25,7 @@
                 />
               </div>
               <div class="form-field">
-                <label>{{ $t('reservation.phone') }} <span class="required">*</span></label>
+                <label>Số điện thoại <span class="required">*</span></label>
                 <input
                   type="tel"
                   v-model="form.phoneNumber"
@@ -36,7 +38,7 @@
             
             <div class="form-group">
               <div class="form-field">
-                <label>{{ $t('reservation.date') }} <span class="required">*</span></label>
+                <label>Ngày đặt <span class="required">*</span></label>
                 <input 
                   type="date" 
                   v-model="form.date" 
@@ -46,7 +48,7 @@
                 />
               </div>
               <div class="form-field">
-                <label>{{ $t('reservation.time') }} <span class="required">*</span></label>
+                <label>Giờ đặt <span class="required">*</span></label>
                 <select v-model="form.time" required :disabled="isSubmitting">
                   <option value="">Chọn giờ</option>
                   <option v-for="slot in timeSlots" :key="slot" :value="slot">
@@ -55,7 +57,7 @@
                 </select>
               </div>
               <div class="form-field">
-                <label>{{ $t('reservation.num_people') }} <span class="required">*</span></label>
+                <label>Số lượng khách <span class="required">*</span></label>
                 <input
                   type="number"
                   v-model.number="form.num_people"
@@ -69,7 +71,7 @@
             </div>
 
             <div class="form-field notes-field">
-                <label>{{ $t('reservation.notes') }}</label>
+              <label>Lưu ý</label>
               <textarea
                 v-model="form.notes"
                 placeholder="Nhập lưu ý (nếu có)"
@@ -79,9 +81,9 @@
             </div>
 
             <div class="reservation-note">
-              <p><strong>{{ $t('reservation.noteTitle') || 'LƯU Ý ĐẶT BÀN' }}</strong></p>
-              <p>{{ $t('reservation.note1') || 'Quý khách vui lòng đến trước thời gian đặt 15 phút để nhà hàng phục vụ quý khách được tốt nhất.' }}</p>
-              <p>{{ $t('reservation.note2') || 'Cảm ơn quý khách!' }}</p>
+              <p><strong>LƯU Ý ĐẶT BÀN</strong></p>
+              <p>Quý khách vui lòng đến trước thời gian đặt 15 phút để nhà hàng phục vụ quý khách được tốt nhất.</p>
+              <p>Cảm ơn quý khách!</p>
             </div>
 
             <button
@@ -96,7 +98,7 @@
             >
               <span v-if="isSubmitting" class="button-spinner"></span>
               <span v-else-if="isSubmitted" class="button-checkmark">✓</span>
-              {{ isSubmitting ? $t('reservation.submitting') : (isSubmitted ? $t('reservation.submitted') : $t('reservation.submit')) }}
+              {{ getButtonText() }}
             </button>
           </form>
         </div>

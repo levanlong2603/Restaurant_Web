@@ -25,18 +25,18 @@ exports.getTableStatus = async (req, res) => {
 
         let reservationDetails = await ReservationDetail.findAll({
             where: {
-                reservation_id: reservations.map(res => res.id) 
+                reservation_id: reservations.map(res => res.reservation_id) 
             }
         });
 
         const tableStatus = tables.map(table => {
-            const tableReservations = reservationDetails.filter(r => r.table_id === table.id);
+            const tableReservations = reservationDetails.filter(r => r.table_id === table.table_id);
             let status = 'Available';
 
             if (tableReservations.length > 0) {
                 const latestReservationDetail = tableReservations[0];
                 
-                const reservation = reservations.find(res => res.id === latestReservationDetail.reservation_id);
+                const reservation = reservations.find(res => res.reservation_id === latestReservationDetail.reservation_id);
                 
                 if (reservation) {
                     if (reservation.status === 'preparing') {
@@ -48,11 +48,11 @@ exports.getTableStatus = async (req, res) => {
             }
             
             return {
-                id: table.id,
+                table_id: table.table_id,
                 name: table.name,
                 status: status,
-                reservationTime: tableReservations.length > 0 && reservations.find(res => res.id === tableReservations[0].reservation_id) 
-                    ? reservations.find(res => res.id === tableReservations[0].reservation_id).reservation_time 
+                reservationTime: tableReservations.length > 0 && reservations.find(res => res.reservation_id === tableReservations[0].reservation_id) 
+                    ? reservations.find(res => res.reservation_id === tableReservations[0].reservation_id).reservation_time 
                     : null,
                 reservation_id: tableReservations.length > 0 ? tableReservations[0].reservation_id : null
             };
@@ -81,14 +81,14 @@ exports.getSeveredTables = async (req, res) => {
 
         let reservationDetails = await ReservationDetail.findAll({
             where: {
-                reservation_id: reservations.map(res => res.id) 
+                reservation_id: reservations.map(res => res.reservation_id) 
             }
         });
 
 
         const servedTables = await Table.findAll({
             where: {
-                id: reservationDetails.map(r => r.table_id)
+                table_id: reservationDetails.map(r => r.table_id)
             }
         });
 

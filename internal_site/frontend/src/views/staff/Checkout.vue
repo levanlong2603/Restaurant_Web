@@ -8,7 +8,7 @@
           <div class="select-table">
             <select v-model="table_id" class="cart">
               <option value="" disabled>Chọn bàn</option>
-              <option v-for="table in tables" :key="table.id" :value="table.id">Bàn {{ table.id }}</option>
+              <option v-for="table in tables" :key="table.table_id" :value="table.table_id">Bàn {{ table.table_id }}</option>
             </select>
             <button @click="fetchTables" class="refresh-button">Làm mới</button>
           </div>
@@ -69,9 +69,15 @@
           this.table_id = '';
           this.billDetails = null;
           this.errorMessage = '';
+          const token = localStorage.getItem('token');
+          if (!token) {
+            this.errorMessage = 'Token không tồn tại. Vui lòng đăng nhập lại.';
+            return;
+          }
+
           const response = await axios.get('http://localhost:3000/table/served', {
             headers: {
-              Authorization: `Bearer ${localStorage.getItem('token')}`,
+              Authorization: `Bearer ${token}`,
             },
           });
           this.tables = response.data['servedTables'] || [];
@@ -80,7 +86,8 @@
           }
         } catch (error) {
           console.error('Lỗi khi tải danh sách bàn:', error.response?.data || error.message);
-          this.errorMessage = 'Lỗi khi tải danh sách bàn. Vui lòng kiểm tra token hoặc API.';
+          // Provide a clearer message if backend returned one
+          this.errorMessage = error.response?.data?.message || 'Lỗi khi tải danh sách bàn. Vui lòng kiểm tra token hoặc API.';
         }
       },
       async fetchReservationId() {
@@ -98,7 +105,7 @@
           this.reservation = {
             ...response.data,
             customerName: response.data.customer?.name || 'Khách hàng không xác định',
-            tableNumber: response.data.details.map(table => table.id).join(', '),
+            tableNumber: response.data.details.map(table => table.table_id).join(', '),
           };
           await this.fetchBillDetails();
         } catch (error) {
@@ -108,12 +115,12 @@
       },
       async fetchBillDetails() {
         try {
-          if (!this.reservation.id) {
-            this.errorMessage = 'Không có reservation_id để tải hóa đơn.';
-            return;
-          }
+          if (!this.reservation?.reservation_id) {
+              this.errorMessage = 'Không có reservation_id để tải hóa đơn.';
+              return;
+            }
           this.errorMessage = '';
-          const response = await axios.get(`http://localhost:3000/bill/${this.reservation.id}`, {
+          const response = await axios.get(`http://localhost:3000/bill/${this.reservation.reservation_id}`, {
             headers: {
               Authorization: `Bearer ${localStorage.getItem('token')}`,
             },
@@ -142,7 +149,7 @@
           try {
             console.log('Payment data:', paymentData);
             await axios.post(`http://localhost:3000/bill/`, {
-                reservation_id: this.reservation.id,
+                reservation_id: this.reservation.reservation_id,
                 paymethod: paymentData.method,
                 reservation_status: paymentData.status,
                 total_amount: this.billDetails.total_amount,
@@ -161,16 +168,29 @@
           }
       },
       async fetchReservation(){
-        const reservation = JSON.parse(localStorage.getItem('selectedReservation'));
-        if (reservation) {
+        const raw = localStorage.getItem('selectedReservation');
+        if (!raw) return;
+        try {
+          const reservation = JSON.parse(raw);
+          // normalize older objects that might still have `id`
+          if (reservation.id && !reservation.reservation_id) {
+            reservation.reservation_id = reservation.id;
+          }
+
+          this.reservation = reservation;
+
           this.billDetails = {
             ...reservation ,
-            tableNumber: reservation.details.map(table => table.table_id).join(', '),
+            tableNumber: (reservation.details || []).map(table => table.table_id).join(', '),
           };
-          if(reservation.details.length > 0) {
-            this.table_id = reservation.details[0].table_id; // Assuming the first table is the one to be used
+          if ((reservation.details || []).length > 0) {
+            this.table_id = reservation.details[0].table_id; // select the first table
           }
-          this.fetchBillDetails();
+          // Only fetch bill details if we have a reservation_id
+          if (this.reservation?.reservation_id) await this.fetchBillDetails();
+        } catch (err) {
+          console.error('Invalid selectedReservation in localStorage', err);
+        } finally {
           localStorage.removeItem('selectedReservation'); // Clear the reservation after using it
         }
       }

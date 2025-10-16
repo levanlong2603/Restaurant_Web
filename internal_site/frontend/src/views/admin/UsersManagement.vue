@@ -41,7 +41,7 @@
                             <div class="col-meta">Date added</div>
                             <div class="col-actions">Hành động</div>
                         </div>
-                        <div class="user-item pending-user" v-for="user in pendingUsers" :key="user.id"
+                        <div class="user-item pending-user" v-for="user in pendingUsers" :key="user.user_id"
                             @click="openProfileModal(user)">
                             <div class="user-details">
                                 <img :src="getImageUrl(user.profilePhoto)" alt="Ảnh đại diện" class="user-photo"
@@ -76,7 +76,7 @@
                             <div class="col-meta">Date added</div>
                             <div class="col-actions">Hành động</div>
                         </div>
-                        <div class="user-item" v-for="user in paginatedUsers" :key="user.id"
+                        <div class="user-item" v-for="user in paginatedUsers" :key="user.user_id"
                             @click="openProfileModal(user)">
                             <div class="user-details">
                                 <img :src="getImageUrl(user.profilePhoto)" alt="Ảnh đại diện" class="user-photo"
@@ -133,7 +133,7 @@
                             <div class="col-meta">Date added</div>
                             <div class="col-actions">Hành động</div>
                         </div>
-                        <div class="user-item deleted-user" v-for="user in paginatedDeletedUsers" :key="user.id">
+                        <div class="user-item deleted-user" v-for="user in paginatedDeletedUsers" :key="user.user_id">
                             <div class="user-details">
                                 <img :src="getImageUrl(user.profilePhoto)" alt="Ảnh đại diện" class="user-photo"
                                     @error="handleImageError" />
@@ -517,7 +517,7 @@ export default {
         },
         async approveUser(user) {
             try {
-                await axios.put(`http://localhost:3000/users/approve/${user.id}`, {}, {
+                await axios.put(`http://localhost:3000/users/approve/${user.user_id}`, {}, {
                     headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` },
                 });
                 await this.fetchUsers();
@@ -530,7 +530,7 @@ export default {
         },
         async rejectUser(user) {
             try {
-                await axios.put(`http://localhost:3000/users/reject/${user.id}`, {}, {
+                await axios.put(`http://localhost:3000/users/reject/${user.user_id}`, {}, {
                     headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` },
                 });
                 await this.fetchUsers();
@@ -544,7 +544,7 @@ export default {
         openAddUserModal() {
             this.editingUser = null;
             this.userForm = {
-                id: null,
+                user_id: null,
                 name: '',
                 phoneNumber: '',
                 email: '',
@@ -561,14 +561,14 @@ export default {
         },
         openEditModal(user) {
             this.editingUser = user;
-            this.userForm = { ...user, password: '' };
+            this.userForm = { ...user, password: '', user_id: user.user_id };
             this.previewPhoto = null;
             this.showUserModal = true;
             this.showProfileModal = false;
         },
         async openProfileModal(user) {
             try {
-                const response = await axios.get(`http://localhost:3000/users/${user.id}`, {
+                const response = await axios.get(`http://localhost:3000/users/${user.user_id}`, {
                     headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` },
                 });
                 this.selectedUser = response.data.user;
@@ -641,7 +641,7 @@ export default {
                 const token = localStorage.getItem('token');
                 let response;
                 if (this.editingUser) {
-                    response = await axios.put(`http://localhost:3000/users/${this.userForm.id}`, userData, {
+                    response = await axios.put(`http://localhost:3000/users/${this.userForm.user_id}`, userData, {
                         headers: { 'Authorization': `Bearer ${token}` },
                     });
                     Swal.fire('Thành công!', 'Cập nhật người dùng thành công!', 'success');
@@ -654,7 +654,7 @@ export default {
 
                 await this.fetchUsers();
                 if (this.showProfileModal && this.editingUser) {
-                    const updatedUserResponse = await axios.get(`http://localhost:3000/users/${this.editingUser.id}`, {
+                    const updatedUserResponse = await axios.get(`http://localhost:3000/users/${this.editingUser.user_id}`, {
                         headers: { 'Authorization': `Bearer ${token}` },
                     });
                     this.selectedUser = updatedUserResponse.data.user;
@@ -672,7 +672,7 @@ export default {
         },
         async deleteUser() {
             try {
-                await axios.delete(`http://localhost:3000/users/${this.userToDelete.id}`, {
+                await axios.delete(`http://localhost:3000/users/${this.userToDelete.user_id}`, {
                     headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` },
                 });
                 this.showDeletePopup = false;
@@ -690,7 +690,7 @@ export default {
         },
         async restoreUser() {
             try {
-                await axios.post(`http://localhost:3000/users/restore/${this.userToRestore.id}`, {}, {
+                await axios.post(`http://localhost:3000/users/restore/${this.userToRestore.user_id}`, {}, {
                     headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` },
                 });
                 this.showRestorePopup = false;

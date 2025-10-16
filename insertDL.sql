@@ -31,7 +31,7 @@ USE `restaurant_db`;
 
 DROP TABLE IF EXISTS `bill`;
 CREATE TABLE `bill` (
-  `id` int(11) NOT NULL,
+  `bill_id` int(11) NOT NULL,
   `reservation_id` int(11) NOT NULL,
   `staff_id` int(11) NOT NULL,
   `payment_method` enum('cash','credit_card','bank_transfer') NOT NULL DEFAULT 'cash',
@@ -45,7 +45,7 @@ CREATE TABLE `bill` (
 -- Dumping data for table `bill`
 --
 
-INSERT INTO `bill` (`id`, `reservation_id`, `staff_id`, `payment_method`, `total_amount`, `time`, `createdAt`, `updatedAt`) VALUES
+INSERT INTO `bill` (`bill_id`, `reservation_id`, `staff_id`, `payment_method`, `total_amount`, `time`, `createdAt`, `updatedAt`) VALUES
 (1, 1, 3, 'cash', 220000, '2025-10-06 20:43:34', '2025-10-06 20:43:34', '2025-10-06 20:43:34'),
 (2, 2, 3, 'cash', 760000, '2025-10-07 22:24:05', '2025-10-07 22:24:05', '2025-10-07 22:24:05');
 
@@ -57,7 +57,7 @@ INSERT INTO `bill` (`id`, `reservation_id`, `staff_id`, `payment_method`, `total
 
 DROP TABLE IF EXISTS `customer`;
 CREATE TABLE `customer` (
-  `id` int(11) NOT NULL,
+  `customer_id` int(11) NOT NULL,
   `name` varchar(255) NOT NULL,
   `phoneNumber` varchar(255) NOT NULL,
   `createdAt` datetime NOT NULL,
@@ -68,7 +68,7 @@ CREATE TABLE `customer` (
 -- Dumping data for table `customer`
 --
 
-INSERT INTO `customer` (`id`, `name`, `phoneNumber`, `createdAt`, `updatedAt`) VALUES
+INSERT INTO `customer` (`customer_id`, `name`, `phoneNumber`, `createdAt`, `updatedAt`) VALUES
 (1, 'abc', '1111111111', '2025-10-06 19:12:21', '2025-10-06 19:12:21'),
 (2, 'ânnana', '1212121212', '2025-10-06 20:42:24', '2025-10-06 20:42:24');
 
@@ -80,7 +80,7 @@ INSERT INTO `customer` (`id`, `name`, `phoneNumber`, `createdAt`, `updatedAt`) V
 
 DROP TABLE IF EXISTS `menu`;
 CREATE TABLE `menu` (
-  `id` int(11) NOT NULL,
+  `menu_id` int(11) NOT NULL,
   `name` varchar(255) NOT NULL,
   `price` decimal(10,2) NOT NULL,
   `description` text DEFAULT NULL,
@@ -94,7 +94,7 @@ CREATE TABLE `menu` (
 -- Dumping data for table `menu`
 --
 
-INSERT INTO `menu` (`id`, `name`, `price`, `description`, `category`, `image`, `imagePublicId`, `deleted`) VALUES
+INSERT INTO `menu` (`menu_id`, `name`, `price`, `description`, `category`, `image`, `imagePublicId`, `deleted`) VALUES
 (1, 'Gỏi tôm cuốn thịt', 115000.00, 'Món cuốn thanh mát gồm tôm sú, thịt luộc, bún tươi và rau thơm, được gói trong bánh tráng mỏng dẻo. Ăn kèm nước chấm đậu phộng đặc trưng, mang đến hương vị nhẹ nhàng và tinh tế.', 'appetizer', 'https://res.cloudinary.com/drem0ihib/image/upload/v1759754435/menu/appetizer/m6blq1tbnj9nk2wceew7.jpg', 'menu/appetizer/m6blq1tbnj9nk2wceew7', 0),
 (2, 'Nộm tai heo hoa chuối', 30000.00, 'Món gỏi giòn sần sật với tai heo thái mỏng, hoa chuối bào và rau thơm, trộn cùng nước mắm chua cay, rắc đậu phộng rang thơm. Hài hòa giữa vị béo, chua và giòn mát.', 'appetizer', 'https://res.cloudinary.com/drem0ihib/image/upload/v1759754646/menu/appetizer/ayjy7tj6vbplgomtnz2e.jpg', 'menu/appetizer/ayjy7tj6vbplgomtnz2e', 0),
 (3, 'Nộm rau má', 105000.00, 'Rau má tươi trộn cùng hành tím, cà rốt và đậu phộng rang, tạo nên món gỏi thanh mát, giải nhiệt, rất thích hợp mở đầu bữa ăn.', 'appetizer', 'https://res.cloudinary.com/drem0ihib/image/upload/v1759754844/menu/appetizer/mlrypjbgwm6s0ajyw182.webp', 'menu/appetizer/mlrypjbgwm6s0ajyw182', 0),
@@ -147,7 +147,7 @@ INSERT INTO `menu` (`id`, `name`, `price`, `description`, `category`, `image`, `
 
 DROP TABLE IF EXISTS `order_item`;
 CREATE TABLE `order_item` (
-  `id` int(11) NOT NULL,
+  `order_item_id` int(11) NOT NULL,
   `reservation_id` int(11) NOT NULL,
   `menu_id` int(11) NOT NULL,
   `quantity` int(11) NOT NULL DEFAULT 1,
@@ -161,7 +161,7 @@ CREATE TABLE `order_item` (
 -- Dumping data for table `order_item`
 --
 
-INSERT INTO `order_item` (`id`, `reservation_id`, `menu_id`, `quantity`, `note`, `status`, `createdAt`, `updatedAt`) VALUES
+INSERT INTO `order_item` (`order_item_id`, `reservation_id`, `menu_id`, `quantity`, `note`, `status`, `createdAt`, `updatedAt`) VALUES
 (1, 1, 1, 1, '', 'serving', '2025-10-06 20:43:19', '2025-10-06 20:43:19'),
 (2, 1, 3, 1, '', 'serving', '2025-10-06 20:43:19', '2025-10-06 20:43:19'),
 (3, 2, 8, 1, '', 'serving', '2025-10-07 22:22:29', '2025-10-07 22:22:29'),
@@ -180,7 +180,7 @@ INSERT INTO `order_item` (`id`, `reservation_id`, `menu_id`, `quantity`, `note`,
 
 DROP TABLE IF EXISTS `reservation`;
 CREATE TABLE `reservation` (
-  `id` int(11) NOT NULL,
+  `reservation_id` int(11) NOT NULL,
   `customer_id` int(11) NOT NULL,
   `reservation_time` datetime NOT NULL,
   `checkin_time` datetime DEFAULT NULL,
@@ -197,7 +197,7 @@ CREATE TABLE `reservation` (
 -- Dumping data for table `reservation`
 --
 
-INSERT INTO `reservation` (`id`, `customer_id`, `reservation_time`, `checkin_time`, `checkout_time`, `num_people`, `staff_id`, `status`, `dwell_time`, `createdAt`, `updatedAt`) VALUES
+INSERT INTO `reservation` (`reservation_id`, `customer_id`, `reservation_time`, `checkin_time`, `checkout_time`, `num_people`, `staff_id`, `status`, `dwell_time`, `createdAt`, `updatedAt`) VALUES
 (1, 1, '2025-10-06 20:00:00', '2025-10-06 19:13:30', '2025-10-06 20:43:34', 2, 3, 'completed', NULL, '2025-10-06 19:12:21', '2025-10-06 20:43:34'),
 (2, 2, '2025-10-07 21:00:00', NULL, '2025-10-07 22:24:05', 2, 3, 'completed', NULL, '2025-10-06 20:42:24', '2025-10-07 22:24:05');
 
@@ -209,7 +209,7 @@ INSERT INTO `reservation` (`id`, `customer_id`, `reservation_time`, `checkin_tim
 
 DROP TABLE IF EXISTS `reservation_detail`;
 CREATE TABLE `reservation_detail` (
-  `id` int(11) NOT NULL,
+  `reservation_detail_id` int(11) NOT NULL,
   `table_id` int(11) NOT NULL,
   `reservation_id` int(11) NOT NULL,
   `createdAt` datetime NOT NULL,
@@ -220,7 +220,7 @@ CREATE TABLE `reservation_detail` (
 -- Dumping data for table `reservation_detail`
 --
 
-INSERT INTO `reservation_detail` (`id`, `table_id`, `reservation_id`, `createdAt`, `updatedAt`) VALUES
+INSERT INTO `reservation_detail` (`reservation_detail_id`, `table_id`, `reservation_id`, `createdAt`, `updatedAt`) VALUES
 (1, 5, 1, '2025-10-06 19:13:04', '2025-10-06 19:13:04'),
 (2, 5, 2, '2025-10-07 22:20:26', '2025-10-07 22:20:26');
 
@@ -232,7 +232,7 @@ INSERT INTO `reservation_detail` (`id`, `table_id`, `reservation_id`, `createdAt
 
 DROP TABLE IF EXISTS `table`;
 CREATE TABLE `table` (
-  `id` int(11) NOT NULL,
+  `table_id` int(11) NOT NULL,
   `capacity` int(11) NOT NULL,
   `createdAt` datetime NOT NULL,
   `updatedAt` datetime NOT NULL
@@ -242,7 +242,7 @@ CREATE TABLE `table` (
 -- Dumping data for table `table`
 --
 
-INSERT INTO `table` (`id`, `capacity`, `createdAt`, `updatedAt`) VALUES
+INSERT INTO `table` (`table_id`, `capacity`, `createdAt`, `updatedAt`) VALUES
 (1, 2, '2025-10-06 12:52:57', '2025-10-06 12:52:57'),
 (2, 4, '2025-10-06 12:52:57', '2025-10-06 12:52:57'),
 (3, 2, '2025-10-06 12:52:57', '2025-10-06 12:52:57'),
@@ -272,7 +272,7 @@ INSERT INTO `table` (`id`, `capacity`, `createdAt`, `updatedAt`) VALUES
 
 DROP TABLE IF EXISTS `user`;
 CREATE TABLE `user` (
-  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
   `name` varchar(255) NOT NULL,
   `phoneNumber` varchar(255) NOT NULL,
   `email` varchar(255) NOT NULL,
@@ -292,7 +292,7 @@ CREATE TABLE `user` (
 -- Dumping data for table `user`
 --
 
-INSERT INTO `user` (`id`, `name`, `phoneNumber`, `email`, `address`, `password`, `profilePhoto`, `profilePhotoPublicId`, `role`, `lastActive`, `deleted`, `status`, `dateAdded`, `updatedAt`) VALUES
+INSERT INTO `user` (`user_id`, `name`, `phoneNumber`, `email`, `address`, `password`, `profilePhoto`, `profilePhotoPublicId`, `role`, `lastActive`, `deleted`, `status`, `dateAdded`, `updatedAt`) VALUES
 (1, 'Lê Văn Long', '0333054438', 'long2k4fahu@gmail.com', 'HN', '$2b$10$ikDEszAEJuGlfjKKVbrDR.20lO.kPwAmbbJQWlK3UyfvVnRMJAbm6', NULL, NULL, 'manager', '2025-10-06 12:55:08', 0, 'approved', '2025-10-06 12:54:18', '2025-10-06 12:55:08'),
 (2, 'Đàm Trung Quân', '1234567890', 'quan123@gmail.com', 'HN', '$2b$10$FptQg6ucCqQBKJOyi.75ZeNlTGZ/lHWWDiDBjS9TeVYC9kkC1V8mO', NULL, NULL, 'manager', '2025-10-07 22:32:26', 0, 'approved', '2025-10-06 12:55:12', '2025-10-07 22:32:26'),
 (3, 'an', '123456', 'andan@gmail.com', 'mo than', '$2b$10$6qO.m7l3t9.CiYF33JBIW.JvWmEpI7FFoyAVvbjztaeyBHijeIHr.', NULL, NULL, 'staff', '2025-10-07 22:33:03', 0, 'approved', '2025-10-06 19:10:34', '2025-10-07 22:33:03');
@@ -303,9 +303,8 @@ INSERT INTO `user` (`id`, `name`, `phoneNumber`, `email`, `address`, `password`,
 
 --
 -- Indexes for table `bill`
---
 ALTER TABLE `bill`
-  ADD PRIMARY KEY (`id`),
+  ADD PRIMARY KEY (`bill_id`),
   ADD KEY `reservation_id` (`reservation_id`),
   ADD KEY `staff_id` (`staff_id`);
 
@@ -313,20 +312,20 @@ ALTER TABLE `bill`
 -- Indexes for table `customer`
 --
 ALTER TABLE `customer`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`customer_id`);
 
 --
 -- Indexes for table `menu`
 --
 ALTER TABLE `menu`
-  ADD PRIMARY KEY (`id`),
+  ADD PRIMARY KEY (`menu_id`),
   ADD UNIQUE KEY `name` (`name`);
 
 --
 -- Indexes for table `order_item`
 --
 ALTER TABLE `order_item`
-  ADD PRIMARY KEY (`id`),
+  ADD PRIMARY KEY (`order_item_id`),
   ADD KEY `reservation_id` (`reservation_id`),
   ADD KEY `menu_id` (`menu_id`);
 
@@ -334,7 +333,7 @@ ALTER TABLE `order_item`
 -- Indexes for table `reservation`
 --
 ALTER TABLE `reservation`
-  ADD PRIMARY KEY (`id`),
+  ADD PRIMARY KEY (`reservation_id`),
   ADD KEY `customer_id` (`customer_id`),
   ADD KEY `staff_id` (`staff_id`);
 
@@ -342,7 +341,7 @@ ALTER TABLE `reservation`
 -- Indexes for table `reservation_detail`
 --
 ALTER TABLE `reservation_detail`
-  ADD PRIMARY KEY (`id`),
+  ADD PRIMARY KEY (`reservation_detail_id`),
   ADD KEY `table_id` (`table_id`),
   ADD KEY `reservation_id` (`reservation_id`);
 
@@ -350,13 +349,13 @@ ALTER TABLE `reservation_detail`
 -- Indexes for table `table`
 --
 ALTER TABLE `table`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`table_id`);
 
 --
 -- Indexes for table `user`
 --
 ALTER TABLE `user`
-  ADD PRIMARY KEY (`id`),
+  ADD PRIMARY KEY (`user_id`),
   ADD UNIQUE KEY `email` (`email`);
 
 --
@@ -365,51 +364,50 @@ ALTER TABLE `user`
 
 --
 -- AUTO_INCREMENT for table `bill`
---
 ALTER TABLE `bill`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `bill_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `customer`
 --
 ALTER TABLE `customer`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `customer_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `menu`
 --
 ALTER TABLE `menu`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=44;
+  MODIFY `menu_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=44;
 
 --
 -- AUTO_INCREMENT for table `order_item`
 --
 ALTER TABLE `order_item`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `order_item_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `reservation`
 --
 ALTER TABLE `reservation`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `reservation_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `reservation_detail`
 --
 ALTER TABLE `reservation_detail`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `reservation_detail_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `table`
 --
 ALTER TABLE `table`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `table_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- Constraints for dumped tables
@@ -417,31 +415,30 @@ ALTER TABLE `user`
 
 --
 -- Constraints for table `bill`
---
 ALTER TABLE `bill`
-  ADD CONSTRAINT `bill_ibfk_1` FOREIGN KEY (`reservation_id`) REFERENCES `reservation` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `bill_ibfk_2` FOREIGN KEY (`staff_id`) REFERENCES `user` (`id`);
+  ADD CONSTRAINT `bill_ibfk_1` FOREIGN KEY (`reservation_id`) REFERENCES `reservation` (`reservation_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `bill_ibfk_2` FOREIGN KEY (`staff_id`) REFERENCES `user` (`user_id`);
 
 --
 -- Constraints for table `order_item`
 --
 ALTER TABLE `order_item`
-  ADD CONSTRAINT `order_item_ibfk_1` FOREIGN KEY (`reservation_id`) REFERENCES `reservation` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `order_item_ibfk_2` FOREIGN KEY (`menu_id`) REFERENCES `menu` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE;
+  ADD CONSTRAINT `order_item_ibfk_1` FOREIGN KEY (`reservation_id`) REFERENCES `reservation` (`reservation_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `order_item_ibfk_2` FOREIGN KEY (`menu_id`) REFERENCES `menu` (`menu_id`) ON DELETE NO ACTION ON UPDATE CASCADE;
 
 --
 -- Constraints for table `reservation`
 --
 ALTER TABLE `reservation`
-  ADD CONSTRAINT `reservation_ibfk_1` FOREIGN KEY (`customer_id`) REFERENCES `customer` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `reservation_ibfk_2` FOREIGN KEY (`staff_id`) REFERENCES `user` (`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+  ADD CONSTRAINT `reservation_ibfk_1` FOREIGN KEY (`customer_id`) REFERENCES `customer` (`customer_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `reservation_ibfk_2` FOREIGN KEY (`staff_id`) REFERENCES `user` (`user_id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 --
 -- Constraints for table `reservation_detail`
 --
 ALTER TABLE `reservation_detail`
-  ADD CONSTRAINT `reservation_detail_ibfk_1` FOREIGN KEY (`table_id`) REFERENCES `table` (`id`),
-  ADD CONSTRAINT `reservation_detail_ibfk_2` FOREIGN KEY (`reservation_id`) REFERENCES `reservation` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE;
+  ADD CONSTRAINT `reservation_detail_ibfk_1` FOREIGN KEY (`table_id`) REFERENCES `table` (`table_id`),
+  ADD CONSTRAINT `reservation_detail_ibfk_2` FOREIGN KEY (`reservation_id`) REFERENCES `reservation` (`reservation_id`) ON DELETE NO ACTION ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

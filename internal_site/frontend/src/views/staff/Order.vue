@@ -7,7 +7,7 @@
         <div class="select-table">
           <select v-model="table_id" class="cart" Chọn bàn>
             <option :value="''" disabled>Chọn bàn</option>
-            <option v-for="table in tables" :key="table.id" :value="table.id">Bàn {{ table.id }}</option>
+            <option v-for="table in tables" :key="table.table_id" :value="table.table_id">Bàn {{ table.table_id }}</option>
           </select>
           <button @click="refresh">Refresh</button>
         </div>
@@ -95,11 +95,15 @@ import Navigation from '../../components/Navigation.vue';
               ...response.data,
               customerName: response.data.customer?.name || 'Khách hàng không xác định',
               tableNumber: response.data.details?.length
-                ? response.data.details.map((detail) => detail.table_id).join(', ')
-                : 'Chưa xác định',
-            };
-            this.$emit('update:reservation_id', this.reservation.id);
-            this.$emit('update:reservation', this.reservation);
+                  ? response.data.details.map((detail) => detail.table_id).join(', ')
+                  : 'Chưa xác định',
+              };
+              // normalize id
+              if (this.reservation.id && !this.reservation.reservation_id) {
+                this.reservation.reservation_id = this.reservation.id;
+              }
+              this.$emit('update:reservation_id', this.reservation.reservation_id);
+              this.$emit('update:reservation', this.reservation);
         } catch (error) {
           console.log('Lỗi khi tải danh sách đặt bàn', 'error');
         }
@@ -117,7 +121,10 @@ import Navigation from '../../components/Navigation.vue';
               ? reservation_storage.details.map((detail) => detail.table_id).join(', ')
               : 'Chưa xác định',
           };
-          this.reservation_id = this.reservation.id;
+          if (this.reservation.id && !this.reservation.reservation_id) {
+            this.reservation.reservation_id = this.reservation.id;
+          }
+          this.reservation_id = this.reservation.reservation_id;
           if (this.reservation && this.reservation.details.length > 0) {
             this.table_id = reservation_storage.details[0].table_id;
           } else {

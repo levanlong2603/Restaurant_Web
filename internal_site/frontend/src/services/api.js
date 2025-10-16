@@ -55,20 +55,20 @@ export default {
   getDeletedUsers() {
     return api.get("/users/deleted");
   },
-  getUser(id) {
-    return api.get(`/users/${id}`);
+  getUser(userId) {
+    return api.get(`/users/${userId}`);
   },
   createUser(userData, config = {}) {
     return api.post("/users/", userData, config);
   },
-  updateUser(id, userData, config = {}) {
-    return api.put(`/users/${id}`, userData, config);
+  updateUser(userId, userData, config = {}) {
+    return api.put(`/users/${userId}`, userData, config);
   },
-  deleteUser(id) {
-    return api.delete(`/users/${id}`);
+  deleteUser(userId) {
+    return api.delete(`/users/${userId}`);
   },
-  restoreUser(id) {
-    return api.post(`/users/restore/${id}`);
+  restoreUser(userId) {
+    return api.post(`/users/restore/${userId}`);
   },
   login(credentials) {
     return api.post("/auth/login", credentials);
@@ -79,11 +79,11 @@ export default {
   getDashboardStats(params = {}) {
     return api.get("/dashboard/", { params });
   },
-  approveUser(id) {
-    return api.put(`/users/approve/${id}`);
+  approveUser(userId) {
+    return api.put(`/users/approve/${userId}`);
   },
-  rejectUser(id) {
-    return api.put(`/users/reject/${id}`);
+  rejectUser(userId) {
+    return api.put(`/users/reject/${userId}`);
   },
   registerUser(userData) {
     return api.post("/auth/register", userData);

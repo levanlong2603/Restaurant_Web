@@ -837,8 +837,8 @@ const getCustomerDetails = async (req, res) => {
     }
 
     const customer = await Customer.findOne({
-      where: { id: parseInt(customerId) }, // Sửa từ customer_id thành id (hoặc tên cột thực tế)
-      attributes: ["name", "phoneNumber"], // Include name for additional context
+      where: { customer_id: parseInt(customerId) },
+      attributes: ["name", "phoneNumber"],
       raw: true,
     });
 

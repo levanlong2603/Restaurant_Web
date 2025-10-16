@@ -18,7 +18,7 @@
     </div>
 
     <section class="menu">
-      <div v-for="(item, index) in paginatedItems" :key="item.id" class="menu-card">
+      <div v-for="(item, index) in paginatedItems" :key="item.menu_id" class="menu-card">
         <h3 v-if="shouldShowCategoryHeader(index)" class="category">
           {{ getCategoryName(item.category) }}
         </h3>
@@ -36,7 +36,7 @@
                   <p>Số lượng</p>
                   <input type="number" v-model="item.quantity" min="1" required />
                 </div>
-                <button @click="addToCart(item)" :disabled="!reservation || !reservation.id" class="add-to-cart">
+                <button @click="addToCart(item)" :disabled="!reservation || !reservation.reservation_id" class="add-to-cart">
                   <img src="../assets/images/plus-icon.svg" alt="Thêm vào giỏ hàng" />
                 </button>
               </div>
@@ -166,11 +166,11 @@ export default {
       this.fetchMenu();
     }, 300),
     addToCart(item) {
-      if (!this.reservation.id) {
+      if (!this.reservation?.reservation_id) {
         alert("Vui lòng chọn bàn trước khi thêm món vào giỏ hàng!");
         return;
       }
-      const existingItem = this.cartItems.find(cartItem => cartItem.id === item.id);
+      const existingItem = this.cartItems.find(cartItem => cartItem.menu_id === item.menu_id);
       if (item.quantity <= 0) {
         return;
       }
@@ -182,7 +182,7 @@ export default {
         }
       } else {
         this.cartItems.push({
-          id: item.id,
+          menu_id: item.menu_id,
           name: item.name,
           price: item.price,
           quantity: item.quantity,
