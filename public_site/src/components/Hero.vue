@@ -25,7 +25,7 @@
     data() {
       return {
         images: [
-          { url: hero1, title: this.$t('heroSlides.slide1.title') || 'Tinh Hoa Việt', subtitle: this.$t('heroSlides.slide1.subtitle') || 'Dấu ấn Việt - Tròn vị quê hương' },
+          { url: hero1, title: this.$t('heroSlides.slide1.title') || 'Long Quân An', subtitle: this.$t('heroSlides.slide1.subtitle') || 'Dấu ấn Việt - Tròn vị quê hương' },
           { url: hero2, title: this.$t('heroSlides.slide2.title') || 'Hương Vị Quê', subtitle: this.$t('heroSlides.slide2.subtitle') || 'Hương vị truyền thống – Đậm đà bản sắc' },
           { url: hero3, title: this.$t('heroSlides.slide3.title') || 'Thực Đơn Đặc Sắc', subtitle: this.$t('heroSlides.slide3.subtitle') || 'Món ngon mỗi ngày – Phục vụ tận tâm' }
         ],
