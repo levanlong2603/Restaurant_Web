@@ -1,4 +1,5 @@
 const config = require("config");
+const { sequelize, Reservation, Bill } = require('../models');
 const querystring = require("qs");
 const crypto = require("crypto");
 
@@ -297,7 +298,7 @@ const paymentController = {
   cashPayment: async function (req, res) {
     const transaction = await sequelize.transaction();
     try {
-      const { reservation_id } = req.params;
+      const reservation_id = req.params.reservation_id || req.params.id;
       const { amount, status } = req.body;
 
       // Kiểm tra dữ liệu đầu vào
@@ -309,7 +310,7 @@ const paymentController = {
           'Trạng thái không hợp lệ (chỉ chấp nhận "paid" hoặc "completed")'
         );
       }
-      if (isNaN(reservation_id)) {
+      if (isNaN(Number(reservation_id))) {
         throw new Error("Reservation ID không hợp lệ");
       }
 
@@ -322,7 +323,7 @@ const paymentController = {
       }
 
       // Tạo bản ghi mới trong bảng Bill
-      const staff_id = req.user?.id || 1; // Lấy từ authMiddleware hoặc mặc định
+      const staff_id = req.user?.user_id || req.user?.id || 1; // prefer user_id
       await Bill.create(
         {
           reservation_id,
@@ -336,7 +337,7 @@ const paymentController = {
       // Cập nhật trạng thái reservation
       await Reservation.update(
         { status: status },
-        { where: { id: reservation_id }, transaction }
+        { where: { reservation_id: reservation_id }, transaction }
       );
 
       await transaction.commit();

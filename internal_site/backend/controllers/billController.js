@@ -37,12 +37,22 @@ exports.checkout = async (req, res) => {
       return res.status(400).json({ message: "Thiếu thông tin đặt bàn" });
     }
 
-    if (!total_amount || total_amount === 0) {
-      return res.status(400).json({ message: "Chưa gọi món" });
-    }
-
+    // Find reservation and its order items so we can compute total if needed
     const reservation = await Reservation.findOne({
       where: { reservation_id: reservation_id },
+      include: [
+        {
+          model: OrderItem,
+          as: 'orderItems',
+          include: [
+            {
+              model: Menu,
+              as: 'menu',
+              attributes: ['price']
+            }
+          ]
+        }
+      ]
     });
 
     if (!reservation) {
@@ -51,19 +61,36 @@ exports.checkout = async (req, res) => {
         .json({ message: "Không tìm thấy thông tin đặt bàn này" });
     }
 
-    console.log(reservation.status);
+    console.log('Reservation status:', reservation.status);
 
     if (reservation.status !== "serving") {
       return res.status(400).json({ message: "Trạng thái bàn không hợp lệ" });
     }
 
-    console.log(paymethod);
+    // Compute total_amount from orderItems if caller didn't provide a valid total
+    let computedTotal = 0;
+    if (reservation.orderItems && Array.isArray(reservation.orderItems)) {
+      computedTotal = reservation.orderItems.reduce((sum, item) => {
+        if (item.status === 'cancelled') return sum;
+        const price = parseFloat(item.menu?.price || 0) || 0;
+        const qty = Number(item.quantity || 0) || 0;
+        return sum + price * qty;
+      }, 0);
+    }
+
+    const finalTotal = (total_amount && Number(total_amount) > 0) ? Number(total_amount) : computedTotal;
+
+    if (!finalTotal || finalTotal === 0) {
+      return res.status(400).json({ message: "Chưa gọi món or total amount is zero" });
+    }
+
+    console.log('Using finalTotal for bill:', finalTotal, 'paymethod:', paymethod);
 
     const bill = await Bill.create({
       reservation_id: reservation.reservation_id,
       staff_id: staff.user_id,
       payment_method: paymethod,
-      total_amount: total_amount,
+      total_amount: finalTotal,
       time: time,
     });
 
@@ -82,7 +109,8 @@ exports.checkout = async (req, res) => {
 };
 
 exports.getBillDetail = async (req, res) => {
-  const { id: reservationId } = req.params;
+  // support both :reservation_id and legacy :id param names
+  const reservationId = req.params.reservation_id || req.params.id;
 
   try {
     if (req.user.role !== "staff") {
@@ -90,6 +118,7 @@ exports.getBillDetail = async (req, res) => {
         .status(403)
         .json({ message: "Chỉ nhân viên mới có thể xem hóa đơn" });
     }
+
     const reservation = await Reservation.findOne({
       where: { reservation_id: reservationId },
       include: [
@@ -122,7 +151,20 @@ exports.getBillDetail = async (req, res) => {
         .status(404)
         .json({ message: "Không tìm thấy thông tin đặt bàn này" });
     }
-    return res.status(200).json({ reservation });
+
+    // Find the bill associated with this reservation (if any)
+    const bill = await Bill.findOne({ where: { reservation_id: reservationId } });
+
+    // Construct a response shape that the frontend expects:
+    const response = {
+      reservation,
+      total_amount: bill ? bill.total_amount : 0,
+      status: reservation.status,
+      payment_method: bill ? bill.payment_method : null,
+      bill: bill || null,
+    };
+
+    return res.status(200).json(response);
   } catch (error) {
     console.error(error);
     return res.status(500).json({ message: "Internal server error" });

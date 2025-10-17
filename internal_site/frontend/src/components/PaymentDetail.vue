@@ -92,6 +92,7 @@ export default {
   watch: {
     billDetails: {
       handler(newBill) {
+        if (newBill) this.errorMessage = '';
         this.customerLeft = newBill?.payment_status !== 'completed' ? true : this.customerLeft;
       },
       deep: true,
@@ -113,6 +114,11 @@ export default {
     if (!token) throw new Error('Vui lòng đăng nhập để tiếp tục');
 
     if (!this.billDetails?.total_amount) throw new Error('Hóa đơn không hợp lệ hoặc số tiền bằng 0');
+
+    if (!this.reservation) {
+      this.errorMessage = 'Không có đặt bàn để thanh toán.';
+      return;
+    }
 
     const reservationId = this.reservation.reservation_id || this.reservation;
 
@@ -175,6 +181,10 @@ export default {
     },
     async customerLeave() {
       try {
+        if (!this.reservation) {
+          this.errorMessage = 'Không có đặt bàn để cập nhật trạng thái.';
+          return;
+        }
         const reservationId = this.reservation.reservation_id || this.reservation;
         const response = await axios.put(`http://localhost:3000/reservation/left/${reservationId}`, null, {
           headers: {
@@ -188,10 +198,15 @@ export default {
         alert(error.response?.data?.message || 'Không thể cập nhật trạng thái. Vui lòng thử lại.');
       }
     },
-    async created() {
+    async fetchBillDetails() {
       try {
+        if (!this.reservation) {
+          this.errorMessage = 'Không có đặt bàn để tải hóa đơn.';
+          return;
+        }
         const reservationId = this.reservation.reservation_id || this.reservation;
-        const response = await axios.get(`http://localhost:3000/reservation/${reservationId}`, {
+        // Call bill endpoint which returns { reservation, total_amount, status, payment_method, bill }
+        const response = await axios.get(`http://localhost:3000/bill/${reservationId}`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`,
           },
@@ -199,7 +214,8 @@ export default {
         this.$emit('update:billDetails', response.data);
       } catch (error) {
         console.error('Lỗi khi tải chi tiết hóa đơn:', error.response?.data || error.message);
-        this.errorMessage = 'Không thể tải chi tiết hóa đơn.';
+        const apiMsg = error.response?.data?.message || error.response?.data || error.message;
+        this.errorMessage = `Không thể tải chi tiết hóa đơn. ${apiMsg}`;
       }
     },
     async handlePaymentResult(event) {
@@ -216,7 +232,7 @@ export default {
           });
 
           // Làm mới dữ liệu hóa đơn
-          await this.created();
+          await this.fetchBillDetails();
 
           // Thông báo cho người dùng
           alert('Thanh toán thành công! Mã giao dịch: ' + transactionId);
@@ -234,7 +250,10 @@ export default {
   },
   computed: {
     formatPrice() {
-      return (price) => new Intl.NumberFormat('vi-VN').format(parseFloat(price));
+      return (price) => {
+        const n = parseFloat(price);
+        return new Intl.NumberFormat('vi-VN').format(isNaN(n) ? 0 : n);
+      };
     },
     totalAmount() {
       return this.billDetails?.total_amount || 0;

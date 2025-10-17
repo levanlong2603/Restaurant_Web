@@ -130,7 +130,7 @@ exports.deleteOrderItem = async (req, res) => {
 
 exports.getOrderItems = async (req, res) => {
     try {
-        const { id: reservation_id } = req.params; // Lấy reservation_id từ URL
+        const reservation_id = req.params.reservation_id || req.params.id; // Lấy reservation_id từ URL
 
         if (!reservation_id) {
             return res.status(400).json({ message: "Thiếu reservation_id!" });

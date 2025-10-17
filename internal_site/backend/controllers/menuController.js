@@ -96,13 +96,28 @@ exports.createMenuItem = async (req, res) => {
 // Cập nhật món
 exports.updateMenuItem = async (req, res) => {
   try {
-  const { menu_id } = req.params;
-    const { name, price, description, category, image, imagePublicId } =
-      req.body;
+    // Accept either :menu_id or legacy :id or body.menu_id
+    const menu_id = req.params.menu_id || req.params.id || req.body.menu_id;
+    const { name, price, description, category, image, imagePublicId } = req.body;
 
-  const item = await Menu.findByPk(menu_id);
+    // defensive: log incoming identifiers for debugging
+    console.log('updateMenuItem called with menu_id param:', menu_id, 'body.name:', name);
+
+    let item = null;
+    if (menu_id) {
+      // try numeric cast
+      const parsedId = isNaN(Number(menu_id)) ? menu_id : Number(menu_id);
+      item = await Menu.findByPk(parsedId);
+    }
+
+    // fallback: try find by name if provided and PK lookup failed
+    if (!item && name) {
+      item = await Menu.findOne({ where: { name } });
+      if (item) console.log('Found menu by name fallback, menu_id:', item.menu_id);
+    }
+
     if (!item) {
-      return res.status(404).json({ message: "Món không tồn tại" });
+      return res.status(404).json({ message: `Món không tồn tại (menu_id received: ${menu_id || 'none'})` });
     }
 
     // Xóa ảnh cũ trên Cloudinary nếu có imagePublicId mới và khác với imagePublicId cũ

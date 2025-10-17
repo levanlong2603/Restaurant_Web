@@ -163,8 +163,10 @@
             alert('Thanh toán thành công!');
             window.location.reload();
           } catch (error) {
-          console.error('Lỗi khi cập nhật trạng thái thanh toán:', error.response?.data.message || error.message);
-          alert("Lỗi thanh toán:", error.response?.data.message || error.message);
+          const apiMsg = error.response?.data?.message || error.response?.data || error.message;
+          console.error('Lỗi khi cập nhật trạng thái thanh toán:', apiMsg);
+          this.errorMessage = `Lỗi thanh toán: ${apiMsg}`;
+          alert(`Lỗi thanh toán: ${apiMsg}`);
           }
       },
       async fetchReservation(){

@@ -235,15 +235,18 @@ exports.cancelReservation = async (req, res) => {
 
     const formattedReservation = {
       reservation_id: reservation.reservation_id,
-      start_time: reservation.start_time,
+      reservation_time: reservation.reservation_time,
       status: reservation.status,
       customer: customer ? {
         customer_id: customer.customer_id,
         name: customer.name,
-        phone_number: customer.phone_number
+        phoneNumber: customer.phoneNumber
       } : null,
       tables: reservationDetails.map(detail => {
         const table = tables.find(t => t.table_id === detail.table_id);
+        if (!table) {
+          return { table_id: detail.table_id, name: null };
+        }
         return { table_id: table.table_id, name: table.name };
       })
     };
@@ -262,8 +265,9 @@ exports.cancelReservation = async (req, res) => {
 
 exports.updateReservation = async (req, res) => {
   try {
-      const { reservation_id } = req.params; 
+      const reservation_id = req.params.reservation_id || req.params.id;
 
+      let staff_id = null;
       if (req.user){
         staff_id = req.user?.user_id || req.user.id;
       }
@@ -327,7 +331,7 @@ exports.getReservationByTableId = async (req, res) => {
 
     const reservations = await Reservation.findOne({
       where: {
-        id: {
+        reservation_id: {
           [Sequelize.Op.in]: reservation_ids
         },
         status: {
@@ -358,7 +362,7 @@ exports.getReservationByTableId = async (req, res) => {
 
 exports.checkin = async (req, res) => {
   try {
-    const { reservation_id } = req.params;
+    const reservation_id = req.params.reservation_id || req.params.id;
 
     const reservation = await Reservation.findByPk(reservation_id);
 
@@ -423,7 +427,7 @@ exports.getAllReservations = async (req, res) => {
 
 exports.customerLeft = async (req, res) => {
   try {
-    const { reservation_id } = req.params;
+    const reservation_id = req.params.reservation_id || req.params.id;
     let { checkout_time } = req.body; // Nhận checkout_time từ request
 
     const reservation = await Reservation.findByPk(reservation_id);

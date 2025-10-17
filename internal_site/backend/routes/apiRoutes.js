@@ -1,9 +1,18 @@
 const express = require('express');
-const { getMenu, addMenuItem, updateMenuItem, deleteMenuItem } = require('../controllers/menuController');
+const menuController = require('../controllers/menuController');
 const { createReservation } = require('../controllers/reservationController');
+const authenticateToken = require('../middleware/authMiddleware');
 const router = express.Router();
 
-router.get('/menu', getMenu);
+// Public: list menus
+router.get('/menu', menuController.getAllMenuItems);
+
+// Protected admin/staff actions (frontend uses these routes)
+router.post('/menu', authenticateToken, menuController.createMenuItem);
+router.patch('/menu/:menu_id', authenticateToken, menuController.updateMenuItem);
+router.delete('/menu/:menu_id', authenticateToken, menuController.deleteMenuItem);
+router.post('/menu/restore/:menu_id', authenticateToken, menuController.restoreMenuItem);
+
 router.post('/reservations', createReservation);
 
 module.exports = router;
