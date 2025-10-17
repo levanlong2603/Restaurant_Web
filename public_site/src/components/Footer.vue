@@ -2,34 +2,34 @@
   <footer class="footer">
     <div class="footer-content">
       <!-- Thông tin nhà hàng -->
-      <div class="restaurant-info">
-  <h2 class="restaurant-name">LONG QUÂN AN - ẨM THỰC TINH TÚY</h2>
+    <div class="restaurant-info">
+  <h2 class="restaurant-name">{{ $t('footer.name') }}</h2>
         
         <div class="contact-info">
           <div class="location">
-            <h3>Địa chỉ : Số 33, đường Đại Mỗ, phường Đại Mỗ, quận Nam Từ Liêm, TP. Hà Nội</h3>
-            <p>Hotline: 0348 047 350</p>
+            <h3>{{ $t('contact.address') }}</h3>
+            <p>{{ $t('footer.hotline') || 'Hotline: 0348 047 350' }}</p>
           </div>
         </div>
         
-        <p class="email">Email: nhahanglongquanan@gmail.com</p>
+        <p class="email">Email: {{ $t('contact.email') }}</p>
       </div>
 
       <div class="divider"></div>
 
       <!-- Giờ mở cửa -->
       <div class="opening-hours">
-        <h3>Giờ mở cửa</h3>
-        <p>Sáng: 10h - 14h</p>
-        <p>Chiều: 18h - 22h</p>
-        <p>Tất cả các ngày trong tuần</p>
+  <h3>{{ $t('footer.openingHoursTitle') || 'Giờ mở cửa' }}</h3>
+  <p>{{ $t('footer.openingMorning') || 'Sáng: 10h - 14h' }}</p>
+  <p>{{ $t('footer.openingEvening') || 'Chiều: 18h - 22h' }}</p>
+  <p>{{ $t('footer.openingEveryday') || 'Tất cả các ngày trong tuần' }}</p>
       </div>
 
       <div class="divider"></div>
 
       <!-- Mạng xã hội -->
       <div class="social-media">
-        <h3>Mạng xã hội</h3>
+        <h3>{{ $t('footer.social') || 'Mạng xã hội' }}</h3>
         <div class="social-icons">
           <a href="https://www.facebook.com/codai2004" target="_blank" aria-label="Facebook" class="social-icon">
             <i class="fab fa-facebook-f"></i>
@@ -46,13 +46,13 @@
     </div>
 
     <!-- Bản quyền và liên kết - ĐÃ ĐƯA VÀO GIỮA -->
-    <div class="footer-bottom">
+  <div class="footer-bottom">
       <div class="footer-bottom-content">
-  <p class="copyright">Copyright © 2025 <strong>LONG QUÂN AN - Ẩm thực tinh túy</strong> All rights reserved.</p>
+  <p class="copyright">{{ $t('footer.copyright') }} <strong>{{ $t('footer.name') }}</strong> All rights reserved.</p>
         <div class="footer-links">
-          <a href="#">Bảo mật thông tin</a>
+          <a href="#">{{ $t('footer.privacy') }}</a>
           <span class="separator">|</span>
-          <router-link to="/contact">Liên hệ</router-link>
+          <router-link to="/contact">{{ $t('footer.contact') }}</router-link>
         </div>
       </div>
     </div>

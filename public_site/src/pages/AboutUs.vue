@@ -1,9 +1,9 @@
 <!-- Trang giới thiệu -->
 <template>
   <div class="about-page">
-    <Header />
-    <Hero />
-    <About/>
+  <Header />
+  <Hero />
+  <About/>
     <!-- Image gallery -->
     <section class="about-gallery">
       <img v-for="(img, idx) in galleryImages" :key="idx" :src="require(`@/assets/images/${img}`)" :alt="`Gallery ${idx+1}`" />

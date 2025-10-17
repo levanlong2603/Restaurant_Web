@@ -3,10 +3,10 @@
   <div class="contact-page">
     <Header />
     <main>
-      <h1>LIÊN HỆ</h1>
+  <h1>{{ $t('contact.title') }}</h1>
       <!-- <h3>Các chi nhánh</h3> -->
       <div class="branch">
-        <p>Địa chỉ : Số 33, đường Đại Mỗ, phường Đại Mỗ, quận Nam Từ Liêm, TP. Hà Nội</p>
+  <p>{{ $t('contact.address') }}</p>
         <!-- Embedded Google Map for the exact address -->
         <div class="map-embed">
           <iframe
@@ -15,10 +15,10 @@
             width="100%" height="450" style="border:0;" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
         </div>
         <div style="margin-top:12px;">
-          <a class="open-map-btn" href="https://www.google.com/maps/search/?api=1&query=S%E1%BB%91%2033%2C%20%C4%91%C6%B0%E1%BB%9Dng%20%C4%90%E1%BA%A1i%20M%E1%BB%93%2C%20ph%C6%B0%E1%BB%9Dng%20%C4%90%E1%BA%A1i%20M%E1%BB%93%2C%20Qu%E1%BA%ADn%20Nam%20T%E1%BB%AB%20Li%C3%AAm%2C%20H%C3%A0%20N%E1%BB%99i" target="_blank" rel="noopener">Mở bản đồ</a>
+          <a class="open-map-btn" href="https://www.google.com/maps/search/?api=1&query=S%E1%BB%91%2033%2C%20%C4%91%C6%B0%E1%BB%9Dng%20%C4%90%E1%BA%A1i%20M%E1%BB%93%2C%20ph%C6%B0%E1%BB%9Dng%20%C4%90%E1%BA%A1i%20M%E1%BB%93%2C%20Qu%E1%BA%ADn%20Nam%20T%E1%BB%AB%20Li%C3%AAm%2C%20H%C3%A0%20N%E1%BB%99i" target="_blank" rel="noopener">{{ $t('contact.openMap') }}</a>
         </div>
       </div>
-      <p>Email: <a href="mailto:nhahanglongquanan@gmail.com">nhahanglongquanan@gmail.com</a></p>
+  <p>Email: <a :href="`mailto:${$t('contact.email')}`">{{ $t('contact.email') }}</a></p>
     </main>
     <Footer />
     <Chatbot />

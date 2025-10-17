@@ -9,8 +9,101 @@
     "title": "Vietnamese Essence Restaurant",
     "subtitle": "Traditional Flavors - Culinary Excellence"
   },
+  "heroSlides": {
+    "slide1": { "title": "Long Quân An", "subtitle": "Vietnamese Essence - Taste of home" },
+    "slide2": { "title": "Homely Flavors", "subtitle": "Traditional flavors – Rich in character" },
+    "slide3": { "title": "Special Menu", "subtitle": "Delicious every day – Served with care" }
+  },
   "about": {
     "title": "About Us",
-    "content": "Vietnamese Essence Restaurant offers traditional dishes with authentic flavors..."
+    "content": "Vietnamese Essence Restaurant offers traditional dishes with authentic flavors...",
+    "section1": {
+      "title": "THE RESTAURANT",
+      "content": "Experience a warm and refined Vietnamese dining atmosphere..."
+    },
+    "section2": {
+      "title": "OUR SIGNATURE DISHES",
+      "content": "Our chefs carefully select the freshest ingredients and prepare them using traditional recipes..."
+    },
+    "section3": {
+      "title": "LOCATED IN THE HEART OF THE CITY",
+      "content": "The restaurant is located in the vibrant city center, a perfect stop after a day of exploring..."
+    }
+  },
+  "menu": {
+    "title": "RESTAURANT MENU",
+    "description": "The restaurant menu brings bold flavors blending tradition with refinement.",
+    "featured": "Featured Dishes",
+    "allCategories": "All categories",
+    "searchPlaceholder": "Search dishes...",
+    "refresh": "Refresh",
+    "prevPage": "Prev",
+    "nextPage": "Next",
+    "pageInfo": "Page",
+    "noItems": "No dishes to display."
+  },
+  "categories": {
+    "appetizer": "Appetizers",
+    "main_dish": "Main Dishes",
+    "side_dish": "Side Dishes",
+    "regional_specialty": "Regional Specialties",
+    "vegetarian": "Vegetarian Dishes",
+    "dessert": "Desserts",
+    "beverage": "Beverages"
+  },
+  "reservation": {
+    "title": "RESERVATION",
+    "description": "Booking in advance helps you secure the preferred seating and ensures better preparation.",
+    "formTitle": "RESERVER INFO",
+    "name": "Full name",
+    "phone": "Phone number",
+    "date": "Date",
+    "time": "Time",
+    "num_people": "Guests",
+    "notes": "Notes",
+    "submit": "RESERVE",
+    "submitting": "PROCESSING...",
+    "submitted": "SENT SUCCESSFULLY",
+    "successTitle": "RESERVATION SUCCESSFUL!",
+    "successThanks": "Thank you for reserving at our restaurant.",
+    "close": "Close",
+    "noteTitle": "RESERVATION NOTES",
+    "note1": "Please arrive 15 minutes before your reservation time so we can serve you best.",
+    "note2": "Thank you!"
+  },
+  "contact": {
+    "title": "CONTACT",
+    "openMap": "Open map",
+    "address": "Address: No.33, Dai Mo street, Dai Mo ward, Nam Tu Liem district, Hanoi",
+    "email": "nhahanglongquanan@gmail.com"
+  },
+  "footer": {
+    "name": "LONG QUÂN AN - CULINARY ESSENCE",
+    "social": "Social",
+    "privacy": "Privacy policy",
+    "contact": "Contact",
+    "copyright": "Copyright © 2025 LONG QUÂN AN - Culinary Essence",
+    "hotline": "Hotline: 0348 047 350",
+    "openingHoursTitle": "Opening Hours",
+    "openingMorning": "Morning: 10:00 - 14:00",
+    "openingEvening": "Evening: 18:00 - 22:00",
+    "openingEveryday": "Open every day"
+  },
+  "chatbot": {
+    "title": "Support Chatbot",
+    "inputPlaceholder": "Type your question...",
+    "error": "Server connection error, please try again!"
+  },
+  "aboutUs": {
+    "title": "About Us",
+    "intro1": "LONG QUÂN AN",
+    "intro2": "VIETNAMESE HOME-STYLE RICE RESTAURANT IN HANOI.",
+    "p1": "At Long Quân An, our philosophy is simple: share the flavors and culture of Vietnamese rice with everyone. We do this by using the freshest ingredients and crafting each dish with care by our dedicated chefs.",
+    "p2": "The dining space at Long Quân An is inspired by traditional Vietnamese values blended with modern touches, creating a nostalgic yet refreshing atmosphere.",
+    "p3": "With wood and greenery as the main elements—closest to nature—your dining experience will feel truly distinctive!",
+    "lang": {
+      "vi": "VI",
+      "en": "EN"
+    }
   }
 }
