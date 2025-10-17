@@ -730,7 +730,7 @@ const getCustomersStats = async (req, res) => {
           model: Customer,
           as: "customer",
           required: true,
-          attributes: ["id", "name", "phoneNumber"],
+          attributes: ["customer_id", "name", "phoneNumber"],
         },
         {
           model: Bill,
@@ -757,7 +757,7 @@ const getCustomersStats = async (req, res) => {
           model: Customer,
           as: "customer",
           required: true,
-          attributes: ["id", "name", "phoneNumber"],
+          attributes: ["customer_id", "name", "phoneNumber"],
         },
         {
           model: Bill,
@@ -781,7 +781,7 @@ const getCustomersStats = async (req, res) => {
           .filter((r) => r.customer?.name === name && r.bill)
           .reduce((sum, r) => sum + (Number(r.bill?.total_amount) || 0), 0);
         return {
-          customer_id: customer?.id || null,
+          customer_id: customer?.customer_id || null,
           name,
           visits,
           totalBill,
@@ -802,7 +802,7 @@ const getCustomersStats = async (req, res) => {
           .filter((r) => r.customer?.name === name && r.bill)
           .reduce((sum, r) => sum + (Number(r.bill?.total_amount) || 0), 0);
         return {
-          customer_id: customer?.id || null,
+          customer_id: customer?.customer_id || null,
           name,
           visits,
           totalBill,
