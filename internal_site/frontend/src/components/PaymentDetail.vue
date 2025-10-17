@@ -32,7 +32,6 @@
           <div class="account-info">
             <p><strong>Chủ tài khoản:</strong> LE VAN LONG</p>
             <p><strong>Số tài khoản:</strong> <span id="acct">3388826032004</span></p>
-            <p style="font-size:13px;color:#ddd;">Bạn có thể quét mã QR ở trên hoặc sao chép số tài khoản để chuyển khoản.</p>
           </div>
         </div>
       </div>
