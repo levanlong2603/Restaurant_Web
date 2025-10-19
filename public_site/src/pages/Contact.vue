@@ -6,6 +6,7 @@
   <h1>{{ $t('contact.title') }}</h1>
       <!-- <h3>Các chi nhánh</h3> -->
       <div class="branch">
+  <p>Email: <a :href="`mailto:${$t('contact.email')}`">{{ $t('contact.email') }}</a>, Hotline: <a>0348 047 350</a></p>
   <p>{{ $t('contact.address') }}</p>
         <!-- Embedded Google Map for the exact address -->
         <div class="map-embed">
@@ -18,7 +19,6 @@
           <a class="open-map-btn" href="https://www.google.com/maps/search/?api=1&query=S%E1%BB%91%2033%2C%20%C4%91%C6%B0%E1%BB%9Dng%20%C4%90%E1%BA%A1i%20M%E1%BB%93%2C%20ph%C6%B0%E1%BB%9Dng%20%C4%90%E1%BA%A1i%20M%E1%BB%93%2C%20Qu%E1%BA%ADn%20Nam%20T%E1%BB%AB%20Li%C3%AAm%2C%20H%C3%A0%20N%E1%BB%99i" target="_blank" rel="noopener">{{ $t('contact.openMap') }}</a>
         </div>
       </div>
-  <p>Email: <a :href="`mailto:${$t('contact.email')}`">{{ $t('contact.email') }}</a></p>
     </main>
     <Footer />
     <Chatbot />
