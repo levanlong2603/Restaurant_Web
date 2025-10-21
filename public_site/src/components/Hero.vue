@@ -86,7 +86,9 @@ export default {
         }
       ],
       currentIndex: 0,
-      autoPlayInterval: null
+      autoPlayInterval: null,
+      touchStartX: 0,
+      touchEndX: 0
     };
   },
   computed: {
@@ -115,13 +117,40 @@ export default {
       this.autoPlayInterval = setInterval(() => {
         this.nextSlide();
       }, 5000);
+    },
+    handleTouchStart(e) {
+      this.touchStartX = e.changedTouches[0].screenX;
+    },
+    handleTouchEnd(e) {
+      this.touchEndX = e.changedTouches[0].screenX;
+      this.handleSwipe();
+    },
+    handleSwipe() {
+      const minSwipeDistance = 50;
+      const distance = this.touchStartX - this.touchEndX;
+      
+      if (Math.abs(distance) < minSwipeDistance) return;
+      
+      if (distance > 0) {
+        // Swipe left - next slide
+        this.nextSlide();
+      } else {
+        // Swipe right - previous slide
+        this.prevSlide();
+      }
     }
   },
   mounted() {
     this.startAutoPlay();
+    // Thêm sự kiện touch cho mobile
+    this.$el.addEventListener('touchstart', this.handleTouchStart, { passive: true });
+    this.$el.addEventListener('touchend', this.handleTouchEnd, { passive: true });
   },
   beforeDestroy() {
     clearInterval(this.autoPlayInterval);
+    // Xóa sự kiện touch khi component bị hủy
+    this.$el.removeEventListener('touchstart', this.handleTouchStart);
+    this.$el.removeEventListener('touchend', this.handleTouchEnd);
   }
 };
 </script>
@@ -134,6 +163,7 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
+  touch-action: pan-y; /* Cho phép swipe dọc nhưng không can thiệp vào swipe ngang */
 }
 
 .slide {
@@ -179,11 +209,13 @@ export default {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  padding: 0 1rem; /* Thêm padding để tránh nội dung sát viền */
+  box-sizing: border-box;
 }
 
 .content-wrapper {
   max-width: 800px;
-  padding: 0 2rem;
+  width: 100%;
 }
 
 .text-content {
@@ -197,6 +229,7 @@ export default {
   color: #E7C27D;
   text-shadow: 2px 2px 4px rgba(107, 66, 38, 0.8);
   letter-spacing: 3px;
+  line-height: 1.1; /* Cải thiện khả năng đọc trên mobile */
 }
 
 .hero-subtitle {
@@ -206,6 +239,7 @@ export default {
   color: #F5E3B3;
   text-shadow: 2px 2px 4px rgba(107, 66, 38, 0.6);
   letter-spacing: 1px;
+  line-height: 1.3; /* Cải thiện khả năng đọc trên mobile */
 }
 
 .hero-actions {
@@ -213,6 +247,7 @@ export default {
   gap: 1rem;
   justify-content: center;
   margin-top: 2rem;
+  flex-wrap: wrap; /* Cho phép các nút xuống dòng nếu cần */
 }
 
 .btn {
@@ -228,6 +263,7 @@ export default {
   text-decoration: none;
   display: inline-block;
   text-align: center;
+  min-width: 140px; /* Đảm bảo nút có kích thước tối thiểu dễ chạm */
 }
 
 .btn-primary {
@@ -271,6 +307,9 @@ export default {
   background-color: rgba(255, 248, 231, 0.5);
   cursor: pointer;
   transition: all 0.3s ease;
+  /* Tăng kích thước chạm trên mobile */
+  min-width: 16px;
+  min-height: 16px;
 }
 
 .nav-dot.active {
@@ -352,15 +391,18 @@ export default {
 @media (max-width: 768px) {
   .hero {
     height: 75vh;
+    min-height: 500px; /* Đảm bảo chiều cao tối thiểu */
   }
   
   .hero-title {
     font-size: 2.5rem;
     letter-spacing: 1px;
+    margin-bottom: 0.5rem;
   }
   
   .hero-subtitle {
     font-size: 1.3rem;
+    margin-bottom: 1rem;
   }
   
   .content-wrapper {
@@ -370,24 +412,33 @@ export default {
   .hero-actions {
     flex-direction: column;
     align-items: center;
+    gap: 0.75rem;
   }
   
   .btn {
     width: 200px;
+    padding: 0.85rem 1.5rem; /* Tăng padding để dễ chạm hơn */
+    font-size: 0.95rem;
   }
   
   .nav-btn {
-    display: none;
+    display: none; /* Ẩn nút điều hướng trên mobile để tiết kiệm không gian */
+  }
+  
+  .slide-nav {
+    bottom: 1.5rem;
   }
 }
 
 @media (max-width: 480px) {
   .hero {
     height: 70vh;
+    min-height: 450px;
   }
   
   .hero-title {
     font-size: 2rem;
+    letter-spacing: 0.5px;
   }
   
   .hero-subtitle {
@@ -400,6 +451,74 @@ export default {
   
   .slide-nav {
     bottom: 1rem;
+  }
+  
+  .nav-dot {
+    min-width: 14px;
+    min-height: 14px;
+  }
+  
+  .text-content {
+    margin-bottom: 1.5rem;
+  }
+  
+  .hero-actions {
+    margin-top: 1.5rem;
+  }
+}
+
+/* Điều chỉnh cho màn hình rất nhỏ */
+@media (max-width: 360px) {
+  .hero-title {
+    font-size: 1.8rem;
+  }
+  
+  .hero-subtitle {
+    font-size: 1rem;
+  }
+  
+  .btn {
+    width: 180px;
+    padding: 0.8rem 1.2rem;
+    font-size: 0.9rem;
+  }
+}
+
+/* Tối ưu hóa cho thiết bị di động ở chế độ ngang */
+@media (max-height: 500px) and (orientation: landscape) {
+  .hero {
+    height: 100vh;
+    min-height: 300px;
+  }
+  
+  .hero-content {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+  }
+  
+  .text-content {
+    margin-bottom: 1rem;
+  }
+  
+  .hero-title {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .hero-subtitle {
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .hero-actions {
+    margin-top: 1rem;
+    flex-direction: row;
+  }
+  
+  .btn {
+    width: auto;
+    padding: 0.6rem 1.2rem;
+    font-size: 0.9rem;
   }
 }
 </style>

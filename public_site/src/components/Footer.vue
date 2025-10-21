@@ -2,8 +2,8 @@
   <footer class="footer">
     <div class="footer-content">
       <!-- Thông tin nhà hàng -->
-    <div class="restaurant-info">
-  <h2 class="restaurant-name">{{ $t('footer.name') }}</h2>
+      <div class="restaurant-info">
+        <h2 class="restaurant-name">{{ $t('footer.name') }}</h2>
         
         <div class="contact-info">
           <div class="location">
@@ -19,10 +19,10 @@
 
       <!-- Giờ mở cửa -->
       <div class="opening-hours">
-  <h3>{{ $t('footer.openingHoursTitle') || 'Giờ mở cửa' }}</h3>
-  <p>{{ $t('footer.openingMorning') || 'Sáng: 10h - 14h' }}</p>
-  <p>{{ $t('footer.openingEvening') || 'Chiều: 18h - 22h' }}</p>
-  <p>{{ $t('footer.openingEveryday') || 'Tất cả các ngày trong tuần' }}</p>
+        <h3>{{ $t('footer.openingHoursTitle') || 'Giờ mở cửa' }}</h3>
+        <p>{{ $t('footer.openingMorning') || 'Sáng: 10h - 14h' }}</p>
+        <p>{{ $t('footer.openingEvening') || 'Chiều: 18h - 22h' }}</p>
+        <p>{{ $t('footer.openingEveryday') || 'Tất cả các ngày trong tuần' }}</p>
       </div>
 
       <div class="divider"></div>
@@ -31,26 +31,25 @@
       <div class="social-media">
         <h3>{{ $t('footer.social') || 'Mạng xã hội' }}</h3>
         <div class="social-icons">
-          <a href="https://www.facebook.com/codai2004" target="_blank" aria-label="Facebook" class="social-icon">
+          <a href="https://www.facebook.com/codai2004" target="_blank" rel="noopener noreferrer" aria-label="Facebook" class="social-icon">
             <i class="fab fa-facebook-f"></i>
           </a>
-          <a href="https://www.instagram.com/co3d_ok/" target="_blank" aria-label="Instagram" class="social-icon">
+          <a href="https://www.instagram.com/co3d_ok/" target="_blank" rel="noopener noreferrer" aria-label="Instagram" class="social-icon">
             <i class="fab fa-instagram"></i>
           </a>
-          <!-- TikTok: placeholder URL — change to your TikTok profile if available -->
-          <a href="https://www.tiktok.com/@red.chicken.ptit" target="_blank" aria-label="TikTok" class="social-icon">
+          <a href="https://www.tiktok.com/@red.chicken.ptit" target="_blank" rel="noopener noreferrer" aria-label="TikTok" class="social-icon">
             <i class="fab fa-tiktok"></i>
           </a>
         </div>
       </div>
     </div>
 
-    <!-- Bản quyền và liên kết - ĐÃ ĐƯA VÀO GIỮA -->
-  <div class="footer-bottom">
+    <!-- Bản quyền và liên kết -->
+    <div class="footer-bottom">
       <div class="footer-bottom-content">
-  <p class="copyright">{{ $t('footer.copyright') }} <strong>{{ $t('footer.name') }}</strong> All rights reserved.</p>
+        <p class="copyright">{{ $t('footer.copyright') }} <strong>{{ $t('footer.name') }}</strong> All rights reserved.</p>
         <div class="footer-links">
-          <a href="#">{{ $t('footer.privacy') }}</a>
+          <a href="/privacy">{{ $t('footer.privacy') }}</a>
           <span class="separator">|</span>
           <router-link to="/contact">{{ $t('footer.contact') }}</router-link>
         </div>
@@ -61,16 +60,17 @@
 
 <style scoped>
 .footer {
-  background: linear-gradient(135deg, #6B4226 0%, #8B5E3C 100%); /* Gradient nâu đất đến nâu gỗ */
-  color: #FFF8E7; /* Trắng kem */
+  background: linear-gradient(135deg, #6B4226 0%, #8B5E3C 100%);
+  color: #FFF8E7;
   padding: 40px 20px 20px;
   font-family: 'Arial', sans-serif;
-  box-shadow: 0 -4px 15px rgba(107, 66, 38, 0.4); /* Bóng màu nâu */
-  border-top: 2px solid #E7C27D; /* Viền vàng nhạt */
+  box-shadow: 0 -4px 15px rgba(107, 66, 38, 0.4);
+  border-top: 2px solid #E7C27D;
+  position: relative;
 }
 
 .footer-content {
-  max-width: 1100px;
+  max-width: 1200px;
   margin: 0 auto;
   display: flex;
   flex-wrap: wrap;
@@ -87,7 +87,7 @@
 
 .restaurant-name {
   font-size: 24px;
-  color: #E7C27D; /* Vàng nhạt */
+  color: #E7C27D;
   margin-bottom: 20px;
   text-transform: uppercase;
   font-weight: 700;
@@ -107,20 +107,22 @@
   font-size: 16px;
   margin-bottom: 5px;
   font-weight: 600;
-  color: #FFF8E7; /* Trắng kem */
+  color: #FFF8E7;
 }
 
 .location p, .email, .parking {
   font-size: 14px;
   opacity: 0.9;
   margin-bottom: 5px;
-  color: #F5E3B3; /* Be nhạt */
+  color: #F5E3B3;
 }
 
+/* Sửa lỗi divider - chỉ hiển thị trên desktop */
 .divider {
   width: 1px;
-  background: linear-gradient(to bottom, transparent, #E7C27D, transparent); /* Gradient vàng */
+  background: linear-gradient(to bottom, transparent, #E7C27D, transparent);
   margin: 0 20px;
+  display: block;
 }
 
 .opening-hours {
@@ -130,7 +132,7 @@
 .opening-hours h3, .social-media h3 {
   font-size: 18px;
   margin-bottom: 15px;
-  color: #E7C27D; /* Vàng nhạt */
+  color: #E7C27D;
   font-weight: 600;
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
 }
@@ -139,7 +141,7 @@
   font-size: 14px;
   margin-bottom: 8px;
   opacity: 0.9;
-  color: #F5E3B3; /* Be nhạt */
+  color: #F5E3B3;
 }
 
 .social-media {
@@ -157,9 +159,9 @@
   justify-content: center;
   width: 40px;
   height: 40px;
-  background: linear-gradient(135deg, #E7C27D 0%, #8B5E3C 100%); /* Gradient vàng đến nâu */
+  background: linear-gradient(135deg, #E7C27D 0%, #8B5E3C 100%);
   border-radius: 50%;
-  color: #FFF8E7; /* Trắng kem */
+  color: #FFF8E7;
   font-size: 18px;
   transition: all 0.3s ease;
   text-decoration: none;
@@ -168,17 +170,17 @@
 }
 
 .social-icon:hover {
-  background: linear-gradient(135deg, #FFF8E7 0%, #E7C27D 100%); /* Gradient trắng đến vàng */
-  color: #6B4226; /* Nâu đất */
+  background: linear-gradient(135deg, #FFF8E7 0%, #E7C27D 100%);
+  color: #6B4226;
   transform: scale(1.1) translateY(-2px);
   box-shadow: 0 4px 12px rgba(231, 194, 125, 0.4);
 }
 
 .footer-bottom {
-  max-width: 1100px;
+  max-width: 1200px;
   margin: 20px auto 0;
   padding-top: 20px;
-  border-top: 1px solid rgba(231, 194, 125, 0.3); /* Viền vàng trong suốt */
+  border-top: 1px solid rgba(231, 194, 125, 0.3);
 }
 
 .footer-bottom-content {
@@ -193,11 +195,11 @@
   font-size: 14px;
   opacity: 0.9;
   margin: 0;
-  color: #F5E3B3; /* Be nhạt */
+  color: #F5E3B3;
 }
 
 .copyright strong {
-  color: #E7C27D; /* Vàng nhạt */
+  color: #E7C27D;
   font-weight: 700;
 }
 
@@ -208,7 +210,7 @@
 }
 
 .footer-links a {
-  color: #F5E3B3; /* Be nhạt */
+  color: #F5E3B3;
   text-decoration: none;
   font-size: 14px;
   opacity: 0.9;
@@ -218,13 +220,13 @@
 
 .footer-links a:hover {
   opacity: 1;
-  color: #E7C27D; /* Vàng nhạt */
+  color: #E7C27D;
   transform: translateY(-1px);
 }
 
 .separator {
   opacity: 0.5;
-  color: #E7C27D; /* Vàng nhạt */
+  color: #E7C27D;
 }
 
 /* Hiệu ứng cho toàn bộ footer */
@@ -236,19 +238,32 @@
   transform: translateY(-5px);
 }
 
-/* Responsive */
+/* ===== RESPONSIVE FIXES ===== */
+
+/* Tablet */
 @media (max-width: 768px) {
   .footer-content {
     flex-direction: column;
     text-align: center;
     gap: 30px;
+    padding-bottom: 20px;
   }
   
+  /* Sửa lỗi divider trên mobile */
   .divider {
     width: 100%;
     height: 1px;
     margin: 10px 0;
-    background: linear-gradient(to right, transparent, #E7C27D, transparent); /* Gradient ngang */
+    background: linear-gradient(to right, transparent, #E7C27D, transparent);
+    display: block;
+  }
+  
+  .restaurant-info,
+  .opening-hours,
+  .social-media {
+    flex: 1;
+    min-width: 100%;
+    width: 100%;
   }
   
   .restaurant-name {
@@ -264,29 +279,68 @@
     justify-content: center;
   }
   
-  .opening-hours, .social-media {
-    flex: 1;
-    min-width: 100%;
+  /* Ẩn divider thừa trên mobile */
+  .footer-content .divider:last-child {
+    display: none;
   }
 }
 
+/* Mobile */
 @media (max-width: 480px) {
   .footer {
     padding: 30px 15px 15px;
-  }
-  
-  .restaurant-name {
-    font-size: 18px;
   }
   
   .footer-content {
     gap: 25px;
   }
   
+  .restaurant-name {
+    font-size: 18px;
+    margin-bottom: 15px;
+  }
+  
   .social-icon {
     width: 35px;
     height: 35px;
     font-size: 16px;
+  }
+  
+  .footer-bottom-content {
+    gap: 10px;
+  }
+  
+  .copyright {
+    font-size: 13px;
+  }
+  
+  .footer-links {
+    gap: 8px;
+  }
+  
+  .footer-links a {
+    font-size: 13px;
+  }
+}
+
+/* Small mobile */
+@media (max-width: 360px) {
+  .footer {
+    padding: 25px 10px 10px;
+  }
+  
+  .footer-content {
+    gap: 20px;
+  }
+  
+  .social-icons {
+    gap: 10px;
+  }
+  
+  .social-icon {
+    width: 32px;
+    height: 32px;
+    font-size: 14px;
   }
 }
 
@@ -309,4 +363,35 @@
 .footer-content > div:nth-child(1) { animation-delay: 0.1s; }
 .footer-content > div:nth-child(2) { animation-delay: 0.2s; }
 .footer-content > div:nth-child(3) { animation-delay: 0.3s; }
+
+/* Fix for Font Awesome icons */
+.social-icon i {
+  line-height: 1;
+}
+
+/* Ensure proper spacing for all elements */
+.restaurant-info > *,
+.opening-hours > *,
+.social-media > * {
+  margin-bottom: 10px;
+}
+
+.restaurant-info > *:last-child,
+.opening-hours > *:last-child,
+.social-media > *:last-child {
+  margin-bottom: 0;
+}
+
+/* Print styles */
+@media print {
+  .footer {
+    background: #6B4226 !important;
+    box-shadow: none !important;
+    border-top: 2px solid #E7C27D !important;
+  }
+  
+  .social-icons {
+    display: none !important;
+  }
+}
 </style>
