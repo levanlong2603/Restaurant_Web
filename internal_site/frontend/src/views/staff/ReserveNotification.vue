@@ -1,93 +1,108 @@
 <template>
   <div class="main-container">
     <Navigation @sidebar-toggle="handleSidebarToggle" />
-    <div class="reservation-management" :class="{ 'sidebar-collapsed': isSidebarCollapsed }">
-      <!-- Header không cố định -->
-      <div class="header">
-        <h1>Quản lý Đặt bàn</h1>
-        <div class="actions">
-          <input type="text" v-model="searchQuery" placeholder="Tìm kiếm..." @input="debouncedSearch" />
-          <input type="date" v-model="selectedDate" @change="fetchReservations" />
-          <select v-model="selectedStatus" @change="filterByStatus">
-            <option value="">Tất cả trạng thái</option>
-            <option value="pending">Chờ duyệt</option>
-            <option value="preparing">Đặt trước</option>
-            <option value="serving">Đang phục vụ</option>
-            <option value="paid">Đã thanh toán</option>
-            <option value="completed">Hoàn thành</option>
-            <option value="cancelled">Đã hủy</option>
-          </select>
+    <section class="dashboard" :class="{ 'sidebar-collapsed': isSidebarCollapsed }">
+      <!-- Header giống mẫu trong hình -->
+      <div class="dashboard-header">
+        <div class="header-main">
+          <div class="header-title-section">
+            <h1>QUẢN LÝ ĐẶT BÀN</h1>
+          </div>
+          <div class="header-controls-section">
+            <span class="current-time">{{ currentDateTime }}</span>
+            <div class="controls-group">
+              <div class="filter-controls">
+                <input type="text" v-model="searchQuery" placeholder="Tìm kiếm..." class="search-input" />
+                <select v-model="selectedStatus" class="status-filter" @change="filterByStatus">
+                  <option value="">Tất cả trạng thái</option>
+                  <option value="pending">Chờ duyệt</option>
+                  <option value="preparing">Đặt trước</option>
+                  <option value="serving">Đang phục vụ</option>
+                  <option value="completed">Hoàn thành</option>
+                  <option value="cancelled">Đã hủy</option>
+                </select>
+                <input type="date" v-model="selectedDate" class="date-filter" @change="fetchReservations" />
+              </div>
+              <button class="refresh-button" @click="refresh">
+                <i class="fas fa-sync-alt"></i> Làm mới
+              </button>
+            </div>
+          </div>
         </div>
       </div>
 
-      <!-- Danh sách thông báo đặt bàn (dạng bảng) -->
-      <div class="reservation-list-wrapper">
-        <table class="reservation-table">
-          <thead>
-            <tr>
-              <th class="col-id">ID</th>
-              <th class="col-customer">Khách hàng</th>
-              <th class="col-time">Thời gian đặt</th>
-              <th class="col-people">Số người</th>
-              <th class="col-table">Bàn</th>
-              <th class="col-status">Trạng thái</th>
-              <th class="col-actions">Hành động</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="reservation in filteredReservations" :key="reservation.reservation_id">
-              <td class="col-id">{{ reservation.reservation_id }}</td>
-              <td class="col-customer">{{ reservation.customerName }}</td>
-                <td class="col-time">{{ formatDate(reservation.reservation_time) }}</td>
-              <td class="col-people">{{ reservation.num_people }}</td>
-              <td class="col-table">{{ reservation.tableNumber }}</td>
-              <td class="col-status">
-                <span class="status" :class="reservation.status">
-                  {{ statusDisplayNames[reservation.status] || reservation.status }}
-                </span>
-              </td>
-              <td class="col-actions">
-                <button
-                  v-if="reservation.status === 'pending'"
-                  class="approve-button"
-                  @click="goToDetail(reservation)"
-                >
-                Duyệt
-              </button>
-              <button
-                v-if="reservation.status === 'preparing'"
-                class="checkin-button"
-                @click="checkin(reservation)"
-              >
-                Check in
-              </button>
-                <button
-                  v-if="reservation.status === 'pending' || reservation.status === 'preparing'"
-                  class="cancel-button"
-                  @click="cancel(reservation)"
-                >
-                  Hủy
-                </button>
-                <button
-                  v-if="reservation.status === 'serving'"
-                  class="order-button"
-                  @click="order(reservation)"
-                >
-                  Gọi món
-                </button>
-                <button
-                  v-if="reservation.status === 'serving' || reservation.status === 'paid'"
-                  class="checkout-button"
-                  @click="checkout(reservation)"
-                >
-                  Check out
-                </button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+      <div class="container-reservation">
+        <section class="reservation-management">
+          <!-- Danh sách thông báo đặt bàn (dạng bảng) -->
+          <div class="reservation-list-wrapper">
+            <table class="reservation-table">
+              <thead>
+                <tr>
+                  <th class="col-id">ID</th>
+                  <th class="col-customer">Khách hàng</th>
+                  <th class="col-time">Thời gian đặt</th>
+                  <th class="col-people">Số người</th>
+                  <th class="col-table">Bàn</th>
+                  <th class="col-status">Trạng thái</th>
+                  <th class="col-actions">Hành động</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="reservation in filteredReservations" :key="reservation.reservation_id">
+                  <td class="col-id">{{ reservation.reservation_id }}</td>
+                  <td class="col-customer">{{ reservation.customerName }}</td>
+                  <td class="col-time">{{ formatDate(reservation.reservation_time) }}</td>
+                  <td class="col-people">{{ reservation.num_people }}</td>
+                  <td class="col-table">{{ reservation.tableNumber }}</td>
+                  <td class="col-status">
+                    <span class="status" :class="reservation.status">
+                      {{ statusDisplayNames[reservation.status] || reservation.status }}
+                    </span>
+                  </td>
+                  <td class="col-actions">
+                    <button
+                      v-if="reservation.status === 'pending'"
+                      class="action-btn approve-btn"
+                      @click="goToDetail(reservation)"
+                    >
+                      <i class="fas fa-check"></i> Duyệt
+                    </button>
+                    <button
+                      v-if="reservation.status === 'preparing'"
+                      class="action-btn checkin-btn"
+                      @click="checkin(reservation)"
+                    >
+                      <i class="fas fa-sign-in-alt"></i> Check in
+                    </button>
+                    <button
+                      v-if="reservation.status === 'pending' || reservation.status === 'preparing'"
+                      class="action-btn cancel-btn"
+                      @click="cancel(reservation)"
+                    >
+                      <i class="fas fa-times"></i> Hủy
+                    </button>
+                    <button
+                      v-if="reservation.status === 'serving'"
+                      class="action-btn order-btn"
+                      @click="order(reservation)"
+                    >
+                      <i class="fas fa-utensils"></i> Gọi món
+                    </button>
+                    <button
+                      v-if="reservation.status === 'serving' || reservation.status === 'paid'"
+                      class="action-btn checkout-btn"
+                      @click="checkout(reservation)"
+                    >
+                      <i class="fas fa-sign-out-alt"></i> Check out
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
       </div>
-    </div>
+    </section>
   </div>
 </template>
 
@@ -104,7 +119,7 @@ export default {
   data() {
     return {
       searchQuery: '',
-      selectedStatus: '' ,
+      selectedStatus: '',
       reservations: [],
       isSidebarCollapsed: false,
       statusDisplayNames: {
@@ -116,6 +131,8 @@ export default {
         cancelled: 'Đã hủy',
       },
       selectedDate: '',
+      currentDateTime: '',
+      updateDateTimeInterval: null,
     };
   },
   computed: {
@@ -126,7 +143,8 @@ export default {
           (reservation) =>
             reservation.customerName.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
             reservation.tableNumber.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
-            (reservation.customer?.phoneNumber?.toLowerCase().includes(this.searchQuery.toLowerCase()) ?? false)        );
+            (reservation.customer?.phoneNumber?.toLowerCase().includes(this.searchQuery.toLowerCase()) ?? false)
+        );
       }
 
       if (this.selectedStatus) {
@@ -147,6 +165,11 @@ export default {
   created() {
     this.debouncedSearch = debounce(this.search, 300);
     this.fetchReservations();
+    this.updateDateTime();
+    this.updateDateTimeInterval = setInterval(this.updateDateTime, 60000);
+  },
+  beforeDestroy() {
+    clearInterval(this.updateDateTimeInterval);
   },
   methods: {
     handleSidebarToggle(isCollapsed) {
@@ -163,19 +186,19 @@ export default {
         console.log(response.data);
 
         this.reservations = response.data
-        .map((reservation) => ({
-          ...reservation,
-          customerName: reservation.customer?.name || 'Khách hàng không xác định',
-          tableNumber: reservation.details?.length
-            ? reservation.details.map((detail) => detail.table_id).join(', ')
-            : 'Chưa xác định',
-          phoneNumber: reservation.customer?.phoneNumber || 'Chưa có số điện thoại', // Thêm số điện thoại
+          .map((reservation) => ({
+            ...reservation,
+            customerName: reservation.customer?.name || 'Khách hàng không xác định',
+            tableNumber: reservation.details?.length
+              ? reservation.details.map((detail) => detail.table_id).join(', ')
+              : 'Chưa xác định',
+            phoneNumber: reservation.customer?.phoneNumber || 'Chưa có số điện thoại',
           }));
       } catch (error) {
         console.error('Error fetching reservations:', error);
       }
     },
-  async cancelReservation(reservation) {
+    async cancelReservation(reservation) {
       try {
         const resId = reservation.reservation_id || reservation.id;
         console.log("ID:", resId);
@@ -186,61 +209,59 @@ export default {
             Authorization: `Bearer ${localStorage.getItem('token')}`,
           },
         });
-                if (response) {
-                    alert(response.data.message);
-                }
-                console.log('Hủy đặt bàn:', response.data);
-                window.location.reload();
-            } catch (error) {
-                console.error('Lỗi khi cập nhật đặt bàn:', error);
-                if (error.response) {
-                    console.error("Chi tiết lỗi từ server:", error.response.data);
-                    alert(`${error.response.data.message || "Không thể cập nhật đặt bàn"}`);
-                } else {
-                    alert("Không thể kết nối đến server, vui lòng thử lại!");
-                }
-            }
-        },
-        async checkin(reservation) {
-            // Thêm logic check-in tại đây
-            try {
+        if (response) {
+          alert(response.data.message);
+        }
+        console.log('Hủy đặt bàn:', response.data);
+        window.location.reload();
+      } catch (error) {
+        console.error('Lỗi khi cập nhật đặt bàn:', error);
+        if (error.response) {
+          console.error("Chi tiết lỗi từ server:", error.response.data);
+          alert(`${error.response.data.message || "Không thể cập nhật đặt bàn"}`);
+        } else {
+          alert("Không thể kết nối đến server, vui lòng thử lại!");
+        }
+      }
+    },
+    async checkin(reservation) {
+      try {
         const resId = reservation.reservation_id || reservation.id;
         console.log("ID:", resId);
         console.log(localStorage.getItem('token'));
         const response = await axios.put(
           `http://localhost:3000/reservation/checkin/${resId}`,
-                    null, // nếu không có data body
-                    {
-                        headers: {
-                            Authorization: `Bearer ${localStorage.getItem('token')}`,
-                        },
-                    }
-                );
-                
-                if (response) {
-                    alert(response.data.message);
-                }
-                window.location.reload();
-            } catch (error) {
-                console.error('Lỗi khi check-in:', error);
-            }
-        },
+          null,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem('token')}`,
+            },
+          }
+        );
+
+        if (response) {
+          alert(response.data.message);
+        }
+        window.location.reload();
+      } catch (error) {
+        console.error('Lỗi khi check-in:', error);
+      }
+    },
     search() {},
     filterByStatus() {},
     goToDetail(reservation) {
       localStorage.setItem('selectedReservation', JSON.stringify(reservation));
       this.$router.push(`/reserve`);
     },
-    async checkout(reservation){
-          if(reservation.status === 'serving'){
+    async checkout(reservation) {
+      if (reservation.status === 'serving') {
         localStorage.setItem('selectedReservation', JSON.stringify({
           ...reservation,
-          reservation_id: reservation.reservation_id  // Đảm bảo lưu reservation_id
+          reservation_id: reservation.reservation_id
         }));
         this.$router.push(`/checkout`);
-      }
-      else {
-        try{
+      } else {
+        try {
           console.log("Processing checkout for reservation:", reservation.reservation_id);
           const response = await axios.put(`http://localhost:3000/reservation/left/${reservation.reservation_id}`, null, {
             headers: {
@@ -259,52 +280,31 @@ export default {
           } else {
             alert("Không thể kết nối đến server, vui lòng thử lại!");
           }
-        } 
+        }
       }
-      
     },
     async cancel(reservation) {
-        try {
-            console.log("Cancelling reservation:", reservation.reservation_id);
-            const response = await axios.put(`http://localhost:3000/reservation/cancel`, {
-                reservation_id: reservation.reservation_id,
-            }, {
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem('token')}`,
-                },
-            });
-            if (response) {
-                alert(response.data.message);
-            }
-            window.location.reload();
-        } catch (error) {
-            console.error('Lỗi khi cập nhật đặt bàn:', error);
-            if (error.response) {
-                console.error("Chi tiết lỗi từ server:", error.response.data);
-                alert(`${error.response.data.message || "Không thể cập nhật đặt bàn"}`);
-            } else {
-                alert("Không thể kết nối đến server, vui lòng thử lại!");
-            }
-        }
-    },
-    async checkin(reservation) {
       try {
-        console.log("Checking in reservation:", reservation.reservation_id);
-        const response = await axios.put(
-          `http://localhost:3000/reservation/checkin/${reservation.reservation_id}`,
-          null,
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem('token')}`,
-            },
-          }
-        );
+        console.log("Cancelling reservation:", reservation.reservation_id);
+        const response = await axios.put(`http://localhost:3000/reservation/cancel`, {
+          reservation_id: reservation.reservation_id,
+        }, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        });
         if (response) {
           alert(response.data.message);
         }
         window.location.reload();
       } catch (error) {
-        console.error('Lỗi khi check-in:', error);
+        console.error('Lỗi khi cập nhật đặt bàn:', error);
+        if (error.response) {
+          console.error("Chi tiết lỗi từ server:", error.response.data);
+          alert(`${error.response.data.message || "Không thể cập nhật đặt bàn"}`);
+        } else {
+          alert("Không thể kết nối đến server, vui lòng thử lại!");
+        }
       }
     },
     async order(reservation) {
@@ -324,6 +324,16 @@ export default {
         minute: '2-digit',
       });
     },
+    updateDateTime() {
+      this.currentDateTime = new Date().toLocaleString("vi-VN", {
+        weekday: "short",
+        day: "numeric",
+        month: "short",
+        year: "numeric",
+        hour: "numeric",
+        minute: "numeric"
+      });
+    },
   },
 };
 </script>
@@ -331,69 +341,157 @@ export default {
 <style scoped>
 .main-container {
   display: flex;
-  background: #FFF8E7; /* Trắng kem */
-  height: 100vh;
+  min-height: 100vh;
+  background-color: #FFF8E7;
+  font-family: 'Arial', sans-serif;
+}
+
+.dashboard {
+  flex: 1;
+  padding: 2rem;
+  background-color: #FFF8E7;
+  transition: margin-left 0.3s ease;
+}
+
+/* Header giống mẫu trong hình */
+.dashboard-header {
+  background: linear-gradient(135deg, #8B5E3C, #6B4226);
+  padding: 1.5rem 2rem;
+  margin: -2rem -2rem 2rem -2rem;
+  border-bottom: 1px solid #E7C27D;
+  box-shadow: 0 4px 15px rgba(107, 66, 38, 0.3);
+}
+
+.header-main {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 2rem;
+}
+
+.header-title-section {
+  flex: 1;
+}
+
+.header-title-section h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #FFF8E7;
+  text-shadow: 0 0 5px #E7C27D, 0 0 30px #E7C27D;
+  margin: 0;
+  letter-spacing: 0.5px;
+  margin-left: 1cm;
+}
+
+.header-controls-section {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 1rem;
+  min-width: 600px;
+}
+
+.current-time {
+  font-size: 1rem;
+  color: #F5E3B3;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.controls-group {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+  justify-content: flex-end;
+}
+
+.filter-controls {
+  display: flex;
+  gap: 0.8rem;
+  align-items: center;
+  flex: 1;
+  justify-content: flex-end;
+}
+
+.search-input,
+.status-filter,
+.date-filter {
+  padding: 0.6rem 0.8rem;
+  border: 1px solid #8B5E3C;
+  border-radius: 8px;
+  background: rgba(255, 248, 231, 0.95);
+  color: #3B2F2F;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+  font-weight: 500;
+  min-height: 40px;
+  box-sizing: border-box;
+}
+
+.search-input {
+  width: 200px;
+}
+
+.status-filter {
+  width: 160px;
+}
+
+.date-filter {
+  width: 150px;
+}
+
+.search-input:focus,
+.status-filter:focus,
+.date-filter:focus {
+  border-color: #E7C27D;
+  outline: none;
+  background: #FFF8E7;
+  box-shadow: 0 0 0 3px rgba(231, 194, 125, 0.3);
+}
+
+.refresh-button {
+  padding: 0.6rem 1.2rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.3s ease;
+  font-weight: 600;
+  box-shadow: 0 2px 8px rgba(107, 66, 38, 0.3);
+  border: 1px solid #E7C27D;
+  background: #E7C27D;
+  color: #6B4226;
+  white-space: nowrap;
+  min-height: 40px;
+}
+
+.refresh-button:hover {
+  background: #F5E3B3;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(231, 194, 125, 0.4);
+}
+
+.container-reservation {
+  flex: 1;
+  margin: 0;
+  padding: 0;
+  background-color: #FFF8E7;
+  color: #3B2F2F;
+  display: flex;
+  flex-direction: column;
   overflow: hidden;
 }
 
 .reservation-management {
-  flex: 1;
-  margin: 0;
-  padding: 0;
-  background-color: #FFF8E7; /* Trắng kem */
-  color: #3B2F2F; /* Đen nâu */
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  padding-right: 20px;
-  transition: margin-left 0.3s ease;
-}
-
-.reservation-management.sidebar-collapsed {
-  margin-left: 10px; 
-}
-
-.header {
-  background-color: #FFF8E7; /* Trắng kem */
-  padding: 20px;
-  border-bottom: 1px solid #E7C27D; /* Vàng nhạt */
-}
-
-.header h1 {
-  text-align: center;
-  color: #6B4226; /* Nâu đất */
-  margin: 0 0 20px 0;
-  font-weight: bold;
-  text-shadow: 0 0 5px #E7C27D, 0 0 30px #E7C27D; /* Hiệu ứng vàng */
-}
-
-.actions {
-  display: flex;
-  gap: 10px;
-  justify-content: flex-end;
-}
-
-.actions input,
-.actions select {
-  padding: 10px;
-  border: 1px solid #8B5E3C; /* Nâu gỗ */
-  border-radius: 8px;
-  background: rgba(255, 248, 231, 0.8); /* Trắng kem trong suốt */
-  color: #3B2F2F; /* Đen nâu */
-  font-weight: 500;
-  transition: all 0.3s ease;
-}
-
-.actions input:focus,
-.actions select:focus {
-  border-color: #E7C27D; /* Vàng nhạt */
-  background: #FFF8E7; /* Trắng kem */
-  outline: none;
-  box-shadow: 0 0 0 3px rgba(231, 194, 125, 0.3);
-}
-
-.actions select {
-  background: rgba(255, 248, 231, 0.8); /* Trắng kem trong suốt */
+  padding: 0px;
+  color: #3B2F2F;
+  width: 100%;
+  margin: 0 auto;
+  z-index: 1;
 }
 
 .reservation-list-wrapper {
@@ -404,28 +502,27 @@ export default {
 }
 
 .reservation-table {
-  width: 98%;
+  width: 100%;
   border-collapse: collapse;
-  background: rgba(255, 248, 231, 0.5); /* Trắng kem trong suốt */
+  background: rgba(255, 248, 231, 0.5);
   border-radius: 12px;
   overflow: hidden;
-  border: 1px solid rgba(231, 194, 125, 0.3); /* Vàng nhạt trong suốt */
-  box-shadow: 0 4px 15px rgba(107, 66, 38, 0.2); /* Bóng nâu */
+  border: 1px solid rgba(231, 194, 125, 0.3);
+  box-shadow: 0 4px 15px rgba(107, 66, 38, 0.2);
+  font-size: 16px;
 }
 
 .reservation-table thead {
-  background: rgba(139, 94, 60, 0.3); /* Nâu gỗ trong suốt */
-  top: 0;
-  z-index: 5;
+  background: rgba(139, 94, 60, 0.3);
 }
 
 .reservation-table th,
 .reservation-table td {
-  padding: 10px 15px;
-  height: 35px;
+  padding: 15px 20px;
+  height: 50px;
   text-align: left;
-  border-bottom: 1px solid rgba(231, 194, 125, 0.3); /* Vàng nhạt trong suốt */
-  border-right: 1px solid rgba(231, 194, 125, 0.3); /* Vàng nhạt trong suốt */
+  border-bottom: 1px solid rgba(231, 194, 125, 0.3);
+  border-right: 1px solid rgba(231, 194, 125, 0.3);
   text-align: center;
   font-weight: 500;
 }
@@ -437,42 +534,43 @@ export default {
 
 .reservation-table th {
   font-weight: bold;
-  color: #6B4226; /* Nâu đất */
+  color: #6B4226;
+  font-size: 16px;
 }
 
-/* Cố định chiều rộng cho từng cột */
+/* Cố định chiều rộng cho từng cột với kích thước lớn hơn */
 .col-id {
-  width: 50px;
+  width: 80px;
 }
 
 .col-customer {
-  width: 150px;
+  width: 200px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
 .col-time {
-  width: 180px;
+  width: 200px;
   white-space: nowrap;
 }
 
 .col-people {
-  width: 80px;
+  width: 100px;
 }
 
 .col-table {
-  width: 100px;
-  white-space: nowrap;
-}
-
-.col-status {
   width: 120px;
   white-space: nowrap;
 }
 
+.col-status {
+  width: 150px;
+  white-space: nowrap;
+}
+
 .col-actions {
-  width: 200px;
+  width: 300px;
   text-align: right;
 }
 
@@ -483,9 +581,9 @@ export default {
 
 .reservation-table td.col-status .status {
   font-weight: bold;
-  padding: 4px 8px;
+  padding: 8px 12px;
   border-radius: 12px;
-  font-size: 12px;
+  font-size: 14px;
 }
 
 .reservation-table td.col-actions {
@@ -496,99 +594,120 @@ export default {
 
 /* Màu sắc trạng thái */
 .status.pending {
-  color: #F57C00; /* Cam */
+  color: #F57C00;
   background-color: rgba(245, 124, 0, 0.1);
 }
 
 .status.preparing {
-  color: #1976D2; /* Xanh dương */
+  color: #1976D2;
   background-color: rgba(25, 118, 210, 0.1);
 }
 
 .status.serving {
-  color: #388E3C; /* Xanh lá */
+  color: #388E3C;
   background-color: rgba(56, 142, 60, 0.1);
 }
 
 .status.paid {
-  color: #7B1FA2; /* Tím */
+  color: #7B1FA2;
   background-color: rgba(123, 31, 162, 0.1);
 }
 
 .status.completed {
-  color: #6B4226; /* Nâu đất */
+  color: #6B4226;
   background-color: rgba(107, 66, 38, 0.1);
   opacity: 0.7;
 }
 
 .status.cancelled {
-  color: #D32F2F; /* Đỏ */
+  color: #D32F2F;
   background-color: rgba(211, 47, 47, 0.1);
 }
 
-/* Nút hành động */
-.col-actions button {
-  color: #FFF8E7; /* Trắng kem */
-  border: none;
-  padding: 6px 12px;
+/* Nút hành động với kích thước lớn hơn */
+.action-btn {
+  padding: 10px 16px;
+  background: rgba(255, 248, 231, 0.6);
+  border: 1px solid #8B5E3C;
   border-radius: 6px;
+  color: #6B4226;
   cursor: pointer;
+  font-size: 14px;
   font-weight: 600;
   transition: all 0.3s ease;
-  box-shadow: 0 2px 4px rgba(107, 66, 38, 0.2); /* Bóng nâu */
-  border: 1px solid rgba(255, 248, 231, 0.3); /* Viền trắng trong suốt */
+  box-shadow: 0 2px 4px rgba(107, 66, 38, 0.2);
+  min-height: 40px;
+  min-width: 80px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
 }
 
-.order-button {
-  background: #E7C27D; /* Vàng nhạt */
-  color: #6B4226; /* Nâu đất */
+.order-btn {
+  background: #E7C27D;
+  color: #6B4226;
+  border: 1px solid #E7C27D;
 }
-.order-button:hover {
-  background: #F5E3B3; /* Be nhạt */
-  transform: translateY(-1px);
+
+.order-btn:hover {
+  background: #F5E3B3;
+  transform: translateY(-2px);
   box-shadow: 0 4px 8px rgba(231, 194, 125, 0.3);
 }
 
-.approve-button {
-  background: #388E3C; /* Xanh lá */
+.approve-btn {
+  background: #388E3C;
+  color: #FFF8E7;
+  border: 1px solid #388E3C;
 }
-.approve-button:hover {
-  background: #2E7D32; /* Xanh lá đậm */
-  transform: translateY(-1px);
+
+.approve-btn:hover {
+  background: #2E7D32;
+  transform: translateY(-2px);
   box-shadow: 0 4px 8px rgba(56, 142, 60, 0.3);
 }
 
-.checkin-button {
-  background: #1976D2; /* Xanh dương */
+.checkin-btn {
+  background: #1976D2;
+  color: #FFF8E7;
+  border: 1px solid #1976D2;
 }
-.checkin-button:hover {
-  background: #1565C0; /* Xanh dương đậm */
-  transform: translateY(-1px);
+
+.checkin-btn:hover {
+  background: #1565C0;
+  transform: translateY(-2px);
   box-shadow: 0 4px 8px rgba(25, 118, 210, 0.3);
 }
 
-.cancel-button {
-  background: #D32F2F; /* Đỏ */
+.cancel-btn {
+  background: #D32F2F;
+  color: #FFF8E7;
+  border: 1px solid #D32F2F;
 }
-.cancel-button:hover {
-  background: #C62828; /* Đỏ đậm */
-  transform: translateY(-1px);
+
+.cancel-btn:hover {
+  background: #C62828;
+  transform: translateY(-2px);
   box-shadow: 0 4px 8px rgba(211, 47, 47, 0.3);
 }
 
-.checkout-button {
-  background: #7B1FA2; /* Tím */
+.checkout-btn {
+  background: #7B1FA2;
+  color: #FFF8E7;
+  border: 1px solid #7B1FA2;
 }
-.checkout-button:hover {
-  background: #6A1B9A; /* Tím đậm */
-  transform: translateY(-1px);
+
+.checkout-btn:hover {
+  background: #6A1B9A;
+  transform: translateY(-2px);
   box-shadow: 0 4px 8px rgba(123, 31, 162, 0.3);
 }
 
 .reservation-table td.col-actions {
   display: flex;
-  justify-content: center;  
-  align-items: center;      
+  justify-content: center;
+  align-items: center;
 }
 
 /* Hiệu ứng hover cho hàng */
@@ -597,7 +716,7 @@ export default {
 }
 
 .reservation-table tbody tr:hover {
-  background: rgba(231, 194, 125, 0.2); /* Vàng nhạt trong suốt */
+  background: rgba(231, 194, 125, 0.2);
 }
 
 /* Custom scrollbar */
@@ -611,27 +730,78 @@ export default {
 }
 
 .reservation-list-wrapper::-webkit-scrollbar-thumb {
-  background: #E7C27D; /* Vàng nhạt */
+  background: #E7C27D;
   border-radius: 4px;
 }
 
 .reservation-list-wrapper::-webkit-scrollbar-thumb:hover {
-  background: #8B5E3C; /* Nâu gỗ */
+  background: #8B5E3C;
 }
 
 /* Responsive design */
+@media (max-width: 1200px) {
+  .header-controls-section {
+    min-width: 500px;
+  }
+  
+  .search-input {
+    width: 180px;
+  }
+  
+  .status-filter {
+    width: 140px;
+  }
+  
+  .date-filter {
+    width: 140px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .header-main {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .header-controls-section {
+    min-width: auto;
+    width: 100%;
+    align-items: flex-start;
+  }
+  
+  .controls-group {
+    justify-content: flex-start;
+  }
+}
+
 @media (max-width: 768px) {
-  .reservation-management {
-    padding-right: 10px;
+  .dashboard {
+    padding: 1rem;
   }
   
-  .header {
-    padding: 15px;
+  .dashboard-header {
+    padding: 1rem;
+    margin: -1rem -1rem 1rem -1rem;
   }
   
-  .actions {
-    flex-wrap: wrap;
-    justify-content: center;
+  .header-title-section h1 {
+    font-size: 1.6rem;
+  }
+  
+  .controls-group {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .filter-controls {
+    flex-direction: column;
+    width: 100%;
+  }
+  
+  .search-input,
+  .status-filter,
+  .date-filter {
+    width: 100%;
   }
   
   .reservation-list-wrapper {
@@ -644,27 +814,17 @@ export default {
   
   .reservation-table th,
   .reservation-table td {
-    padding: 8px 10px;
-  }
-  
-  .col-actions {
-    width: 150px;
+    padding: 10px 12px;
   }
 }
 
 @media (max-width: 480px) {
-  .header h1 {
-    font-size: 20px;
+  .header-title-section h1 {
+    font-size: 1.4rem;
   }
   
-  .actions {
-    gap: 8px;
-  }
-  
-  .actions input,
-  .actions select {
-    padding: 8px;
-    font-size: 14px;
+  .current-time {
+    font-size: 0.9rem;
   }
   
   .reservation-table {
@@ -673,11 +833,11 @@ export default {
   
   .reservation-table th,
   .reservation-table td {
-    padding: 6px 8px;
+    padding: 8px 10px;
   }
   
-  .col-actions button {
-    padding: 4px 8px;
+  .action-btn {
+    padding: 8px 12px;
     font-size: 12px;
   }
 }
