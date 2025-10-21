@@ -1,66 +1,81 @@
 <template>
   <div class="main-container">
     <Navigation @sidebar-toggle="handleSidebarToggle" />
-    <div class="reservation-management" :class="{ 'sidebar-collapsed': isSidebarCollapsed }">
-      <!-- Header không cố định -->
-      <div class="header">
-        <h1>Danh sách hóa đơn</h1>
-        <div class="actions">
-            <input type="text" v-model="searchQuery" placeholder="Tìm kiếm..." @input="debouncedSearch" />
-            <input type="date" v-model="selectedDate" @change="fetchBills" />
-            <select v-model="selectedMethod" @change="filterByMethod">
-                <option value="">Tất cả phương thức</option>
-                <option value="bank_transfer">Quét mã QR</option>
-                <option value="cash">Tiền mặt</option>
-                <option value="credit_card">Thẻ</option>
-            </select>
-            <select v-model="selectedStatus" @change="filterByStatus">
-                <option value="">Tất cả trạng thái</option>
-                <option value="paid">Đã thanh toán</option>
-                <option value="completed">Hoàn thành</option>
-            </select>
-            <button @click="refresh">Làm mới</button>
+    <section class="dashboard" :class="{ 'sidebar-collapsed': isSidebarCollapsed }">
+      <!-- Header giống mẫu trong hình -->
+      <div class="dashboard-header">
+        <div class="header-main">
+          <div class="header-title-section">
+            <h1>DANH SÁCH HÓA ĐƠN</h1>
+          </div>
+          <div class="header-controls-section">
+            <span class="current-time">{{ currentDateTime }}</span>
+            <div class="controls-group">
+              <div class="filter-controls">
+                <input type="text" v-model="searchQuery" placeholder="Tìm kiếm..." class="search-input" />
+                <input type="date" v-model="selectedDate" class="date-filter" @change="fetchBills" />
+                <select v-model="selectedMethod" class="status-filter" @change="filterByMethod">
+                  <option value="">Tất cả phương thức</option>
+                  <option value="bank_transfer">Quét mã QR</option>
+                  <option value="cash">Tiền mặt</option>
+                  <option value="credit_card">Thẻ</option>
+                </select>
+                <select v-model="selectedStatus" class="status-filter" @change="filterByStatus">
+                  <option value="">Tất cả trạng thái</option>
+                  <option value="paid">Đã thanh toán</option>
+                  <option value="completed">Hoàn thành</option>
+                </select>
+              </div>
+              <button class="refresh-button" @click="refresh">
+                <i class="fas fa-sync-alt"></i> Làm mới
+              </button>
+            </div>
+          </div>
         </div>
       </div>
 
-      <!-- Danh sách hóa đơn (dạng bảng) -->
-      <div class="reservation-list-wrapper">
-        <table class="reservation-table">
-          <thead>
-            <tr>
-              <th class="col-id">STT</th>
-              <th class="col-customer">Khách hàng</th>
-              <th class="col-time">Thời gian</th>
-              <th class="col-people">Số người</th>
-              <th class="col-table">Bàn</th>
-              <th class="col-status">Trạng thái</th>
-              <th class="col-method">Phương thức</th>
-              <th class="col-total">Tổng tiền</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="(bill, index) in filteredBills" :key="bill.bill_id">              
-                <td class="col-id">{{ index + 1 }}</td>
-              <td class="col-customer">{{ bill.customerName }}</td>
-              <td class="col-time">{{ formatDate(bill.time) }}</td>
-              <td class="col-people">{{ bill.reservation?.num_people || 'N/A' }}</td>
-              <td class="col-table">{{ bill.tableNumber }}</td>
-              <td class="col-status">
-                <span class="status" :class="bill.reservation?.status">
-                  {{ statusDisplayNames[bill.reservation?.status] || bill.reservation?.status || 'Không xác định' }}
-                </span>
-              </td>
-              <td class="col-method">
-                <span class="status" :class="bill.payment_method">
-                  {{ paymentMethodDisplayNames[bill.payment_method] || 'Không xác định' }}
-                </span>
-              </td>
-              <td class="col-total">{{ formatCurrency(bill.total_amount) }}</td>
-            </tr>
-          </tbody>
-        </table>
+      <div class="container-reservation">
+        <section class="reservation-management">
+          <!-- Danh sách hóa đơn (dạng bảng) -->
+          <div class="reservation-list-wrapper">
+            <table class="reservation-table">
+              <thead>
+                <tr>
+                  <th class="col-id">STT</th>
+                  <th class="col-customer">Khách hàng</th>
+                  <th class="col-time">Thời gian</th>
+                  <th class="col-people">Số người</th>
+                  <th class="col-table">Bàn</th>
+                  <th class="col-status">Trạng thái</th>
+                  <th class="col-method">Phương thức</th>
+                  <th class="col-total">Tổng tiền</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="(bill, index) in filteredBills" :key="bill.bill_id">              
+                  <td class="col-id">{{ index + 1 }}</td>
+                  <td class="col-customer">{{ bill.customerName }}</td>
+                  <td class="col-time">{{ formatDate(bill.time) }}</td>
+                  <td class="col-people">{{ bill.reservation?.num_people || 'N/A' }}</td>
+                  <td class="col-table">{{ bill.tableNumber }}</td>
+                  <td class="col-status">
+                    <span class="status" :class="bill.reservation?.status">
+                      {{ statusDisplayNames[bill.reservation?.status] || bill.reservation?.status || 'Không xác định' }}
+                    </span>
+                  </td>
+                  <td class="col-method">
+                    <span class="status" :class="bill.payment_method">
+                      {{ paymentMethodDisplayNames[bill.payment_method] || 'Không xác định' }}
+                    </span>
+                  </td>
+                  <td class="col-total">{{ formatCurrency(bill.total_amount) }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
       </div>
-    </div>
+    </section>
   </div>
 </template>
 
@@ -91,6 +106,8 @@ export default {
         credit_card: 'Thẻ',
       },
       selectedMethod: '',
+      currentDateTime: '',
+      updateDateTimeInterval: null,
     };
   },
   computed: {
@@ -129,10 +146,14 @@ export default {
   created() {
     this.debouncedSearch = debounce(this.search, 300);
     this.fetchBills();
+    this.updateDateTime();
+    this.updateDateTimeInterval = setInterval(this.updateDateTime, 60000);
+  },
+  beforeDestroy() {
+    clearInterval(this.updateDateTimeInterval);
   },
   methods: {
     handleSidebarToggle(isCollapsed) {
-      console.log('Sidebar is collapsed:', isCollapsed);
       this.isSidebarCollapsed = isCollapsed;
     },
     refresh() {
@@ -166,6 +187,9 @@ export default {
     filterByStatus() {
       // Trigger filtering via computed property
     },
+    filterByMethod() {
+      // Trigger filtering via computed property
+    },
     formatDate(dateString) {
       const date = new Date(dateString);
       return date.toLocaleString('vi-VN', {
@@ -182,6 +206,16 @@ export default {
         currency: 'VND',
       }).format(amount);
     },
+    updateDateTime() {
+      this.currentDateTime = new Date().toLocaleString("vi-VN", {
+        weekday: "short",
+        day: "numeric",
+        month: "short",
+        year: "numeric",
+        hour: "numeric",
+        minute: "numeric"
+      });
+    },
   },
 };
 </script>
@@ -189,93 +223,157 @@ export default {
 <style scoped>
 .main-container {
   display: flex;
-  background: #FFF8E7; /* Trắng kem */
-  height: 100vh;
+  min-height: 100vh;
+  background-color: #FFF8E7;
+  font-family: 'Arial', sans-serif;
+}
+
+.dashboard {
+  flex: 1;
+  padding: 2rem;
+  background-color: #FFF8E7;
+  transition: margin-left 0.3s ease;
+}
+
+/* Header giống mẫu trong hình */
+.dashboard-header {
+  background: linear-gradient(135deg, #8B5E3C, #6B4226);
+  padding: 1.5rem 2rem;
+  margin: -2rem -2rem 2rem -2rem;
+  border-bottom: 1px solid #E7C27D;
+  box-shadow: 0 4px 15px rgba(107, 66, 38, 0.3);
+}
+
+.header-main {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 2rem;
+}
+
+.header-title-section {
+  flex: 1;
+}
+
+.header-title-section h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #FFF8E7;
+  text-shadow: 0 0 5px #E7C27D, 0 0 30px #E7C27D;
+  margin: 0;
+  letter-spacing: 0.5px;
+  margin-left: 1cm;
+}
+
+.header-controls-section {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 1rem;
+  min-width: 600px;
+}
+
+.current-time {
+  font-size: 1rem;
+  color: #F5E3B3;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.controls-group {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+  justify-content: flex-end;
+}
+
+.filter-controls {
+  display: flex;
+  gap: 0.8rem;
+  align-items: center;
+  flex: 1;
+  justify-content: flex-end;
+}
+
+.search-input,
+.status-filter,
+.date-filter {
+  padding: 0.6rem 0.8rem;
+  border: 1px solid #8B5E3C;
+  border-radius: 8px;
+  background: rgba(255, 248, 231, 0.95);
+  color: #3B2F2F;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+  font-weight: 500;
+  min-height: 40px;
+  box-sizing: border-box;
+}
+
+.search-input {
+  width: 200px;
+}
+
+.status-filter {
+  width: 160px;
+}
+
+.date-filter {
+  width: 150px;
+}
+
+.search-input:focus,
+.status-filter:focus,
+.date-filter:focus {
+  border-color: #E7C27D;
+  outline: none;
+  background: #FFF8E7;
+  box-shadow: 0 0 0 3px rgba(231, 194, 125, 0.3);
+}
+
+.refresh-button {
+  padding: 0.6rem 1.2rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.3s ease;
+  font-weight: 600;
+  box-shadow: 0 2px 8px rgba(107, 66, 38, 0.3);
+  border: 1px solid #E7C27D;
+  background: #E7C27D;
+  color: #6B4226;
+  white-space: nowrap;
+  min-height: 40px;
+}
+
+.refresh-button:hover {
+  background: #F5E3B3;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(231, 194, 125, 0.4);
+}
+
+.container-reservation {
+  flex: 1;
+  margin: 0;
+  padding: 0;
+  background-color: #FFF8E7;
+  color: #3B2F2F;
+  display: flex;
+  flex-direction: column;
   overflow: hidden;
 }
 
 .reservation-management {
-  flex: 1;
-  margin: 0;
-  padding: 0;
-  background-color: #FFF8E7; /* Trắng kem */
-  color: #3B2F2F; /* Đen nâu */
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  padding-right: 20px;
-  transition: margin-left 0.3s ease;
-}
-
-.reservation-management.sidebar-collapsed {
-  margin-left: 10px;
-}
-
-.header {
-  background-color: #FFF8E7; /* Trắng kem */
-  padding: 20px;
-  border-bottom: 1px solid #E7C27D; /* Vàng nhạt */
-}
-
-.header h1 {
-  text-align: center;
-  color: #6B4226; /* Nâu đất */
-  margin: 0 0 20px 0;
-  font-weight: bold;
-  text-shadow: 0 0 5px #E7C27D, 0 0 30px #E7C27D; /* Hiệu ứng vàng */
-}
-
-.actions {
-  display: flex;
-  gap: 10px;
-  justify-content: flex-end;
-}
-
-.actions input,
-.actions select {
-  padding: 10px;
-  border: 1px solid #8B5E3C; /* Nâu gỗ */
-  border-radius: 8px;
-  background: rgba(255, 248, 231, 0.8); /* Trắng kem trong suốt */
-  color: #3B2F2F; /* Đen nâu */
-  font-weight: 500;
-  transition: all 0.3s ease;
-}
-
-.actions input:focus,
-.actions select:focus {
-  border-color: #E7C27D; /* Vàng nhạt */
-  background: #FFF8E7; /* Trắng kem */
-  outline: none;
-  box-shadow: 0 0 0 3px rgba(231, 194, 125, 0.3);
-}
-
-.actions input[type="date"] {
-  background: rgba(255, 248, 231, 0.8); /* Trắng kem trong suốt */
-  cursor: pointer;
-}
-
-.actions select {
-  background: rgba(255, 248, 231, 0.8); /* Trắng kem trong suốt */
-}
-
-.actions button {
-  padding: 10px 20px;
-  background: #8B5E3C; /* Nâu gỗ */
-  color: #FFF8E7; /* Trắng kem */
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: 600;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 8px rgba(107, 66, 38, 0.3); /* Bóng nâu */
-  border: 1px solid #E7C27D; /* Viền vàng */
-}
-
-.actions button:hover {
-  background: #6B4226; /* Nâu đất */
-  transform: translateY(-2px);
-  box-shadow: 0 4px 15px rgba(107, 66, 38, 0.4);
+  padding: 0px;
+  color: #3B2F2F;
+  width: 100%;
+  margin: 0 auto;
+  z-index: 1;
 }
 
 .reservation-list-wrapper {
@@ -288,26 +386,26 @@ export default {
 .reservation-table {
   width: 100%;
   border-collapse: collapse;
-  background: rgba(255, 248, 231, 0.5); /* Trắng kem trong suốt */
+  background: rgba(255, 248, 231, 0.5);
   border-radius: 12px;
   overflow: hidden;
-  border: 1px solid rgba(231, 194, 125, 0.3); /* Vàng nhạt trong suốt */
-  box-shadow: 0 4px 15px rgba(107, 66, 38, 0.2); /* Bóng nâu */
+  border: 1px solid rgba(231, 194, 125, 0.3);
+  box-shadow: 0 4px 15px rgba(107, 66, 38, 0.2);
+  font-size: 16px;
 }
 
 .reservation-table thead {
-  background: rgba(139, 94, 60, 0.3); /* Nâu gỗ trong suốt */
-  top: 0;
-  z-index: 5;
+  background: rgba(139, 94, 60, 0.3);
 }
 
 .reservation-table th,
 .reservation-table td {
-  padding: 10px 15px;
-  height: 35px;
+  padding: 15px 20px;
+  height: 50px;
+  text-align: left;
+  border-bottom: 1px solid rgba(231, 194, 125, 0.3);
+  border-right: 1px solid rgba(231, 194, 125, 0.3);
   text-align: center;
-  border-bottom: 1px solid rgba(231, 194, 125, 0.3); /* Vàng nhạt trong suốt */
-  border-right: 1px solid rgba(231, 194, 125, 0.3); /* Vàng nhạt trong suốt */
   font-weight: 500;
 }
 
@@ -318,47 +416,49 @@ export default {
 
 .reservation-table th {
   font-weight: bold;
-  color: #6B4226; /* Nâu đất */
+  color: #6B4226;
+  font-size: 16px;
 }
 
-/* Cố định chiều rộng cho từng cột */
+/* Cố định chiều rộng cho từng cột với kích thước lớn hơn */
 .col-id {
-  width: 50px;
+  width: 80px;
 }
 
 .col-customer {
-  width: 150px;
+  width: 200px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
 .col-time {
-  width: 180px;
+  width: 200px;
   white-space: nowrap;
 }
 
 .col-people {
-  width: 80px;
+  width: 100px;
 }
 
 .col-table {
-  width: 100px;
+  width: 120px;
   white-space: nowrap;
 }
 
 .col-status {
-  width: 120px;
+  width: 150px;
   white-space: nowrap;
 }
 
 .col-method {
-  width: 120px;
+  width: 150px;
   white-space: nowrap;
 }
 
 .col-total {
-  width: 120px;
+  width: 150px;
+  white-space: nowrap;
 }
 
 /* Đảm bảo các ô trong tbody khớp với thead */
@@ -369,49 +469,37 @@ export default {
 .reservation-table td.col-status .status,
 .reservation-table td.col-method .status {
   font-weight: bold;
+  padding: 8px 12px;
+  border-radius: 12px;
+  font-size: 14px;
 }
 
 /* Màu sắc trạng thái */
 .status.paid {
-  color: #388E3C; /* Xanh lá đậm */
+  color: #388E3C;
   background-color: rgba(56, 142, 60, 0.1);
-  padding: 4px 8px;
-  border-radius: 12px;
-  font-size: 12px;
 }
 
 .status.completed {
-  color: #6B4226; /* Nâu đất */
+  color: #6B4226;
   background-color: rgba(107, 66, 38, 0.1);
-  padding: 4px 8px;
-  border-radius: 12px;
-  font-size: 12px;
-  opacity: 0.8;
+  opacity: 0.7;
 }
 
 /* Màu sắc phương thức thanh toán */
 .status.bank_transfer {
-  color: #1976D2; /* Xanh dương */
+  color: #1976D2;
   background-color: rgba(25, 118, 210, 0.1);
-  padding: 4px 8px;
-  border-radius: 12px;
-  font-size: 12px;
 }
 
 .status.cash {
-  color: #F57C00; /* Cam */
+  color: #F57C00;
   background-color: rgba(245, 124, 0, 0.1);
-  padding: 4px 8px;
-  border-radius: 12px;
-  font-size: 12px;
 }
 
 .status.credit_card {
-  color: #7B1FA2; /* Tím */
+  color: #7B1FA2;
   background-color: rgba(123, 31, 162, 0.1);
-  padding: 4px 8px;
-  border-radius: 12px;
-  font-size: 12px;
 }
 
 /* Hiệu ứng hover cho hàng */
@@ -420,7 +508,7 @@ export default {
 }
 
 .reservation-table tbody tr:hover {
-  background: rgba(231, 194, 125, 0.2); /* Vàng nhạt trong suốt */
+  background: rgba(231, 194, 125, 0.2);
 }
 
 /* Custom scrollbar */
@@ -434,27 +522,78 @@ export default {
 }
 
 .reservation-list-wrapper::-webkit-scrollbar-thumb {
-  background: #E7C27D; /* Vàng nhạt */
+  background: #E7C27D;
   border-radius: 4px;
 }
 
 .reservation-list-wrapper::-webkit-scrollbar-thumb:hover {
-  background: #8B5E3C; /* Nâu gỗ */
+  background: #8B5E3C;
 }
 
 /* Responsive design */
+@media (max-width: 1200px) {
+  .header-controls-section {
+    min-width: 500px;
+  }
+  
+  .search-input {
+    width: 180px;
+  }
+  
+  .status-filter {
+    width: 140px;
+  }
+  
+  .date-filter {
+    width: 140px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .header-main {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .header-controls-section {
+    min-width: auto;
+    width: 100%;
+    align-items: flex-start;
+  }
+  
+  .controls-group {
+    justify-content: flex-start;
+  }
+}
+
 @media (max-width: 768px) {
-  .reservation-management {
-    padding-right: 10px;
+  .dashboard {
+    padding: 1rem;
   }
   
-  .header {
-    padding: 15px;
+  .dashboard-header {
+    padding: 1rem;
+    margin: -1rem -1rem 1rem -1rem;
   }
   
-  .actions {
-    flex-wrap: wrap;
-    justify-content: center;
+  .header-title-section h1 {
+    font-size: 1.6rem;
+  }
+  
+  .controls-group {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .filter-controls {
+    flex-direction: column;
+    width: 100%;
+  }
+  
+  .search-input,
+  .status-filter,
+  .date-filter {
+    width: 100%;
   }
   
   .reservation-list-wrapper {
@@ -467,24 +606,17 @@ export default {
   
   .reservation-table th,
   .reservation-table td {
-    padding: 8px 10px;
+    padding: 10px 12px;
   }
 }
 
 @media (max-width: 480px) {
-  .header h1 {
-    font-size: 20px;
+  .header-title-section h1 {
+    font-size: 1.4rem;
   }
   
-  .actions {
-    gap: 8px;
-  }
-  
-  .actions input,
-  .actions select,
-  .actions button {
-    padding: 8px;
-    font-size: 14px;
+  .current-time {
+    font-size: 0.9rem;
   }
   
   .reservation-table {
@@ -493,7 +625,7 @@ export default {
   
   .reservation-table th,
   .reservation-table td {
-    padding: 6px 8px;
+    padding: 8px 10px;
   }
 }
 </style>

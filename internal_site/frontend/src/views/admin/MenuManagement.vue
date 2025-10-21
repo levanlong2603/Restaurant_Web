@@ -1,169 +1,191 @@
 <template>
-  <div class="main-layout">
+  <div class="main-container">
     <Navigation @sidebar-toggle="handleSidebarToggle" />
-    <div class="menu-management" :class="{ 'sidebar-collapsed': isSidebarCollapsed }">
-      <h1>Quản lý Menu</h1>
-      <div class="split-container">
-        <!-- Bên trái: Form thêm mới và danh sách món vừa thêm/sửa -->
-        <div class="left-panel">
-          <h2>Thêm món mới</h2>
-          <form @submit.prevent="addItem" class="add-form">
-            <div class="form-group">
-              <label for="new-name">Tên món</label>
-              <input id="new-name" v-model="newItem.name" placeholder="Nhập tên món" required />
-            </div>
-            <div class="form-group">
-              <label for="new-price">Giá (VNĐ)</label>
-              <input id="new-price" v-model.number="newItem.price" type="number" placeholder="Nhập giá" required />
-            </div>
-            <div class="form-group">
-              <label for="new-description">Mô tả</label>
-              <textarea id="new-description" v-model="newItem.description" placeholder="Nhập mô tả món"
-                required></textarea>
-            </div>
-            <div class="form-group">
-              <label for="new-category">Danh mục</label>
-              <select id="new-category" v-model="newItem.category" required>
-                <option value="" disabled>Chọn danh mục</option>
-                <option value="appetizer">Khai vị</option>
-                <option value="main_dish">Món chính</option>
-                <option value="side_dish">Món ăn kèm</option>
-                <option value="regional_specialty">Đặc sản vùng miền</option>
-                <option value="vegetarian">Món chay</option>
-                <option value="dessert">Tráng miệng</option>
-                <option value="beverage">Đồ uống</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label>Ảnh món</label>
-              <div class="image-upload">
-                <div v-if="newImagePreview" class="preview-image-container">
-                  <p>Ảnh xem trước:</p>
-                  <img :src="newImagePreview" alt="Preview Image" class="preview-image" />
-                  <button type="button" class="remove-preview" @click="removeNewImagePreview">Xóa ảnh</button>
-                </div>
-                <input type="file" @change="onFileChange" accept="image/*" />
+    <section class="dashboard" :class="{ 'sidebar-collapsed': isSidebarCollapsed }">
+      <!-- Header giống mẫu trong hình -->
+      <div class="dashboard-header">
+        <div class="header-main">
+          <div class="header-title-section">
+            <h1>QUẢN LÝ MENU</h1>
+          </div>
+          <div class="header-controls-section">
+            <span class="current-time">{{ currentDateTime }}</span>
+            <div class="controls-group">
+              <div class="filter-controls">
+                <select v-model="selectedCategory" class="status-filter" @change="fetchMenu">
+                  <option value="">Tất cả danh mục</option>
+                  <option value="appetizer">Khai vị</option>
+                  <option value="main_dish">Món chính</option>
+                  <option value="side_dish">Món ăn kèm</option>
+                  <option value="regional_specialty">Đặc sản vùng miền</option>
+                  <option value="vegetarian">Món chay</option>
+                  <option value="dessert">Tráng miệng</option>
+                  <option value="beverage">Đồ uống</option>
+                </select>
+                <input type="text" v-model="searchQuery" placeholder="Tìm kiếm món..." class="search-input" @input="debouncedFetchMenu" />
               </div>
+              <button class="refresh-button" @click="refreshPage">
+                <i class="fas fa-sync-alt"></i> Làm mới
+              </button>
             </div>
-            <button type="submit" class="submit-button">Thêm món</button>
-          </form>
-
-          <h2>Món vừa thêm/sửa</h2>
-          <div class="recent-items-wrapper">
-            <ul class="recent-items">
-              <li v-for="item in recentItems" :key="item.menu_id">
-                <span>{{ item.name }} - {{ formatPrice(item.price) }} VNĐ</span>
-                <img :src="getImageUrl(item.image)" :alt="item.name" class="preview-image" />
-              </li>
-            </ul>
           </div>
         </div>
+      </div>
 
-        <!-- Bên phải: Danh sách menu với tìm kiếm và lọc -->
-        <div class="right-panel">
-          <!-- Thanh tìm kiếm và lọc cố định -->
-          <div class="filter-search fixed">
-            <select v-model="selectedCategory" @change="fetchMenu">
-              <option value="">Tất cả danh mục</option>
-              <option value="appetizer">Khai vị</option>
-              <option value="main_dish">Món chính</option>
-              <option value="side_dish">Món ăn kèm</option>
-              <option value="regional_specialty">Đặc sản vùng miền</option>
-              <option value="vegetarian">Món chay</option>
-              <option value="dessert">Tráng miệng</option>
-              <option value="beverage">Đồ uống</option>
-            </select>
-            <input v-model="searchQuery" @input="debouncedFetchMenu" placeholder="Tìm kiếm món..." />
-            <label class="checkbox-label">
-              <input type="checkbox" v-model="showDeleted" @change="fetchMenu" /> Hiển thị món đã xóa
-            </label>
-          </div>
+      <div class="container-reservation">
+        <section class="menu-management">
+          <div class="split-container">
+            <!-- Bên trái: Form thêm mới và danh sách món vừa thêm/sửa -->
+            <div class="left-panel">
+              <h2>Thêm món mới</h2>
+              <form @submit.prevent="addItem" class="add-form">
+                <div class="form-group">
+                  <label for="new-name">Tên món</label>
+                  <input id="new-name" v-model="newItem.name" placeholder="Nhập tên món" required />
+                </div>
+                <div class="form-group">
+                  <label for="new-price">Giá (VNĐ)</label>
+                  <input id="new-price" v-model.number="newItem.price" type="number" placeholder="Nhập giá" required />
+                </div>
+                <div class="form-group">
+                  <label for="new-description">Mô tả</label>
+                  <textarea id="new-description" v-model="newItem.description" placeholder="Nhập mô tả món"
+                    required></textarea>
+                </div>
+                <div class="form-group">
+                  <label for="new-category">Danh mục</label>
+                  <select id="new-category" v-model="newItem.category" required>
+                    <option value="" disabled>Chọn danh mục</option>
+                    <option value="appetizer">Khai vị</option>
+                    <option value="main_dish">Món chính</option>
+                    <option value="side_dish">Món ăn kèm</option>
+                    <option value="regional_specialty">Đặc sản vùng miền</option>
+                    <option value="vegetarian">Món chay</option>
+                    <option value="dessert">Tráng miệng</option>
+                    <option value="beverage">Đồ uống</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>Ảnh món</label>
+                  <div class="image-upload">
+                    <div v-if="newImagePreview" class="preview-image-container">
+                      <p>Ảnh xem trước:</p>
+                      <img :src="newImagePreview" alt="Preview Image" class="preview-image" />
+                      <button type="button" class="remove-preview" @click="removeNewImagePreview">Xóa ảnh</button>
+                    </div>
+                    <input type="file" @change="onFileChange" accept="image/*" />
+                  </div>
+                </div>
+                <button type="submit" class="submit-button">Thêm món</button>
+              </form>
 
-          <!-- Danh sách menu có thể cuộn -->
-          <div class="right-panel-content">
-            <div v-for="(group, category) in groupedMenuItems" :key="category" class="category-group">
-              <h3 class="category-title">{{ categoryDisplayNames[category] || category }}</h3>
-              <ul>
-                <li v-for="item in group" :key="item.menu_id" class="menu-item">
-                  <div class="item-info">
+              <h2>Món vừa thêm/sửa</h2>
+              <div class="recent-items-wrapper">
+                <ul class="recent-items">
+                  <li v-for="item in recentItems" :key="item.menu_id">
                     <span>{{ item.name }} - {{ formatPrice(item.price) }} VNĐ</span>
                     <img :src="getImageUrl(item.image)" :alt="item.name" class="preview-image" />
-                  </div>
-                  <div class="item-actions">
-                    <button @click="openEditPopup(item)" class="action-button">Sửa</button>
-                    <button v-if="item.deleted" @click="restoreItem(item.menu_id)" class="action-button restore-button">Khôi
-                      phục</button>
-                    <button v-else @click="deleteItem(item.menu_id)" class="action-button delete-button">Xóa</button>
-                  </div>
-                </li>
-              </ul>
-            </div>
-
-            <div class="pagination">
-              <button @click="changePage(currentPage - 1)" :disabled="currentPage === 1">Trang trước</button>
-              <span>Trang {{ currentPage }} / {{ totalPages }}</span>
-              <button @click="changePage(currentPage + 1)" :disabled="currentPage === totalPages">Trang sau</button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Popup chỉnh sửa -->
-      <div v-if="showEditPopup" class="popup-overlay">
-        <div class="popup">
-          <h2>Chỉnh sửa món ăn</h2>
-          <form @submit.prevent="updateItem" class="edit-form">
-            <div class="form-group">
-              <label for="edit-name">Tên món</label>
-              <input id="edit-name" v-model="editItem.name" placeholder="Nhập tên món" required />
-            </div>
-            <div class="form-group">
-              <label for="edit-price">Giá (VNĐ)</label>
-              <input id="edit-price" v-model.number="editItem.price" type="number" placeholder="Nhập giá" required />
-            </div>
-            <div class="form-group">
-              <label for="edit-description">Mô tả</label>
-              <textarea id="edit-description" v-model="editItem.description" placeholder="Nhập mô tả món"
-                required></textarea>
-            </div>
-            <div class="form-group">
-              <label for="edit-category">Danh mục</label>
-              <select id="edit-category" v-model="editItem.category" required>
-                <option value="" disabled>Chọn danh mục</option>
-                <option value="appetizer">Khai vị</option>
-                <option value="main_dish">Món chính</option>
-                <option value="side_dish">Món ăn kèm</option>
-                <option value="regional_specialty">Đặc sản vùng miền</option>
-                <option value="vegetarian">Món chay</option>
-                <option value="dessert">Tráng miệng</option>
-                <option value="beverage">Đồ uống</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label>Ảnh món</label>
-              <div class="image-upload">
-                <!-- Hiển thị ảnh hiện tại (nếu có) -->
-                <div v-if="editItem.image && !editImagePreview" class="current-image">
-                  <p>Ảnh hiện tại:</p>
-                  <img :src="getImageUrl(editItem.image)" alt="Current Image" class="preview-image" />
-                </div>
-                <!-- Hiển thị ảnh xem trước (nếu có file mới) -->
-                <div v-if="editImagePreview" class="preview-image-container">
-                  <p>Ảnh xem trước:</p>
-                  <img :src="editImagePreview" alt="Preview Image" class="preview-image" />
-                  <button type="button" class="remove-preview" @click="removeEditImagePreview">Xóa ảnh</button>
-                </div>
-                <input type="file" @change="onEditFileChange" accept="image/*" />
+                  </li>
+                </ul>
               </div>
             </div>
-            <div class="popup-buttons">
-              <button type="submit" class="submit-button">Lưu</button>
-              <button type="button" class="cancel-button" @click="closeEditPopup">Hủy</button>
+
+            <!-- Bên phải: Danh sách menu với tìm kiếm và lọc -->
+            <div class="right-panel">
+              <!-- Thanh tìm kiếm và lọc cố định -->
+              <div class="filter-search fixed">
+                <label class="checkbox-label">
+                  <input type="checkbox" v-model="showDeleted" @change="fetchMenu" /> Hiển thị món đã xóa
+                </label>
+              </div>
+
+              <!-- Danh sách menu có thể cuộn -->
+              <div class="right-panel-content">
+                <div v-for="(group, category) in groupedMenuItems" :key="category" class="category-group">
+                  <h3 class="category-title">{{ categoryDisplayNames[category] || category }}</h3>
+                  <ul>
+                    <li v-for="item in group" :key="item.menu_id" class="menu-item">
+                      <div class="item-info">
+                        <span>{{ item.name }} - {{ formatPrice(item.price) }} VNĐ</span>
+                        <img :src="getImageUrl(item.image)" :alt="item.name" class="preview-image" />
+                      </div>
+                      <div class="item-actions">
+                        <button @click="openEditPopup(item)" class="action-button">Sửa</button>
+                        <button v-if="item.deleted" @click="restoreItem(item.menu_id)" class="action-button restore-button">Khôi
+                          phục</button>
+                        <button v-else @click="deleteItem(item.menu_id)" class="action-button delete-button">Xóa</button>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+
+                <div class="pagination">
+                  <button @click="changePage(currentPage - 1)" :disabled="currentPage === 1">Trang trước</button>
+                  <span>Trang {{ currentPage }} / {{ totalPages }}</span>
+                  <button @click="changePage(currentPage + 1)" :disabled="currentPage === totalPages">Trang sau</button>
+                </div>
+              </div>
             </div>
-          </form>
-        </div>
+          </div>
+
+          <!-- Popup chỉnh sửa -->
+          <div v-if="showEditPopup" class="popup-overlay">
+            <div class="popup">
+              <h2>Chỉnh sửa món ăn</h2>
+              <form @submit.prevent="updateItem" class="edit-form">
+                <div class="form-group">
+                  <label for="edit-name">Tên món</label>
+                  <input id="edit-name" v-model="editItem.name" placeholder="Nhập tên món" required />
+                </div>
+                <div class="form-group">
+                  <label for="edit-price">Giá (VNĐ)</label>
+                  <input id="edit-price" v-model.number="editItem.price" type="number" placeholder="Nhập giá" required />
+                </div>
+                <div class="form-group">
+                  <label for="edit-description">Mô tả</label>
+                  <textarea id="edit-description" v-model="editItem.description" placeholder="Nhập mô tả món"
+                    required></textarea>
+                </div>
+                <div class="form-group">
+                  <label for="edit-category">Danh mục</label>
+                  <select id="edit-category" v-model="editItem.category" required>
+                    <option value="" disabled>Chọn danh mục</option>
+                    <option value="appetizer">Khai vị</option>
+                    <option value="main_dish">Món chính</option>
+                    <option value="side_dish">Món ăn kèm</option>
+                    <option value="regional_specialty">Đặc sản vùng miền</option>
+                    <option value="vegetarian">Món chay</option>
+                    <option value="dessert">Tráng miệng</option>
+                    <option value="beverage">Đồ uống</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>Ảnh món</label>
+                  <div class="image-upload">
+                    <!-- Hiển thị ảnh hiện tại (nếu có) -->
+                    <div v-if="editItem.image && !editImagePreview" class="current-image">
+                      <p>Ảnh hiện tại:</p>
+                      <img :src="getImageUrl(editItem.image)" alt="Current Image" class="preview-image" />
+                    </div>
+                    <!-- Hiển thị ảnh xem trước (nếu có file mới) -->
+                    <div v-if="editImagePreview" class="preview-image-container">
+                      <p>Ảnh xem trước:</p>
+                      <img :src="editImagePreview" alt="Preview Image" class="preview-image" />
+                      <button type="button" class="remove-preview" @click="removeEditImagePreview">Xóa ảnh</button>
+                    </div>
+                    <input type="file" @change="onEditFileChange" accept="image/*" />
+                  </div>
+                </div>
+                <div class="popup-buttons">
+                  <button type="submit" class="submit-button">Lưu</button>
+                  <button type="button" class="cancel-button" @click="closeEditPopup">Hủy</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </section>
       </div>
-    </div>
+    </section>
   </div>
 </template>
 
@@ -211,6 +233,8 @@ export default {
         beverage: 'Đồ uống',
       },
       defaultImage: '../../assets/images/Logo.png',
+      currentDateTime: '',
+      updateDateTimeInterval: null,
     };
   },
   computed: {
@@ -231,15 +255,33 @@ export default {
   },
   async created() {
     await this.fetchMenu();
+    this.updateDateTime();
+    this.updateDateTimeInterval = setInterval(this.updateDateTime, 60000);
 
     this.$router.afterEach(() => {
       this.$emit('close-sidebar');
       this.isSidebarCollapsed = true;
     });
   },
+  beforeDestroy() {
+    clearInterval(this.updateDateTimeInterval);
+  },
   methods: {
     handleSidebarToggle(isCollapsed) {
       this.isSidebarCollapsed = isCollapsed;
+    },
+    updateDateTime() {
+      this.currentDateTime = new Date().toLocaleString("vi-VN", {
+        weekday: "short",
+        day: "numeric",
+        month: "short",
+        year: "numeric",
+        hour: "numeric",
+        minute: "numeric"
+      });
+    },
+    refreshPage() {
+      window.location.reload();
     },
     handleCloseSidebar() {
       this.isSidebarCollapsed = true;
@@ -541,33 +583,153 @@ export default {
 </script>
 
 <style scoped>
-.main-layout {
+.main-container {
   display: flex;
-  background: #FFF8E7; /* Trắng kem */
+  min-height: 100vh;
+  background-color: #FFF8E7;
+  font-family: 'Arial', sans-serif;
 }
 
-.menu-management {
+.dashboard {
   flex: 1;
-  margin: 0;
-  padding: 0;
-  background-color: #FFF8E7; /* Trắng kem */
-  color: #3B2F2F; /* Đen nâu */
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  padding-right: 20px;
-  padding-left: 20px;
+  padding: 2rem;
+  background-color: #FFF8E7;
   transition: margin-left 0.3s ease;
 }
 
-.menu-management h1 {
+/* Header giống mẫu trong hình */
+.dashboard-header {
+  background: linear-gradient(135deg, #8B5E3C, #6B4226);
+  padding: 1.5rem 2rem;
+  margin: -2rem -2rem 2rem -2rem;
+  border-bottom: 1px solid #E7C27D;
+  box-shadow: 0 4px 15px rgba(107, 66, 38, 0.3);
+}
+
+.header-main {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 2rem;
+}
+
+.header-title-section {
+  flex: 1;
+}
+
+.header-title-section h1 {
   font-size: 2rem;
   font-weight: 700;
-  color: #6B4226; /* Nâu đất */
-  margin-bottom: 20px;
-  margin-top: 30px;
-  text-align: center;
-  text-shadow: 0 0 5px #E7C27D, 0 0 30px #E7C27D; /* Hiệu ứng vàng */
+  color: #FFF8E7;
+  text-shadow: 0 0 5px #E7C27D, 0 0 30px #E7C27D;
+  margin: 0;
+  letter-spacing: 0.5px;
+  margin-left: 1cm;
+}
+
+.header-controls-section {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 1rem;
+  min-width: 600px;
+}
+
+.current-time {
+  font-size: 1rem;
+  color: #F5E3B3;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.controls-group {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+  justify-content: flex-end;
+}
+
+.filter-controls {
+  display: flex;
+  gap: 0.8rem;
+  align-items: center;
+  flex: 1;
+  justify-content: flex-end;
+}
+
+.search-input,
+.status-filter {
+  padding: 0.6rem 0.8rem;
+  border: 1px solid #8B5E3C;
+  border-radius: 8px;
+  background: rgba(255, 248, 231, 0.95);
+  color: #3B2F2F;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+  font-weight: 500;
+  min-height: 40px;
+  box-sizing: border-box;
+}
+
+.search-input {
+  width: 200px;
+}
+
+.status-filter {
+  width: 180px;
+}
+
+.search-input:focus,
+.status-filter:focus {
+  border-color: #E7C27D;
+  outline: none;
+  background: #FFF8E7;
+  box-shadow: 0 0 0 3px rgba(231, 194, 125, 0.3);
+}
+
+.refresh-button {
+  padding: 0.6rem 1.2rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.3s ease;
+  font-weight: 600;
+  box-shadow: 0 2px 8px rgba(107, 66, 38, 0.3);
+  border: 1px solid #E7C27D;
+  background: #E7C27D;
+  color: #6B4226;
+  white-space: nowrap;
+  min-height: 40px;
+}
+
+.refresh-button:hover {
+  background: #F5E3B3;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(231, 194, 125, 0.4);
+}
+
+.container-reservation {
+  flex: 1;
+  margin: 0;
+  padding: 0;
+  background-color: #FFF8E7;
+  color: #3B2F2F;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.menu-management {
+  padding: 0px;
+  color: #3B2F2F;
+  width: 100%;
+  margin: 0 auto;
+  z-index: 1;
 }
 
 .split-container {
@@ -582,11 +744,11 @@ export default {
 .left-panel,
 .right-panel {
   flex: 1;
-  border: 2px solid #E7C27D; /* Vàng nhạt */
+  border: 2px solid #E7C27D;
   border-radius: 15px;
   overflow: hidden;
-  background: rgba(255, 248, 231, 0.6); /* Trắng kem trong suốt */
-  box-shadow: 0 6px 20px rgba(107, 66, 38, 0.2); /* Bóng nâu */
+  background: rgba(255, 248, 231, 0.6);
+  box-shadow: 0 6px 20px rgba(107, 66, 38, 0.2);
   backdrop-filter: blur(10px);
 }
 
@@ -601,15 +763,14 @@ export default {
   flex-direction: column;
 }
 
-.left-panel h2,
-.right-panel h2 {
+.left-panel h2 {
   margin-bottom: 20px;
   font-size: 1.5rem;
-  color: #6B4226; /* Nâu đất */
+  color: #6B4226;
   text-align: center;
   font-weight: 700;
   padding-bottom: 10px;
-  border-bottom: 2px solid #E7C27D; /* Vàng nhạt */
+  border-bottom: 2px solid #E7C27D;
 }
 
 .add-form,
@@ -635,18 +796,18 @@ export default {
 .form-group label {
   font-size: 14px;
   font-weight: 600;
-  color: #6B4226; /* Nâu đất */
+  color: #6B4226;
 }
 
 .form-group input,
 .form-group select,
 .form-group textarea {
   padding: 12px;
-  border: 1px solid #8B5E3C; /* Nâu gỗ */
+  border: 1px solid #8B5E3C;
   border-radius: 10px;
   font-size: 14px;
-  background: rgba(255, 248, 231, 0.8); /* Trắng kem trong suốt */
-  color: #3B2F2F; /* Đen nâu */
+  background: rgba(255, 248, 231, 0.8);
+  color: #3B2F2F;
   transition: all 0.3s ease;
   font-weight: 500;
 }
@@ -654,10 +815,10 @@ export default {
 .form-group input:focus,
 .form-group select:focus,
 .form-group textarea:focus {
-  border-color: #E7C27D; /* Vàng nhạt */
+  border-color: #E7C27D;
   box-shadow: 0 0 0 3px rgba(231, 194, 125, 0.3);
   outline: none;
-  background: #FFF8E7; /* Trắng kem */
+  background: #FFF8E7;
 }
 
 .form-group textarea {
@@ -682,7 +843,7 @@ export default {
 .current-image p,
 .preview-image-container p {
   font-size: 14px;
-  color: #6B4226; /* Nâu đất */
+  color: #6B4226;
   font-weight: 600;
 }
 
@@ -691,14 +852,14 @@ export default {
   height: 120px;
   object-fit: cover;
   border-radius: 10px;
-  border: 2px solid #E7C27D; /* Vàng nhạt */
+  border: 2px solid #E7C27D;
   box-shadow: 0 4px 12px rgba(107, 66, 38, 0.2);
 }
 
 .remove-preview {
   padding: 8px 16px;
-  background: #D32F2F; /* Đỏ */
-  color: #FFF8E7; /* Trắng kem */
+  background: #D32F2F;
+  color: #FFF8E7;
   border: none;
   border-radius: 8px;
   cursor: pointer;
@@ -706,19 +867,19 @@ export default {
   width: fit-content;
   font-weight: 600;
   transition: all 0.3s ease;
-  border: 1px solid #FFF8E7; /* Viền trắng */
+  border: 1px solid #FFF8E7;
 }
 
 .remove-preview:hover {
-  background: #C62828; /* Đỏ đậm */
+  background: #C62828;
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(211, 47, 47, 0.3);
 }
 
 .submit-button {
   padding: 14px;
-  background: linear-gradient(135deg, #8B5E3C, #6B4226); /* Gradient nâu */
-  color: #FFF8E7; /* Trắng kem */
+  background: linear-gradient(135deg, #8B5E3C, #6B4226);
+  color: #FFF8E7;
   border: none;
   border-radius: 10px;
   cursor: pointer;
@@ -726,7 +887,7 @@ export default {
   font-weight: 700;
   transition: all 0.3s ease;
   box-shadow: 0 4px 15px rgba(107, 66, 38, 0.3);
-  border: 2px solid #E7C27D; /* Viền vàng */
+  border: 2px solid #E7C27D;
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
@@ -755,7 +916,7 @@ export default {
   flex-direction: column;
   gap: 8px;
   padding: 12px;
-  border-bottom: 1px solid rgba(231, 194, 125, 0.3); /* Vàng nhạt trong suốt */
+  border-bottom: 1px solid rgba(231, 194, 125, 0.3);
   transition: background-color 0.3s ease;
 }
 
@@ -768,35 +929,17 @@ export default {
   position: sticky;
   top: 0;
   z-index: 10;
-  background: rgba(139, 94, 60, 0.1); /* Nâu gỗ trong suốt */
+  background: rgba(139, 94, 60, 0.1);
   padding: 20px;
-  border-bottom: 2px solid #E7C27D; /* Vàng nhạt */
+  border-bottom: 2px solid #E7C27D;
   display: flex;
   gap: 15px;
   align-items: center;
   backdrop-filter: blur(10px);
 }
 
-.filter-search select,
-.filter-search input {
-  padding: 10px;
-  font-size: 14px;
-  border: 1px solid #8B5E3C; /* Nâu gỗ */
-  border-radius: 8px;
-  background: rgba(255, 248, 231, 0.8); /* Trắng kem trong suốt */
-  color: #3B2F2F; /* Đen nâu */
-  font-weight: 500;
-  transition: all 0.3s ease;
-}
-
-.filter-search select:focus,
-.filter-search input:focus {
-  border-color: #E7C27D; /* Vàng nhạt */
-  box-shadow: 0 0 0 3px rgba(231, 194, 125, 0.3);
-}
-
 .checkbox-label {
-  color: #6B4226; /* Nâu đất */
+  color: #6B4226;
   font-weight: 600;
   display: flex;
   align-items: center;
@@ -808,7 +951,7 @@ export default {
   appearance: none;
   width: 18px;
   height: 18px;
-  border: 2px solid #8B5E3C; /* Nâu gỗ */
+  border: 2px solid #8B5E3C;
   border-radius: 4px;
   background-color: rgba(255, 248, 231, 0.8);
   cursor: pointer;
@@ -817,7 +960,7 @@ export default {
 }
 
 .checkbox-label input[type="checkbox"]:checked {
-  background-color: #8B5E3C; /* Nâu gỗ */
+  background-color: #8B5E3C;
   border-color: #8B5E3C;
 }
 
@@ -827,7 +970,7 @@ export default {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  color: #FFF8E7; /* Trắng kem */
+  color: #FFF8E7;
   font-size: 12px;
   font-weight: bold;
 }
@@ -850,8 +993,8 @@ export default {
   font-size: 1.2rem;
   font-weight: 700;
   margin-bottom: 15px;
-  color: #FFF8E7; /* Trắng kem */
-  background: linear-gradient(135deg, #8B5E3C, #6B4226); /* Gradient nâu */
+  color: #FFF8E7;
+  background: linear-gradient(135deg, #8B5E3C, #6B4226);
   padding: 12px 15px;
   border-radius: 8px;
   text-align: center;
@@ -868,7 +1011,7 @@ ul {
   align-items: center;
   gap: 15px;
   padding: 15px;
-  border-bottom: 1px solid rgba(231, 194, 125, 0.3); /* Vàng nhạt trong suốt */
+  border-bottom: 1px solid rgba(231, 194, 125, 0.3);
   transition: all 0.3s ease;
   border-radius: 8px;
   margin-bottom: 8px;
@@ -884,26 +1027,8 @@ ul {
   display: flex;
   flex-direction: column;
   gap: 6px;
-  color: #3B2F2F; /* Đen nâu */
+  color: #3B2F2F;
   flex: 1;
-}
-
-.item-name {
-  font-weight: 600;
-  color: #6B4226; /* Nâu đất */
-  font-size: 16px;
-}
-
-.item-description {
-  font-size: 14px;
-  color: #3B2F2F; /* Đen nâu */
-  opacity: 0.8;
-}
-
-.item-price {
-  font-weight: 700;
-  color: #8B5E3C; /* Nâu gỗ */
-  font-size: 15px;
 }
 
 .item-actions {
@@ -914,8 +1039,8 @@ ul {
 .action-button {
   padding: 8px 16px;
   font-size: 13px;
-  background: #E7C27D; /* Vàng nhạt */
-  color: #6B4226; /* Nâu đất */
+  background: #E7C27D;
+  color: #6B4226;
   border: none;
   border-radius: 6px;
   cursor: pointer;
@@ -926,29 +1051,29 @@ ul {
 }
 
 .delete-button {
-  background: #D32F2F; /* Đỏ */
-  color: #FFF8E7; /* Trắng kem */
+  background: #D32F2F;
+  color: #FFF8E7;
 }
 
 .restore-button {
-  background: #388E3C; /* Xanh lá */
-  color: #FFF8E7; /* Trắng kem */
+  background: #388E3C;
+  color: #FFF8E7;
 }
 
 .action-button:hover {
-  background: #F5E3B3; /* Be nhạt */
+  background: #F5E3B3;
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(231, 194, 125, 0.3);
 }
 
 .delete-button:hover {
-  background: #C62828; /* Đỏ đậm */
+  background: #C62828;
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(211, 47, 47, 0.3);
 }
 
 .restore-button:hover {
-  background: #2E7D32; /* Xanh lá đậm */
+  background: #2E7D32;
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(56, 142, 60, 0.3);
 }
@@ -965,44 +1090,44 @@ ul {
 
 .pagination button {
   padding: 10px 18px;
-  background: #8B5E3C; /* Nâu gỗ */
-  color: #FFF8E7; /* Trắng kem */
+  background: #8B5E3C;
+  color: #FFF8E7;
   border: none;
   border-radius: 8px;
   cursor: pointer;
   font-weight: 600;
   transition: all 0.3s ease;
   box-shadow: 0 2px 8px rgba(107, 66, 38, 0.3);
-  border: 1px solid #E7C27D; /* Viền vàng */
+  border: 1px solid #E7C27D;
 }
 
 .pagination button:hover:not(:disabled) {
-  background: #6B4226; /* Nâu đất */
+  background: #6B4226;
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(107, 66, 38, 0.4);
 }
 
 .pagination button:disabled {
-  background: #A89B8B; /* Nâu xám */
+  background: #A89B8B;
   cursor: not-allowed;
   opacity: 0.6;
   transform: none;
 }
 
 .popup {
-  background: linear-gradient(135deg, #FFF8E7, #F5E3B3); /* Gradient trắng kem đến be */
+  background: linear-gradient(135deg, #FFF8E7, #F5E3B3);
   padding: 30px;
   border-radius: 15px;
   width: 450px;
   box-shadow: 0 15px 35px rgba(107, 66, 38, 0.4);
-  border: 2px solid #E7C27D; /* Viền vàng */
+  border: 2px solid #E7C27D;
 }
 
 .popup h2 {
   margin-bottom: 20px;
   font-size: 1.5rem;
   text-align: center;
-  color: #6B4226; /* Nâu đất */
+  color: #6B4226;
   font-weight: 700;
 }
 
@@ -1015,9 +1140,9 @@ ul {
 
 .cancel-button {
   padding: 10px 20px;
-  background: rgba(139, 94, 60, 0.2); /* Nâu gỗ trong suốt */
-  color: #6B4226; /* Nâu đất */
-  border: 1px solid #8B5E3C; /* Nâu gỗ */
+  background: rgba(139, 94, 60, 0.2);
+  color: #6B4226;
+  border: 1px solid #8B5E3C;
   border-radius: 8px;
   cursor: pointer;
   font-size: 14px;
@@ -1036,7 +1161,7 @@ ul {
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(107, 66, 38, 0.8); /* Nâu đất trong suốt */
+  background: rgba(107, 66, 38, 0.8);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -1061,18 +1186,77 @@ ul {
 .recent-items-wrapper::-webkit-scrollbar-thumb,
 .edit-form::-webkit-scrollbar-thumb,
 .right-panel-content::-webkit-scrollbar-thumb {
-  background: #E7C27D; /* Vàng nhạt */
+  background: #E7C27D;
   border-radius: 4px;
 }
 
 .recent-items-wrapper::-webkit-scrollbar-thumb:hover,
 .edit-form::-webkit-scrollbar-thumb:hover,
 .right-panel-content::-webkit-scrollbar-thumb:hover {
-  background: #8B5E3C; /* Nâu gỗ */
+  background: #8B5E3C;
 }
 
 /* Responsive Design */
+@media (max-width: 1200px) {
+  .header-controls-section {
+    min-width: 500px;
+  }
+  
+  .search-input {
+    width: 180px;
+  }
+  
+  .status-filter {
+    width: 160px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .header-main {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .header-controls-section {
+    min-width: auto;
+    width: 100%;
+    align-items: flex-start;
+  }
+  
+  .controls-group {
+    justify-content: flex-start;
+  }
+}
+
 @media (max-width: 768px) {
+  .dashboard {
+    padding: 1rem;
+  }
+  
+  .dashboard-header {
+    padding: 1rem;
+    margin: -1rem -1rem 1rem -1rem;
+  }
+  
+  .header-title-section h1 {
+    font-size: 1.6rem;
+  }
+  
+  .controls-group {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .filter-controls {
+    flex-direction: column;
+    width: 100%;
+  }
+  
+  .search-input,
+  .status-filter {
+    width: 100%;
+  }
+  
   .split-container {
     flex-direction: column;
     height: auto;
@@ -1082,10 +1266,6 @@ ul {
   .left-panel,
   .right-panel {
     width: 100%;
-  }
-
-  .menu-management {
-    padding: 15px;
   }
 
   .filter-search.fixed {
@@ -1111,9 +1291,12 @@ ul {
 }
 
 @media (max-width: 480px) {
-  .menu-management h1 {
-    font-size: 1.6rem;
-    margin-top: 20px;
+  .header-title-section h1 {
+    font-size: 1.4rem;
+  }
+  
+  .current-time {
+    font-size: 0.9rem;
   }
 
   .left-panel,
