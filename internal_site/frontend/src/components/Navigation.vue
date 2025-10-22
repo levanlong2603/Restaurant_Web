@@ -1,6 +1,6 @@
 <template>
-  <div class="admin-page" v-if="!isSidebarCollapsed">
-    <aside class="sidebar" :class="{ 'mobile-open': isMobileOpen }">
+  <div class="admin-page">
+  <aside v-show="!isSidebarCollapsed || isMobileOpen" class="sidebar" :class="{ 'mobile-open': isMobileOpen }" :aria-hidden="isMobile && !isMobileOpen" role="navigation">
       <div class="sidebar-header">
         <img src="@/assets/images/Logo.png" alt="Logo Nhà hàng Long Quân An" class="sidebar-logo" />
         <div class="header-text">
@@ -103,7 +103,7 @@
   </div>
 
   <!-- Nút toggle sidebar khi collapsed -->
-  <button class="sidebar-toggle" v-if="isSidebarCollapsed || (isMobile && !isMobileOpen)" @click="openSidebar" title="Mở rộng sidebar">
+  <button class="sidebar-toggle" v-if="isSidebarCollapsed || (isMobile && !isMobileOpen)" @click="openSidebar" title="Mở rộng sidebar" aria-label="Mở menu">
     <i class="fas fa-bars"></i>
   </button>
 
@@ -618,6 +618,11 @@ export default {
   .user-footer {
     padding: 15px;
   }
+}
+
+/* Slightly reduce width on very small phones when shown as drawer */
+@media (max-width: 360px) {
+  .sidebar { width: 95%; }
 }
 
 /* Animation for mobile */

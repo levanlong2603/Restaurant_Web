@@ -41,12 +41,23 @@
             </div>
           </div>
         </div>
+        <div class="input-container">
           <input
-          v-model="userInput"
-          @keyup.enter="sendMessage"
-          :disabled="loading"
-          :placeholder="$t('chatbot.inputPlaceholder')"
-        />
+            v-model="userInput"
+            @keyup.enter="sendMessage"
+            :disabled="loading"
+            :placeholder="$t('chatbot.inputPlaceholder')"
+          />
+          <button 
+            class="send-button" 
+            @click="sendMessage" 
+            :disabled="loading || !userInput.trim()"
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M2 21L23 12L2 3V10L17 12L2 14V21Z" fill="currentColor"/>
+            </svg>
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -156,7 +167,7 @@ export default {
       }
       // As fallback: if message contains the word 'Bản đồ' but no URL, embed Số 33 Đại Mỗ
       if (message.includes('Bản đồ')) {
-        return 'https://www.google.com/maps?q=S%E1%BB%91%2033,%20%C4%91%C6%B0%E1%BB%9Dng%20%C4%90%E1%BA%A1i%20M%E1%BB%93,%20ph%C6%B0%E1%BB%9Dng%20%C4%90%E1%BA%A1i%20M%E1%BB%93,%20Qu%E1%BA%ADn%20Nam%20T%E1%BB%AB%20Li%C3%AAm,%20H%C3%A0%20N%E1%BB%99i&output=embed';
+        return 'https://www.google.com/maps?q=S%E1%BB%91%2033,%20%C4%91%C6%B0%E1%BB%9Dng%20%C4%90%E1%BA%A1i%20M%E1%BB%97,%20ph%C6%B0%E1%BB%9Dng%20%C4%90%E1%BA%A1i%20M%E1%BB%97,%20Qu%E1%BA%ADn%20Nam%20T%E1%BB%AB%20Li%C3%AAm,%20H%C3%A0%20N%E1%BB%99i&output=embed';
       }
       return null;
     },
@@ -327,7 +338,6 @@ export default {
   border: 1px solid #E7C27D; /* Viền vàng */
 }
 
-
 .map-iframe {
   width: 100%;
   height: 200px;
@@ -335,17 +345,50 @@ export default {
   border-radius: 8px;
 }
 
-input {
-  width: 100%;
-  padding: 15px 12px;
-  border: none;
+.input-container {
+  display: flex;
+  align-items: center;
   border-top: 1px solid #E7C27D; /* Vàng nhạt */
+  background: #FFF8E7; /* Trắng kem */
   border-bottom-left-radius: 10px;
   border-bottom-right-radius: 10px;
+}
+
+input {
+  flex: 1;
+  padding: 15px 12px;
+  border: none;
   outline: none;
   font-size: 14px;
-  background: #FFF8E7; /* Trắng kem */
+  background: transparent;
   color: #3B2F2F; /* Đen nâu */
+}
+
+.send-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  margin-right: 8px;
+  background: #8B5E3C; /* Nâu gỗ */
+  color: #FFF8E7; /* Trắng kem */
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.send-button:hover:not(:disabled) {
+  background: #6B4226; /* Nâu đất */
+  transform: scale(1.05);
+}
+
+.send-button:disabled {
+  background: rgba(139, 94, 60, 0.3); /* Nâu gỗ trong suốt */
+  color: rgba(255, 248, 231, 0.5); /* Trắng kem trong suốt */
+  cursor: not-allowed;
+  transform: none;
 }
 
 /* Animation */
@@ -433,6 +476,17 @@ input {
     max-width: 80%;
     font-size: 13px;
     padding: 10px 14px;
+  }
+  
+  .send-button {
+    width: 36px;
+    height: 36px;
+    margin-right: 6px;
+  }
+  
+  .send-button svg {
+    width: 18px;
+    height: 18px;
   }
 }
 </style>
