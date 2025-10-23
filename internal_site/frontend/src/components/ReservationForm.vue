@@ -37,7 +37,6 @@
             <option value="pending">Chờ duyệt</option>
             <option value="preparing">Đặt trước</option>
             <option value="serving">Đang phục vụ</option>
-            <option value="completed">Hoàn thành</option>
             <option value="cancelled">Đã hủy</option>
           </select>
           <button @click="updateReservation">Xác nhận</button>

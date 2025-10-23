@@ -1,6 +1,6 @@
 <template>
   <div class="admin-page">
-  <aside v-show="!isSidebarCollapsed || isMobileOpen" class="sidebar" :class="{ 'mobile-open': isMobileOpen }" :aria-hidden="isMobile && !isMobileOpen" role="navigation">
+    <aside v-show="!isSidebarCollapsed || isMobileOpen" class="sidebar" :class="{ 'mobile-open': isMobileOpen }" :aria-hidden="isMobile && !isMobileOpen" role="navigation">
       <div class="sidebar-header">
         <img src="@/assets/images/Logo.png" alt="Logo Nhà hàng Long Quân An" class="sidebar-logo" />
         <div class="header-text">
@@ -122,7 +122,7 @@ export default {
 
   data() {
     return {
-      isSidebarCollapsed: true, // Mặc định là thu gọn
+      isSidebarCollapsed: false, // Mặc định là MỞ để luôn hiển thị
       isMobileOpen: false,
       user: JSON.parse(localStorage.getItem('user')) || {},
       isMobile: false
@@ -184,8 +184,11 @@ export default {
     },
 
     handleNavigation() {
-      // Tự động thu gọn sidebar sau khi chọn menu item
-      this.closeSidebar();
+      // Trên mobile, tự động đóng sidebar sau khi chọn menu item
+      if (this.isMobile) {
+        this.closeSidebar();
+      }
+      // Trên desktop, giữ nguyên trạng thái sidebar
     },
 
     isActiveRoute(route) {
@@ -202,6 +205,9 @@ export default {
       // Trên mobile, mặc định đóng sidebar
       if (this.isMobile) {
         this.isMobileOpen = false;
+      } else {
+        // Trên desktop, mặc định mở sidebar
+        this.isSidebarCollapsed = false;
       }
     },
 
@@ -291,7 +297,7 @@ export default {
   background-color: transparent;
 }
 
-/* Sidebar Styles */
+/* Sidebar Styles - Luôn hiện trên cùng */
 .sidebar {
   width: 280px;
   background: linear-gradient(180deg, #6B4226 0%, #8B5E3C 100%);
@@ -303,7 +309,7 @@ export default {
   overflow-y: auto;
   transition: all 0.3s ease;
   box-shadow: 4px 0 20px rgba(107, 66, 38, 0.3);
-  z-index: 1000;
+  z-index: 1100; /* Tăng z-index để luôn trên cùng */
   display: flex;
   flex-direction: column;
   border-right: 2px solid #E7C27D;
@@ -316,6 +322,9 @@ export default {
   padding: 25px 20px;
   background: rgba(107, 66, 38, 0.9);
   border-bottom: 1px solid rgba(231, 194, 125, 0.3);
+  position: sticky;
+  top: 0;
+  z-index: 1101;
 }
 
 .sidebar-logo {
@@ -460,6 +469,9 @@ export default {
   background: rgba(107, 66, 38, 0.8);
   border-top: 1px solid rgba(231, 194, 125, 0.2);
   margin-top: auto;
+  position: sticky;
+  bottom: 0;
+  z-index: 1101;
 }
 
 .user-avatar {
@@ -498,7 +510,7 @@ export default {
   font-weight: 500;
 }
 
-/* Sidebar Toggle Button */
+/* Sidebar Toggle Button - Hiển thị khi sidebar collapsed */
 .sidebar-toggle {
   position: fixed;
   left: 20px;
@@ -508,7 +520,7 @@ export default {
   padding: 12px;
   border-radius: 10px;
   cursor: pointer;
-  z-index: 999;
+  z-index: 1099; /* Thấp hơn sidebar một chút */
   transition: all 0.3s ease;
   border: 2px solid #E7C27D;
   box-shadow: 0 4px 15px rgba(107, 66, 38, 0.4);
@@ -521,7 +533,7 @@ export default {
   box-shadow: 0 6px 20px rgba(107, 66, 38, 0.5);
 }
 
-/* Page Indicator */
+/* Page Indicator khi sidebar collapsed */
 .page-indicator {
   position: fixed;
   left: 0;
@@ -532,7 +544,7 @@ export default {
   border-radius: 0 12px 12px 0;
   font-size: 14px;
   font-weight: 700;
-  z-index: 998;
+  z-index: 1098;
   box-shadow: 0 4px 15px rgba(107, 66, 38, 0.3);
   border: 1px solid rgba(231, 194, 125, 0.5);
   border-left: none;
@@ -550,7 +562,7 @@ export default {
   width: 100%;
   height: 100%;
   background: rgba(0, 0, 0, 0.5);
-  z-index: 999;
+  z-index: 1099; /* Cao hơn các phần tử khác nhưng thấp hơn sidebar */
 }
 
 /* Custom Scrollbar */
@@ -577,7 +589,7 @@ export default {
   .sidebar {
     width: 280px;
     transform: translateX(-100%);
-    z-index: 1001;
+    z-index: 1100;
   }
   
   .sidebar.mobile-open {
@@ -586,6 +598,7 @@ export default {
   
   .sidebar-toggle {
     display: block;
+    z-index: 1099;
   }
   
   .page-indicator {

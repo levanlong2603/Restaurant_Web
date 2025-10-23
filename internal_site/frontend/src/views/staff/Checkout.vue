@@ -2,8 +2,8 @@
   <div class="main-container">
     <Navigation @sidebar-toggle="handleSidebarToggle" />
     <section class="dashboard" :class="{ 'sidebar-collapsed': isSidebarCollapsed }">
-      <!-- Header giống mẫu trong hình -->
-      <div class="dashboard-header">
+      <!-- Header cố định -->
+      <div class="dashboard-header fixed-header">
         <div class="header-main">
           <div class="header-title-section">
             <h1>THANH TOÁN</h1>
@@ -25,6 +25,7 @@
         </div>
       </div>
 
+      <!-- Nội dung chính với padding-top để tránh bị header che -->
       <div class="container-reservation">
         <section class="payment-management">
           <div v-if="errorMessage" class="error-message">
@@ -259,18 +260,35 @@ export default {
 
 .dashboard {
   flex: 1;
-  padding: 2rem;
+  padding: 0;
   background-color: #FFF8E7;
-  transition: margin-left 0.3s ease;
+  transition: all 0.3s ease;
+  position: relative;
+  margin-left: 280px; /* Khoảng cách cho sidebar */
 }
 
-/* Header giống mẫu trong hình */
-.dashboard-header {
+/* Header cố định */
+.dashboard-header.fixed-header {
+  position: fixed;
+  top: 0;
+  left: 280px; /* Căn chỉnh theo sidebar */
+  right: 0;
+  z-index: 1000;
   background: linear-gradient(135deg, #8B5E3C, #6B4226);
   padding: 1.5rem 2rem;
-  margin: -2rem -2rem 2rem -2rem;
   border-bottom: 1px solid #E7C27D;
   box-shadow: 0 4px 15px rgba(107, 66, 38, 0.3);
+  margin: 0;
+  transition: left 0.3s ease; /* Hiệu ứng chuyển động khi sidebar toggle */
+}
+
+/* Khi sidebar collapsed */
+.dashboard.sidebar-collapsed .dashboard-header.fixed-header {
+  left: 0;
+}
+
+.dashboard.sidebar-collapsed {
+  margin-left: 0;
 }
 
 .header-main {
@@ -374,12 +392,13 @@ export default {
 .container-reservation {
   flex: 1;
   margin: 0;
-  padding: 0;
+  padding: 140px 0 0 0; /* Thêm padding-top để tránh bị header che */
   background-color: #FFF8E7;
   color: #3B2F2F;
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  min-height: calc(100vh - 140px);
 }
 
 .payment-management {
@@ -395,6 +414,7 @@ export default {
   gap: 40px;
   margin-top: 20px;
   padding: 0 20px;
+  height: 100%;
 }
 
 .bill-section {
@@ -444,20 +464,26 @@ export default {
   .controls-group {
     justify-content: flex-start;
   }
+  
+  .container-reservation {
+    padding-top: 160px; /* Tăng padding-top cho responsive */
+  }
 }
 
 @media (max-width: 768px) {
   .dashboard {
-    padding: 1rem;
+    padding: 0;
+    margin-left: 0 !important; /* Trên mobile, không có margin */
   }
   
-  .dashboard-header {
+  .dashboard-header.fixed-header {
+    left: 0 !important; /* Trên mobile, header chiếm toàn bộ chiều rộng */
     padding: 1rem;
-    margin: -1rem -1rem 1rem -1rem;
   }
   
   .header-title-section h1 {
     font-size: 1.6rem;
+    margin-left: 0.5cm;
   }
   
   .controls-group {
@@ -478,16 +504,22 @@ export default {
     flex-direction: column;
     gap: 20px;
     padding: 0 10px;
+    height: auto;
   }
   
   .bill-section, .payment-section {
     width: 100%;
+  }
+  
+  .container-reservation {
+    padding-top: 180px; /* Tăng padding-top cho mobile */
   }
 }
 
 @media (max-width: 480px) {
   .header-title-section h1 {
     font-size: 1.4rem;
+    margin-left: 0.3cm;
   }
   
   .current-time {
@@ -501,6 +533,10 @@ export default {
   .refresh-button {
     padding: 0.5rem 1rem;
     font-size: 0.8rem;
+  }
+  
+  .container-reservation {
+    padding-top: 190px; /* Tăng padding-top cho mobile nhỏ */
   }
 }
 </style>
