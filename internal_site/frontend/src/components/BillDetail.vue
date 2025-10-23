@@ -8,7 +8,7 @@
         class="print-pdf-btn"
         :disabled="generatingPDF"
       >
-        {{ generatingPDF ? '⏳ Đang tạo PDF...' : '🖨️ In hóa đơn PDF' }}
+        {{ generatingPDF ? 'Đang tạo...' : 'Xuất hóa đơn' }}
       </button>
     </div>
 
@@ -21,7 +21,6 @@
       <p><strong>Số điện thoại: </strong>{{ billDetails.customer.phoneNumber }}</p>
 
       <p><strong>Bàn:</strong> {{ billDetails.tableNumber }}</p>
-      <p><strong>Trạng thái:</strong> {{ billDetails.payment_status === 'completed' ? 'Đã thanh toán' : 'Chưa thanh toán' }}</p>
       <table class="bill-table">
         <thead>
           <tr>
@@ -190,14 +189,17 @@ export default {
               width: 80px;
               height: 80px;
               margin: 0 auto 10px;
-              background-color: white;
               border-radius: 50%;
+              overflow: hidden;
               display: flex;
               align-items: center;
               justify-content: center;
-              font-weight: bold;
-              font-size: 12px;
-              color: #8B5E3C;
+            }
+            .restaurant-logo img {
+              width: 100%;
+              height: 100%;
+              object-fit: contain;
+              border-radius: 50%;
             }
             .restaurant-name {
               font-size: 24px;
@@ -313,7 +315,9 @@ export default {
         <body>
           <div class="invoice-container">
             <div class="invoice-header">
-              <div class="restaurant-logo">LOGO</div>
+              <div class="restaurant-logo">
+                <img src="/Logo.png" alt="Logo Long Quân An" onerror="this.style.display='none'">
+              </div>
               <h1 class="restaurant-name">LONG QUÂN AN</h1>
               <p class="restaurant-tagline">ẨM THỰC TINH TÚY</p>
               <div class="restaurant-info">
@@ -351,8 +355,6 @@ export default {
                     <div class="detail-value">${this.billDetails.tableNumber || 'N/A'}</div>
                   </div>
                   <div class="detail-group">
-                    <div class="detail-label">Trạng thái:</div>
-                    <div class="detail-value">${this.billDetails.payment_status === 'completed' ? 'Đã thanh toán' : 'Chưa thanh toán'}</div>
                   </div>
                 </div>
               </div>
@@ -390,7 +392,6 @@ export default {
               <div class="invoice-footer">
                 <p class="thank-you">CẢM ƠN QUÝ KHÁCH VÀ HẸN GẶP LẠI!</p>
                 <p>Hóa đơn có giá trị trong vòng 30 ngày kể từ ngày xuất</p>
-                <div class="barcode-placeholder">MÃ VẠCH HÓA ĐƠN</div>
               </div>
             </div>
           </div>
