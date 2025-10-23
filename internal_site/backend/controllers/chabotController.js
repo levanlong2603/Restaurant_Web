@@ -732,15 +732,41 @@ exports.processChat = async (req, res) => {
         };
         console.log('Thông tin đặt bàn (after realtime checks):', req.body);
 
-        const bookTableResult = await reservationController.bookTable(req, res);
-        if (bookTableResult && bookTableResult.reservationId) {
-          return res.status(200).json({
-            message: `Đặt bàn thành công! Nhân viên của chúng tôi sẽ liên hệ với bạn qua số điện thoại ${functionArgs.phoneNumber} để xác nhận.`,
+        // Sửa lỗi ở đây: Gọi trực tiếp hàm bookTable và xử lý response
+        try {
+          // Tạo một mock response object để bắt kết quả
+          const mockRes = {
+            statusCode: 200,
+            jsonData: null,
+            status: function(code) {
+              this.statusCode = code;
+              return this;
+            },
+            json: function(data) {
+              this.jsonData = data;
+              return this;
+            }
+          };
+
+          // Gọi bookTable với mock response
+          await reservationController.bookTable(req, mockRes);
+          
+          // Kiểm tra kết quả
+          if (mockRes.statusCode === 200 || mockRes.statusCode === 201) {
+            return res.status(200).json({
+              message: `Đặt bàn thành công! Nhân viên của chúng tôi sẽ liên hệ với bạn qua số điện thoại ${functionArgs.phoneNumber} để xác nhận.`,
+            });
+          } else {
+            return res.status(mockRes.statusCode || 500).json({
+              message: mockRes.jsonData?.message || 'Lỗi khi đặt bàn, vui lòng thử lại.',
+            });
+          }
+        } catch (bookError) {
+          console.error('Lỗi khi đặt bàn:', bookError);
+          return res.status(500).json({
+            message: 'Có lỗi xảy ra khi đặt bàn. Vui lòng thử lại.',
           });
         }
-        return res.status(bookTableResult.status || 500).json({
-          message: bookTableResult.message || 'Lỗi khi đặt bàn, vui lòng thử lại.',
-        });
       } else if (name === 'getRestaurantInfo') {
         return handleRestaurantInfo(functionArgs, res);
       } else if (name === 'getMenu') {
