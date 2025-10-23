@@ -85,6 +85,7 @@ export default {
 .main-container {
   display: flex;
   background: #FFF8E7; /* Trắng kem */
+  min-height: 100vh;
 }
 
 .reservation-management {
@@ -98,6 +99,7 @@ export default {
   overflow: hidden;
   padding-right: 20px;
   transition: margin-left 0.3s ease;
+  margin-top: 60px; /* Thêm khoảng cách để tránh bị che bởi sidebar cố định */
 }
 
 .reservation-management.sidebar-collapsed {
@@ -147,6 +149,11 @@ export default {
   .reservation-list {
     width: 100%;
   }
+  
+  .reservation-management {
+    margin-top: 50px; /* Điều chỉnh cho mobile */
+    padding-right: 10px;
+  }
 }
 
 @media (max-width: 480px) {
@@ -160,6 +167,7 @@ export default {
   
   .reservation-management {
     padding-right: 10px;
+    margin-top: 45px; /* Điều chỉnh cho mobile nhỏ */
   }
 }
 </style>

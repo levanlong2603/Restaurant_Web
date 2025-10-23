@@ -2,8 +2,8 @@
   <div class="main-container">
     <Navigation @sidebar-toggle="handleSidebarToggle" />
     <section class="dashboard" :class="{ 'sidebar-collapsed': isSidebarCollapsed }">
-      <!-- Header giống mẫu trong hình -->
-      <div class="dashboard-header">
+      <!-- Header cố định -->
+      <div class="dashboard-header fixed-header">
         <div class="header-main">
           <div class="header-title-section">
             <h1>QUẢN LÝ MENU</h1>
@@ -32,6 +32,7 @@
         </div>
       </div>
 
+      <!-- Nội dung chính với padding-top để tránh bị header che -->
       <div class="container-reservation">
         <section class="menu-management">
           <div class="split-container">
@@ -592,18 +593,35 @@ export default {
 
 .dashboard {
   flex: 1;
-  padding: 2rem;
+  padding: 0;
   background-color: #FFF8E7;
-  transition: margin-left 0.3s ease;
+  transition: all 0.3s ease;
+  position: relative;
+  margin-left: 280px; /* Khoảng cách cho sidebar */
 }
 
-/* Header giống mẫu trong hình */
-.dashboard-header {
+/* Header cố định */
+.dashboard-header.fixed-header {
+  position: fixed;
+  top: 0;
+  left: 280px; /* Căn chỉnh theo sidebar */
+  right: 0;
+  z-index: 1000;
   background: linear-gradient(135deg, #8B5E3C, #6B4226);
   padding: 1.5rem 2rem;
-  margin: -2rem -2rem 2rem -2rem;
   border-bottom: 1px solid #E7C27D;
   box-shadow: 0 4px 15px rgba(107, 66, 38, 0.3);
+  margin: 0;
+  transition: left 0.3s ease; /* Hiệu ứng chuyển động khi sidebar toggle */
+}
+
+/* Khi sidebar collapsed */
+.dashboard.sidebar-collapsed .dashboard-header.fixed-header {
+  left: 0;
+}
+
+.dashboard.sidebar-collapsed {
+  margin-left: 0;
 }
 
 .header-main {
@@ -713,15 +731,17 @@ export default {
   box-shadow: 0 4px 15px rgba(231, 194, 125, 0.4);
 }
 
+/* Nội dung chính với padding-top để tránh bị header che */
 .container-reservation {
   flex: 1;
   margin: 0;
-  padding: 0;
+  padding: 140px 0 0 0;
   background-color: #FFF8E7;
   color: #3B2F2F;
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  min-height: calc(100vh - 140px);
 }
 
 .menu-management {
@@ -730,15 +750,17 @@ export default {
   width: 100%;
   margin: 0 auto;
   z-index: 1;
+  height: 100%;
 }
 
 .split-container {
   display: flex;
   gap: 25px;
-  height: calc(100vh - 150px);
+  height: 100%;
   margin-left: 0;
   margin-top: 30px;
   z-index: 1;
+  padding: 0 20px;
 }
 
 .left-panel,
@@ -1226,20 +1248,26 @@ ul {
   .controls-group {
     justify-content: flex-start;
   }
+  
+  .container-reservation {
+    padding-top: 160px; /* Tăng padding-top cho responsive */
+  }
 }
 
 @media (max-width: 768px) {
   .dashboard {
-    padding: 1rem;
+    padding: 0;
+    margin-left: 0 !important; /* Trên mobile, không có margin */
   }
   
-  .dashboard-header {
+  .dashboard-header.fixed-header {
+    left: 0 !important; /* Trên mobile, header chiếm toàn bộ chiều rộng */
     padding: 1rem;
-    margin: -1rem -1rem 1rem -1rem;
   }
   
   .header-title-section h1 {
     font-size: 1.6rem;
+    margin-left: 0.5cm;
   }
   
   .controls-group {
@@ -1261,6 +1289,7 @@ ul {
     flex-direction: column;
     height: auto;
     gap: 20px;
+    padding: 0 10px;
   }
 
   .left-panel,
@@ -1288,11 +1317,16 @@ ul {
     width: 90%;
     margin: 20px;
   }
+  
+  .container-reservation {
+    padding-top: 180px; /* Tăng padding-top cho mobile */
+  }
 }
 
 @media (max-width: 480px) {
   .header-title-section h1 {
     font-size: 1.4rem;
+    margin-left: 0.3cm;
   }
   
   .current-time {
@@ -1321,6 +1355,10 @@ ul {
   .submit-button {
     width: 100%;
     text-align: center;
+  }
+  
+  .container-reservation {
+    padding-top: 190px; /* Tăng padding-top cho mobile nhỏ */
   }
 }
 </style>

@@ -2,7 +2,8 @@
     <div class="main-container">
         <Navigation @sidebar-toggle="handleSidebarToggle" />
         <section class="dashboard" :class="{ 'sidebar-collapsed': isSidebarCollapsed }">
-            <div class="dashboard-header" ref="dashboardHeader">
+            <!-- Header cố định -->
+            <div class="dashboard-header fixed-header">
                 <div class="header-top">
                     <h2>TRANG THỐNG KÊ NHÀ HÀNG</h2>
                     <span>{{ currentDateTime }}</span>
@@ -40,437 +41,437 @@
                 </div>
             </div>
 
-            <div v-if="isLoading" class="loading-overlay">
-                <div class="spinner"></div>
-            </div>
+            <!-- Nội dung chính với padding-top để tránh bị header che -->
+            <div class="container-content">
+                <div v-if="isLoading" class="loading-overlay">
+                    <div class="spinner"></div>
+                </div>
 
-            <div v-if="errorMessage" class="error-message">
-                {{ errorMessage }}
-            </div>
+                <div v-if="errorMessage" class="error-message">
+                    {{ errorMessage }}
+                </div>
 
-            <!-- Tổng quan -->
-            <div v-if="filterCategory === 'tong-quan' && !isLoading" class="stats-grid">
-                <div class="stats-group">
-                    <div class="stat-card" ref="overviewDailyRevenue">
-                        <div class="card-icon revenue-icon"><i class="fas fa-dollar-sign"></i></div>
-                        <div class="card-content">
-                            <h3>Doanh thu trong ngày</h3>
-                            <p>{{ formatCurrency(stats.current.dailyRevenue) }}</p>
-                            <span class="trend"
-                                :class="getTrendClass(stats.current.dailyRevenue, stats.previous.dailyRevenue)">
-                                {{ getTrend(stats.current.dailyRevenue, stats.previous.dailyRevenue) }}
-                            </span>
+                <!-- Tổng quan -->
+                <div v-if="filterCategory === 'tong-quan' && !isLoading" class="stats-grid">
+                    <div class="stats-group">
+                        <div class="stat-card" ref="overviewDailyRevenue">
+                            <div class="card-icon revenue-icon"><i class="fas fa-dollar-sign"></i></div>
+                            <div class="card-content">
+                                <h3>Doanh thu trong ngày</h3>
+                                <p>{{ formatCurrency(stats.current.dailyRevenue) }}</p>
+                                <span class="trend"
+                                    :class="getTrendClass(stats.current.dailyRevenue, stats.previous.dailyRevenue)">
+                                    {{ getTrend(stats.current.dailyRevenue, stats.previous.dailyRevenue) }}
+                                </span>
+                            </div>
+                            <button class="export-image-button"
+                                @click="exportSectionImage('overviewDailyRevenue', 'DoanhThuTrongNgay')">
+                                <i class="fas fa-camera"></i> Xuất ảnh
+                            </button>
                         </div>
-                        <button class="export-image-button"
-                            @click="exportSectionImage('overviewDailyRevenue', 'DoanhThuTrongNgay')">
-                            <i class="fas fa-camera"></i> Xuất ảnh
-                        </button>
+                        <div class="stat-card" ref="overviewTotalBookings">
+                            <div class="card-icon booking-icon"><i class="fas fa-table"></i></div>
+                            <div class="card-content">
+                                <h3>Số lượt đặt bàn</h3>
+                                <p>{{ stats.current.totalBookings }}</p>
+                                <span class="sub-text">Tỷ lệ: {{ stats.current.bookingSuccessRate.toFixed(1) }}%</span>
+                                <span class="trend"
+                                    :class="getTrendClass(stats.current.totalBookings, stats.previous.totalBookings)">
+                                    {{ getTrend(stats.current.totalBookings, stats.previous.totalBookings) }}
+                                </span>
+                            </div>
+                            <button class="export-image-button"
+                                @click="exportSectionImage('overviewTotalBookings', 'SoLuotDatBan')">
+                                <i class="fas fa-camera"></i> Xuất ảnh
+                            </button>
+                        </div>
                     </div>
-                    <div class="stat-card" ref="overviewTotalBookings">
-                        <div class="card-icon booking-icon"><i class="fas fa-table"></i></div>
-                        <div class="card-content">
-                            <h3>Số lượt đặt bàn</h3>
-                            <p>{{ stats.current.totalBookings }}</p>
-                            <span class="sub-text">Tỷ lệ: {{ stats.current.bookingSuccessRate.toFixed(1) }}%</span>
-                            <span class="trend"
-                                :class="getTrendClass(stats.current.totalBookings, stats.previous.totalBookings)">
-                                {{ getTrend(stats.current.totalBookings, stats.previous.totalBookings) }}
-                            </span>
+                    <div class="stats-group">
+                        <div class="stat-card" ref="overviewDailyCustomers">
+                            <div class="card-icon customer-icon"><i class="fas fa-users"></i></div>
+                            <div class="card-content">
+                                <h3>Lượng khách trong ngày</h3>
+                                <p>{{ stats.current.dailyCustomers }}</p>
+                                <span class="trend"
+                                    :class="getTrendClass(stats.current.dailyCustomers, stats.previous.dailyCustomers)">
+                                    {{ getTrend(stats.current.dailyCustomers, stats.previous.dailyCustomers) }}
+                                </span>
+                            </div>
+                            <button class="export-image-button"
+                                @click="exportSectionImage('overviewDailyCustomers', 'LuongKhachTrongNgay')">
+                                <i class="fas fa-camera"></i> Xuất ảnh
+                            </button>
                         </div>
-                        <button class="export-image-button"
-                            @click="exportSectionImage('overviewTotalBookings', 'SoLuotDatBan')">
-                            <i class="fas fa-camera"></i> Xuất ảnh
-                        </button>
+                        <div class="stat-card" ref="overviewAvgServeTime">
+                            <div class="card-icon time-icon"><i class="fas fa-clock"></i></div>
+                            <div class="card-content">
+                                <h3>Thời gian phục vụ TB</h3>
+                                <p>{{ stats.current.avgServeTime || 0 }} phút</p>
+                                <span class="trend"
+                                    :class="getTrendClass(stats.current.avgServeTime || 0, stats.previous.avgServeTime || 0)">
+                                    {{ getTrend(stats.current.avgServeTime || 0, stats.previous.avgServeTime || 0) }}
+                                </span>
+                            </div>
+                            <button class="export-image-button"
+                                @click="exportSectionImage('overviewAvgServeTime', 'ThoiGianPhucVuTB')">
+                                <i class="fas fa-camera"></i> Xuất ảnh
+                            </button>
+                        </div>
+                    </div>
+                    <div class="stats-group">
+                        <div class="stat-card" ref="overviewServingCustomers">
+                            <div class="card-icon serving-icon"><i class="fas fa-user-check"></i></div>
+                            <div class="card-content">
+                                <h3>Khách đang phục vụ</h3>
+                                <p>{{ stats.current.servingCustomers }}</p>
+                                <span class="trend"
+                                    :class="getTrendClass(stats.current.servingCustomers, stats.previous.servingCustomers)">
+                                    {{ getTrend(stats.current.servingCustomers, stats.previous.servingCustomers) }}
+                                </span>
+                            </div>
+                            <button class="export-image-button"
+                                @click="exportSectionImage('overviewServingCustomers', 'KhachDangPhucVu')">
+                                <i class="fas fa-camera"></i> Xuất ảnh
+                            </button>
+                        </div>
+                        <div class="stat-card" ref="overviewCancelledOrders">
+                            <div class="card-icon cancel-icon"><i class="fas fa-times"></i></div>
+                            <div class="card-content">
+                                <h3>Số lượng hủy món</h3>
+                                <p>{{ stats.current.cancelledOrders }}</p>
+                                <span class="trend"
+                                    :class="getTrendClass(stats.current.cancelledOrders, stats.previous.cancelledOrders)">
+                                    {{ getTrend(stats.current.cancelledOrders, stats.previous.cancelledOrders) }}
+                                </span>
+                            </div>
+                            <button class="export-image-button"
+                                @click="exportSectionImage('overviewCancelledOrders', 'SoLuongHuyMon')">
+                                <i class="fas fa-camera"></i> Xuất ảnh
+                            </button>
+                        </div>
                     </div>
                 </div>
-                <div class="stats-group">
-                    <div class="stat-card" ref="overviewDailyCustomers">
-                        <div class="card-icon customer-icon"><i class="fas fa-users"></i></div>
-                        <div class="card-content">
-                            <h3>Lượng khách trong ngày</h3>
-                            <p>{{ stats.current.dailyCustomers }}</p>
-                            <span class="trend"
-                                :class="getTrendClass(stats.current.dailyCustomers, stats.previous.dailyCustomers)">
-                                {{ getTrend(stats.current.dailyCustomers, stats.previous.dailyCustomers) }}
-                            </span>
-                        </div>
-                        <button class="export-image-button"
-                            @click="exportSectionImage('overviewDailyCustomers', 'LuongKhachTrongNgay')">
-                            <i class="fas fa-camera"></i> Xuất ảnh
-                        </button>
-                    </div>
-                    <div class="stat-card" ref="overviewAvgServeTime">
-                        <div class="card-icon time-icon"><i class="fas fa-clock"></i></div>
-                        <div class="card-content">
-                            <h3>Thời gian phục vụ TB</h3>
-                            <p>{{ stats.current.avgServeTime || 0 }} phút</p>
-                            <span class="trend"
-                                :class="getTrendClass(stats.current.avgServeTime || 0, stats.previous.avgServeTime || 0)">
-                                {{ getTrend(stats.current.avgServeTime || 0, stats.previous.avgServeTime || 0) }}
-                            </span>
-                        </div>
-                        <button class="export-image-button"
-                            @click="exportSectionImage('overviewAvgServeTime', 'ThoiGianPhucVuTB')">
-                            <i class="fas fa-camera"></i> Xuất ảnh
-                        </button>
-                    </div>
-                </div>
-                <div class="stats-group">
-                    <div class="stat-card" ref="overviewServingCustomers">
-                        <div class="card-icon serving-icon"><i class="fas fa-user-check"></i></div>
-                        <div class="card-content">
-                            <h3>Khách đang phục vụ</h3>
-                            <p>{{ stats.current.servingCustomers }}</p>
-                            <span class="trend"
-                                :class="getTrendClass(stats.current.servingCustomers, stats.previous.servingCustomers)">
-                                {{ getTrend(stats.current.servingCustomers, stats.previous.servingCustomers) }}
-                            </span>
-                        </div>
-                        <button class="export-image-button"
-                            @click="exportSectionImage('overviewServingCustomers', 'KhachDangPhucVu')">
-                            <i class="fas fa-camera"></i> Xuất ảnh
-                        </button>
-                    </div>
-                    <div class="stat-card" ref="overviewCancelledOrders">
-                        <div class="card-icon cancel-icon"><i class="fas fa-times"></i></div>
-                        <div class="card-content">
-                            <h3>Số lượng hủy món</h3>
-                            <p>{{ stats.current.cancelledOrders }}</p>
-                            <span class="trend"
-                                :class="getTrendClass(stats.current.cancelledOrders, stats.previous.cancelledOrders)">
-                                {{ getTrend(stats.current.cancelledOrders, stats.previous.cancelledOrders) }}
-                            </span>
-                        </div>
-                        <button class="export-image-button"
-                            @click="exportSectionImage('overviewCancelledOrders', 'SoLuongHuyMon')">
-                            <i class="fas fa-camera"></i> Xuất ảnh
-                        </button>
-                    </div>
-                </div>
-            </div>
 
-            <!-- Doanh thu -->
-            <div v-if="filterCategory === 'doanh-thu' && !isLoading" class="stats-grid">
-                <div class="stats-group full-width">
-                    <div class="stat-card" ref="revenueTotal">
-                        <h3>Tổng doanh thu</h3>
-                        <p>{{ formatCurrency(stats.current.totalRevenue) || '0 VNĐ' }}</p>
-                        <apexchart
-                            v-if="Array.isArray(stats.current.monthlyRevenue) && stats.current.monthlyRevenue.length"
-                            type="line" height="200" :options="chartOptionsMonthly" :series="seriesMonthly"></apexchart>
-                        <span class="trend"
-                            :class="getTrendClass(stats.current.totalRevenue || 0, stats.previous.totalRevenue || 0)">
-                            {{ getTrend(stats.current.totalRevenue || 0, stats.previous.totalRevenue || 0) }}
-                        </span>
-                        <button class="export-image-button" @click="exportSectionImage('revenueTotal', 'TongDoanhThu')">
-                            <i class="fas fa-camera"></i> Xuất ảnh
-                        </button>
+                <!-- Doanh thu -->
+                <div v-if="filterCategory === 'doanh-thu' && !isLoading" class="stats-grid">
+                    <div class="stats-group full-width">
+                        <div class="stat-card" ref="revenueTotal">
+                            <h3>Tổng doanh thu</h3>
+                            <p>{{ formatCurrency(stats.current.totalRevenue) || '0 VNĐ' }}</p>
+                            <apexchart
+                                v-if="Array.isArray(stats.current.monthlyRevenue) && stats.current.monthlyRevenue.length"
+                                type="line" height="200" :options="chartOptionsMonthly" :series="seriesMonthly"></apexchart>
+                            <span class="trend"
+                                :class="getTrendClass(stats.current.totalRevenue || 0, stats.previous.totalRevenue || 0)">
+                                {{ getTrend(stats.current.totalRevenue || 0, stats.previous.totalRevenue || 0) }}
+                            </span>
+                            <button class="export-image-button" @click="exportSectionImage('revenueTotal', 'TongDoanhThu')">
+                                <i class="fas fa-camera"></i> Xuất ảnh
+                            </button>
+                        </div>
+                    </div>
+                    <div class="stats-group">
+                        <div class="stat-card" ref="revenueWeekly">
+                            <h3>Doanh thu theo tuần</h3>
+                            <apexchart
+                                v-if="Array.isArray(stats.current.weeklyRevenue) && stats.current.weeklyRevenue.length"
+                                type="bar" height="300" :options="chartOptionsWeekly" :series="seriesWeekly"></apexchart>
+                            <p v-else class="no-data">Không có dữ liệu</p>
+                            <button class="export-image-button"
+                                @click="exportSectionImage('revenueWeekly', 'DoanhThuTheoTuan')">
+                                <i class="fas fa-camera"></i> Xuất ảnh
+                            </button>
+                        </div>
+                        <div class="stat-card" ref="revenueHourly">
+                            <h3>Doanh thu theo giờ</h3>
+                            <apexchart
+                                v-if="Array.isArray(stats.current.hourlyRevenue) && stats.current.hourlyRevenue.length"
+                                type="area" height="300" :options="chartOptionsHourly" :series="seriesHourly"></apexchart>
+                            <p v-else class="no-data">Không có dữ liệu</p>
+                            <button class="export-image-button"
+                                @click="exportSectionImage('revenueHourly', 'DoanhThuTheoGio')">
+                                <i class="fas fa-camera"></i> Xuất ảnh
+                            </button>
+                        </div>
+                    </div>
+                    <div class="stats-group">
+                        <div class="stat-card" ref="revenueByCategory">
+                            <h3>Doanh thu theo danh mục</h3>
+                            <apexchart
+                                v-if="Array.isArray(stats.current.revenueByCategory) && stats.current.revenueByCategory.length"
+                                type="donut" height="300" :options="chartOptionsCategory" :series="seriesCategory">
+                            </apexchart>
+                            <p v-else class="no-data">Không có dữ liệu</p>
+                            <div v-if="Array.isArray(stats.current.revenueByCategory) && stats.current.revenueByCategory.length"
+                                class="category-details">
+                                <div v-for="category in stats.current.revenueByCategory" :key="category.category"
+                                    class="category-item">
+                                    <span>{{ category.category }}: {{ formatCurrency(category.revenue) }}</span>
+                                    <button class="category-details-button"
+                                        @click="toggleCategoryDetails(category.category)">
+                                        <i class="fas fa-eye"></i> Hiện bảng
+                                    </button>
+                                    <table
+                                        v-if="expandedCategory === category.category && Array.isArray(categoryDishes[category.category]) && categoryDishes[category.category].length"
+                                        class="category-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Món ăn</th>
+                                                <th>Số lượng bán</th>
+                                                <th>Doanh thu</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr v-for="dish in categoryDishes[category.category]" :key="dish.name">
+                                                <td>{{ dish.name }}</td>
+                                                <td>{{ dish.sold }}</td>
+                                                <td>{{ formatCurrency(dish.revenue) }}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <p v-else-if="expandedCategory === category.category" class="no-data">Không có dữ liệu
+                                        món ăn</p>
+                                </div>
+                            </div>
+                            <button class="export-image-button"
+                                @click="exportSectionImage('revenueByCategory', 'DoanhThuTheoDanhMuc')">
+                                <i class="fas fa-camera"></i> Xuất ảnh
+                            </button>
+                        </div>
+                        <div class="stat-card" ref="revenueForecast">
+                            <h3>Dự báo doanh thu</h3>
+                            <p>{{ formatCurrency(stats.current.forecastRevenue) || '0 VNĐ' }}</p>
+                            <span class="trend"
+                                :class="getTrendClass(stats.current.forecastRevenue || 0, stats.previous.forecastRevenue || 0)">
+                                {{ getTrend(stats.current.forecastRevenue || 0, stats.previous.forecastRevenue || 0) }}
+                            </span>
+                            <button class="export-image-button"
+                                @click="exportSectionImage('revenueForecast', 'DuBaoDoanhThu')">
+                                <i class="fas fa-camera"></i> Xuất ảnh
+                            </button>
+                        </div>
                     </div>
                 </div>
-                <div class="stats-group">
-                    <div class="stat-card" ref="revenueWeekly">
-                        <h3>Doanh thu theo tuần</h3>
-                        <apexchart
-                            v-if="Array.isArray(stats.current.weeklyRevenue) && stats.current.weeklyRevenue.length"
-                            type="bar" height="300" :options="chartOptionsWeekly" :series="seriesWeekly"></apexchart>
-                        <p v-else class="no-data">Không có dữ liệu</p>
-                        <button class="export-image-button"
-                            @click="exportSectionImage('revenueWeekly', 'DoanhThuTheoTuan')">
-                            <i class="fas fa-camera"></i> Xuất ảnh
-                        </button>
+
+                <!-- Theo món ăn -->
+                <div v-if="filterCategory === 'mon-an' && !isLoading" class="stats-grid">
+                    <div class="stats-group">
+                        <div class="stat-card" ref="topDishes">
+                            <h3>Top 3 món ăn bán chạy</h3>
+                            <div v-if="stats.current.topDishes && stats.current.topDishes.length" class="top-dishes-list">
+                                <div v-for="(dish, index) in stats.current.topDishes" :key="dish.name" class="dish-item"
+                                    :class="{ 'gold': index === 0, 'silver': index === 1, 'bronze': index === 2 }">
+                                    <img :src="getImageUrl(dish.image)" @error="onImageError" alt="Dish Image"
+                                        class="dish-image-small" />
+                                    <span>{{ dish.name }} ({{ dish.sold }} lượt, {{ formatCurrency(dish.revenue) }})</span>
+                                    <button class="details-button" @click="showDishDetails(dish)">Chi tiết</button>
+                                </div>
+                            </div>
+                            <p v-else class="no-data">Không có dữ liệu món ăn</p>
+                            <span class="trend-text">
+                                Trước: {{(stats.previous.topDishes || []).map(d => `${d.name}: ${d.sold}
+                                (${formatCurrency(d.revenue)})`).join(', ')}}
+                            </span>
+                            <button class="export-image-button" @click="exportSectionImage('topDishes', 'TopMonAn')">
+                                <i class="fas fa-camera"></i> Xuất ảnh
+                            </button>
+                        </div>
+                        <div class="stat-card leastSoldDish" ref="leastSoldDish">
+                            <h3>Món ăn bán ít nhất</h3>
+                            <div v-if="stats.current.leastSoldDish.name" class="least-sold-content">
+                                <img :src="getImageUrl(stats.current.leastSoldDish.image)" @error="onImageError"
+                                    alt="Least Sold Dish Image" class="dish-image-small" />
+                                <p>{{ stats.current.leastSoldDish.name }} ({{ stats.current.leastSoldDish.sold }} lượt, {{
+                                    formatCurrency(stats.current.leastSoldDish.revenue) }})</p>
+                            </div>
+                            <p v-else class="no-data">Không có dữ liệu</p>
+                            <span class="trend-text">
+                                Trước: {{ stats.previous.leastSoldDish.name ? `${stats.previous.leastSoldDish.name}:
+                                ${stats.previous.leastSoldDish.sold}
+                                (${formatCurrency(stats.previous.leastSoldDish.revenue)})` : 'Không có dữ liệu' }}
+                            </span>
+                            <button class="export-image-button"
+                                @click="exportSectionImage('leastSoldDish', 'MonAnBanItNhat')">
+                                <i class="fas fa-camera"></i> Xuất ảnh
+                            </button>
+                        </div>
                     </div>
-                    <div class="stat-card" ref="revenueHourly">
-                        <h3>Doanh thu theo giờ</h3>
-                        <apexchart
-                            v-if="Array.isArray(stats.current.hourlyRevenue) && stats.current.hourlyRevenue.length"
-                            type="area" height="300" :options="chartOptionsHourly" :series="seriesHourly"></apexchart>
-                        <p v-else class="no-data">Không có dữ liệu</p>
-                        <button class="export-image-button"
-                            @click="exportSectionImage('revenueHourly', 'DoanhThuTheoGio')">
-                            <i class="fas fa-camera"></i> Xuất ảnh
-                        </button>
-                    </div>
-                </div>
-                <div class="stats-group">
-                    <div class="stat-card" ref="revenueByCategory">
-                        <h3>Doanh thu theo danh mục</h3>
-                        <apexchart
-                            v-if="Array.isArray(stats.current.revenueByCategory) && stats.current.revenueByCategory.length"
-                            type="donut" height="300" :options="chartOptionsCategory" :series="seriesCategory">
-                        </apexchart>
-                        <p v-else class="no-data">Không có dữ liệu</p>
-                        <div v-if="Array.isArray(stats.current.revenueByCategory) && stats.current.revenueByCategory.length"
-                            class="category-details">
+                    <div class="stats-group full-width">
+                        <div class="stat-card" ref="revenueByCategory">
+                            <h3>Doanh thu theo danh mục</h3>
+                            <apexchart type="donut" height="300" :options="chartOptionsCategory" :series="seriesCategory">
+                            </apexchart>
                             <div v-for="category in stats.current.revenueByCategory" :key="category.category"
                                 class="category-item">
                                 <span>{{ category.category }}: {{ formatCurrency(category.revenue) }}</span>
-                                <button class="category-details-button"
-                                    @click="toggleCategoryDetails(category.category)">
+                                <button class="category-details-button" @click="toggleCategoryDetails(category.category)">
                                     <i class="fas fa-eye"></i> Hiện bảng
                                 </button>
-                                <table
-                                    v-if="expandedCategory === category.category && Array.isArray(categoryDishes[category.category]) && categoryDishes[category.category].length"
-                                    class="category-table">
-                                    <thead>
-                                        <tr>
-                                            <th>Món ăn</th>
-                                            <th>Số lượng bán</th>
-                                            <th>Doanh thu</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr v-for="dish in categoryDishes[category.category]" :key="dish.name">
-                                            <td>{{ dish.name }}</td>
-                                            <td>{{ dish.sold }}</td>
-                                            <td>{{ formatCurrency(dish.revenue) }}</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                                <p v-else-if="expandedCategory === category.category" class="no-data">Không có dữ liệu
-                                    món ăn</p>
-                            </div>
-                        </div>
-                        <button class="export-image-button"
-                            @click="exportSectionImage('revenueByCategory', 'DoanhThuTheoDanhMuc')">
-                            <i class="fas fa-camera"></i> Xuất ảnh
-                        </button>
-                    </div>
-                    <div class="stat-card" ref="revenueForecast">
-                        <h3>Dự báo doanh thu</h3>
-                        <p>{{ formatCurrency(stats.current.forecastRevenue) || '0 VNĐ' }}</p>
-                        <span class="trend"
-                            :class="getTrendClass(stats.current.forecastRevenue || 0, stats.previous.forecastRevenue || 0)">
-                            {{ getTrend(stats.current.forecastRevenue || 0, stats.previous.forecastRevenue || 0) }}
-                        </span>
-                        <button class="export-image-button"
-                            @click="exportSectionImage('revenueForecast', 'DuBaoDoanhThu')">
-                            <i class="fas fa-camera"></i> Xuất ảnh
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Theo món ăn -->
-            <div v-if="filterCategory === 'mon-an' && !isLoading" class="stats-grid">
-                <div class="stats-group">
-                    <div class="stat-card" ref="topDishes">
-                        <h3>Top 3 món ăn bán chạy</h3>
-                        <div v-if="stats.current.topDishes && stats.current.topDishes.length" class="top-dishes-list">
-                            <div v-for="(dish, index) in stats.current.topDishes" :key="dish.name" class="dish-item"
-                                :class="{ 'gold': index === 0, 'silver': index === 1, 'bronze': index === 2 }">
-                                <img :src="getImageUrl(dish.image)" @error="onImageError" alt="Dish Image"
-                                    class="dish-image-small" />
-                                <span>{{ dish.name }} ({{ dish.sold }} lượt, {{ formatCurrency(dish.revenue) }})</span>
-                                <button class="details-button" @click="showDishDetails(dish)">Chi tiết</button>
-                            </div>
-                        </div>
-                        <p v-else class="no-data">Không có dữ liệu món ăn</p>
-                        <span class="trend-text">
-                            Trước: {{(stats.previous.topDishes || []).map(d => `${d.name}: ${d.sold}
-                            (${formatCurrency(d.revenue)})`).join(', ')}}
-                        </span>
-                        <button class="export-image-button" @click="exportSectionImage('topDishes', 'TopMonAn')">
-                            <i class="fas fa-camera"></i> Xuất ảnh
-                        </button>
-                    </div>
-                    <div class="stat-card leastSoldDish" ref="leastSoldDish">
-                        <h3>Món ăn bán ít nhất</h3>
-                        <div v-if="stats.current.leastSoldDish.name" class="least-sold-content">
-                            <img :src="getImageUrl(stats.current.leastSoldDish.image)" @error="onImageError"
-                                alt="Least Sold Dish Image" class="dish-image-small" />
-                            <p>{{ stats.current.leastSoldDish.name }} ({{ stats.current.leastSoldDish.sold }} lượt, {{
-                                formatCurrency(stats.current.leastSoldDish.revenue) }})</p>
-                            <!-- <button class="details-button" @click="showDishDetails(dish)">Chi tiết</button> -->
-                        </div>
-                        <p v-else class="no-data">Không có dữ liệu</p>
-                        <span class="trend-text">
-                            Trước: {{ stats.previous.leastSoldDish.name ? `${stats.previous.leastSoldDish.name}:
-                            ${stats.previous.leastSoldDish.sold}
-                            (${formatCurrency(stats.previous.leastSoldDish.revenue)})` : 'Không có dữ liệu' }}
-                        </span>
-                        <button class="export-image-button"
-                            @click="exportSectionImage('leastSoldDish', 'MonAnBanItNhat')">
-                            <i class="fas fa-camera"></i> Xuất ảnh
-                        </button>
-                    </div>
-                </div>
-                <div class="stats-group full-width">
-                    <div class="stat-card" ref="revenueByCategory">
-                        <h3>Doanh thu theo danh mục</h3>
-                        <apexchart type="donut" height="300" :options="chartOptionsCategory" :series="seriesCategory">
-                        </apexchart>
-                        <div v-for="category in stats.current.revenueByCategory" :key="category.category"
-                            class="category-item">
-                            <span>{{ category.category }}: {{ formatCurrency(category.revenue) }}</span>
-                            <button class="category-details-button" @click="toggleCategoryDetails(category.category)">
-                                <i class="fas fa-eye"></i> Hiện bảng
-                            </button>
-                            <div v-if="expandedCategory === category.category">
-                                <table
-                                    v-if="Array.isArray(categoryDishes[category.category]) && categoryDishes[category.category].length"
-                                    class="category-table">
-                                    <thead>
-                                        <tr>
-                                            <th>Món ăn</th>
-                                            <th>Số lượng bán</th>
-                                            <th>Doanh thu</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr v-for="dish in categoryDishes[category.category]" :key="dish.name">
-                                            <td>{{ dish.name }}</td>
-                                            <td>{{ dish.sold }}</td>
-                                            <td>{{ formatCurrency(dish.revenue) }}</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                                <p v-else class="no-data">Không có dữ liệu món ăn</p>
-                            </div>
-                        </div>
-                        <button class="export-image-button"
-                            @click="exportSectionImage('revenueByCategory', 'DoanhThuTheoDanhMuc')">
-                            <i class="fas fa-camera"></i> Xuất ảnh
-                        </button>
-                    </div>
-                </div>
-                <!-- Modal chi tiết món ăn -->
-                <div v-if="selectedDish" class="dish-details-modal">
-                    <div class="modal-content">
-                        <h3>{{ selectedDish.name || 'Không có dữ liệu' }}</h3>
-                        <img :src="getImageUrl(selectedDish.image)" @error="onImageError" alt="Dish Image"
-                            class="dish-image" />
-                        <p>Số lượng bán: {{ selectedDish.sold || 0 }} lượt</p>
-                        <p>Doanh thu: {{ formatCurrency(selectedDish.revenue || 0) }}</p>
-                        <p>Danh mục: {{ selectedDish.category || 'Không xác định' }}</p>
-                        <p>Mô tả: {{ selectedDish.description || 'Chưa có mô tả' }}</p>
-                        <!-- <input type="file" @change="handleImageUpload" accept="image/*" />
-                        <p>{{ uploadMessage }}</p> -->
-                        <button @click="selectedDish = null">Đóng</button>
-                    </div>
-                </div>
-            </div>
-            <!-- Theo khách hàng -->
-            <div v-if="filterCategory === 'khach-hang' && !isLoading" class="stats-grid">
-                <div class="stats-group">
-                    <div class="stat-card" ref="customersNew">
-                        <h3>Khách hàng mới</h3>
-                        <p>{{ stats.current.newCustomers }}</p>
-                        <span class="trend"
-                            :class="getTrendClass(stats.current.newCustomers, stats.previous.newCustomers)">
-                            {{ getTrend(stats.current.newCustomers, stats.previous.newCustomers) }}
-                        </span>
-                        <button class="export-image-button" @click="exportSectionImage('customersNew', 'KhachHangMoi')">
-                            <i class="fas fa-camera"></i> Xuất ảnh
-                        </button>
-                    </div>
-                    <div class="stat-card" ref="customersReturning">
-                        <h3>Khách hàng quay lại</h3>
-                        <p>{{ stats.current.returningCustomers }}</p>
-                        <span class="trend"
-                            :class="getTrendClass(stats.current.returningCustomers, stats.previous.returningCustomers)">
-                            {{ getTrend(stats.current.returningCustomers, stats.previous.returningCustomers) }}
-                        </span>
-                        <button class="export-image-button"
-                            @click="exportSectionImage('customersReturning', 'KhachHangQuayLai')">
-                            <i class="fas fa-camera"></i> Xuất ảnh
-                        </button>
-                    </div>
-                </div>
-                <div class="stats-group full-width">
-                    <div class="stat-card" ref="topCustomers">
-                        <h3>Top 3 khách hàng tiềm năng</h3>
-                        <div v-if="stats.current.topPotentialCustomers && stats.current.topPotentialCustomers.length"
-                            class="top-customers-list">
-                            <div v-for="customer in stats.current.topPotentialCustomers" :key="customer.customer_id"
-                                class="customer-item"
-                                :class="{ 'gold': customer.rank === 1, 'silver': customer.rank === 2, 'bronze': customer.rank === 3 }">
-                                <span class="customer-name">{{ customer.name }}</span>
-                                <div class="customer-stats">
-                                    <span class="total-bill">Tổng hóa đơn: {{ formatCurrency(customer.totalBill)
-                                    }}</span>
-                                    <span class="visits">| {{ customer.visits }} lượt quay lại</span>
+                                <div v-if="expandedCategory === category.category">
+                                    <table
+                                        v-if="Array.isArray(categoryDishes[category.category]) && categoryDishes[category.category].length"
+                                        class="category-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Món ăn</th>
+                                                <th>Số lượng bán</th>
+                                                <th>Doanh thu</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr v-for="dish in categoryDishes[category.category]" :key="dish.name">
+                                                <td>{{ dish.name }}</td>
+                                                <td>{{ dish.sold }}</td>
+                                                <td>{{ formatCurrency(dish.revenue) }}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <p v-else class="no-data">Không có dữ liệu món ăn</p>
                                 </div>
-                                <button class="details-button" @click="showCustomerDetails(customer.customer_id)">Chi
-                                    tiết</button>
                             </div>
+                            <button class="export-image-button"
+                                @click="exportSectionImage('revenueByCategory', 'DoanhThuTheoDanhMuc')">
+                                <i class="fas fa-camera"></i> Xuất ảnh
+                            </button>
                         </div>
-                        <p v-else class="no-data">Không có dữ liệu khách hàng</p>
-                        <span class="trend-text">
-                            Trước: {{(stats.previous.topPotentialCustomers || []).map(c => `${c.name}:
-                            ${formatCurrency(c.totalBill)} (${c.visits})`).join(', ')}}
-                        </span>
-                        <button class="export-image-button"
-                            @click="exportSectionImage('topCustomers', 'TopKhachHangTiemNang')">
-                            <i class="fas fa-camera"></i> Xuất ảnh
-                        </button>
+                    </div>
+                    <!-- Modal chi tiết món ăn -->
+                    <div v-if="selectedDish" class="dish-details-modal">
+                        <div class="modal-content">
+                            <h3>{{ selectedDish.name || 'Không có dữ liệu' }}</h3>
+                            <img :src="getImageUrl(selectedDish.image)" @error="onImageError" alt="Dish Image"
+                                class="dish-image" />
+                            <p>Số lượng bán: {{ selectedDish.sold || 0 }} lượt</p>
+                            <p>Doanh thu: {{ formatCurrency(selectedDish.revenue || 0) }}</p>
+                            <p>Danh mục: {{ selectedDish.category || 'Không xác định' }}</p>
+                            <p>Mô tả: {{ selectedDish.description || 'Chưa có mô tả' }}</p>
+                            <button @click="selectedDish = null">Đóng</button>
+                        </div>
                     </div>
                 </div>
-                <!-- Modal chi tiết khách hàng -->
-                <div v-if="selectedCustomer" class="customer-details-modal">
-                    <div class="modal-content">
-                        <h3>{{ selectedCustomer.name || 'Không có dữ liệu' }}</h3>
-                        <p>Số điện thoại: {{ selectedCustomer.phone || 'Chưa có thông tin' }}</p>
-                        <p>Tổng hóa đơn: {{ formatCurrency(selectedCustomer.totalBill || 0) }}</p>
-                        <p>Lượt quay lại: {{ selectedCustomer.visits || 0 }} lượt</p>
-                        <button @click="selectedCustomer = null">Đóng</button>
+                <!-- Theo khách hàng -->
+                <div v-if="filterCategory === 'khach-hang' && !isLoading" class="stats-grid">
+                    <div class="stats-group">
+                        <div class="stat-card" ref="customersNew">
+                            <h3>Khách hàng mới</h3>
+                            <p>{{ stats.current.newCustomers }}</p>
+                            <span class="trend"
+                                :class="getTrendClass(stats.current.newCustomers, stats.previous.newCustomers)">
+                                {{ getTrend(stats.current.newCustomers, stats.previous.newCustomers) }}
+                            </span>
+                            <button class="export-image-button" @click="exportSectionImage('customersNew', 'KhachHangMoi')">
+                                <i class="fas fa-camera"></i> Xuất ảnh
+                            </button>
+                        </div>
+                        <div class="stat-card" ref="customersReturning">
+                            <h3>Khách hàng quay lại</h3>
+                            <p>{{ stats.current.returningCustomers }}</p>
+                            <span class="trend"
+                                :class="getTrendClass(stats.current.returningCustomers, stats.previous.returningCustomers)">
+                                {{ getTrend(stats.current.returningCustomers, stats.previous.returningCustomers) }}
+                            </span>
+                            <button class="export-image-button"
+                                @click="exportSectionImage('customersReturning', 'KhachHangQuayLai')">
+                                <i class="fas fa-camera"></i> Xuất ảnh
+                            </button>
+                        </div>
+                    </div>
+                    <div class="stats-group full-width">
+                        <div class="stat-card" ref="topCustomers">
+                            <h3>Top 3 khách hàng tiềm năng</h3>
+                            <div v-if="stats.current.topPotentialCustomers && stats.current.topPotentialCustomers.length"
+                                class="top-customers-list">
+                                <div v-for="customer in stats.current.topPotentialCustomers" :key="customer.customer_id"
+                                    class="customer-item"
+                                    :class="{ 'gold': customer.rank === 1, 'silver': customer.rank === 2, 'bronze': customer.rank === 3 }">
+                                    <span class="customer-name">{{ customer.name }}</span>
+                                    <div class="customer-stats">
+                                        <span class="total-bill">Tổng hóa đơn: {{ formatCurrency(customer.totalBill)
+                                        }}</span>
+                                        <span class="visits">| {{ customer.visits }} lượt quay lại</span>
+                                    </div>
+                                    <button class="details-button" @click="showCustomerDetails(customer.customer_id)">Chi
+                                        tiết</button>
+                                </div>
+                            </div>
+                            <p v-else class="no-data">Không có dữ liệu khách hàng</p>
+                            <span class="trend-text">
+                                Trước: {{(stats.previous.topPotentialCustomers || []).map(c => `${c.name}:
+                                ${formatCurrency(c.totalBill)} (${c.visits})`).join(', ')}}
+                            </span>
+                            <button class="export-image-button"
+                                @click="exportSectionImage('topCustomers', 'TopKhachHangTiemNang')">
+                                <i class="fas fa-camera"></i> Xuất ảnh
+                            </button>
+                        </div>
+                    </div>
+                    <!-- Modal chi tiết khách hàng -->
+                    <div v-if="selectedCustomer" class="customer-details-modal">
+                        <div class="modal-content">
+                            <h3>{{ selectedCustomer.name || 'Không có dữ liệu' }}</h3>
+                            <p>Số điện thoại: {{ selectedCustomer.phone || 'Chưa có thông tin' }}</p>
+                            <p>Tổng hóa đơn: {{ formatCurrency(selectedCustomer.totalBill || 0) }}</p>
+                            <p>Lượt quay lại: {{ selectedCustomer.visits || 0 }} lượt</p>
+                            <button @click="selectedCustomer = null">Đóng</button>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- Đặt bàn -->
-            <div v-if="filterCategory === 'dat-ban' && !isLoading" class="stats-grid">
-                <div class="stats-group">
-                    <div class="stat-card" ref="reservationsTotal">
-                        <h3>Số lượng đặt bàn</h3>
-                        <p>Tổng: {{ stats.current.totalBookings }}</p>
-                        <ul>
-                            <li>Đã xác nhận: {{ stats.current.confirmedBookings }}</li>
-                            <li>Đã hủy: {{ stats.current.cancelledBookings }}</li>
-                        </ul>
-                        <span class="trend-text">Trước: Tổng {{ stats.previous.totalBookings }} (Xác nhận: {{
-                            stats.previous.confirmedBookings }}, Hủy: {{ stats.previous.cancelledBookings }})</span>
-                        <button class="export-image-button"
-                            @click="exportSectionImage('reservationsTotal', 'SoLuongDatBan')">
-                            <i class="fas fa-camera"></i> Xuất ảnh
-                        </button>
+                <!-- Đặt bàn -->
+                <div v-if="filterCategory === 'dat-ban' && !isLoading" class="stats-grid">
+                    <div class="stats-group">
+                        <div class="stat-card" ref="reservationsTotal">
+                            <h3>Số lượng đặt bàn</h3>
+                            <p>Tổng: {{ stats.current.totalBookings }}</p>
+                            <ul>
+                                <li>Đã xác nhận: {{ stats.current.confirmedBookings }}</li>
+                                <li>Đã hủy: {{ stats.current.cancelledBookings }}</li>
+                            </ul>
+                            <span class="trend-text">Trước: Tổng {{ stats.previous.totalBookings }} (Xác nhận: {{
+                                stats.previous.confirmedBookings }}, Hủy: {{ stats.previous.cancelledBookings }})</span>
+                            <button class="export-image-button"
+                                @click="exportSectionImage('reservationsTotal', 'SoLuongDatBan')">
+                                <i class="fas fa-camera"></i> Xuất ảnh
+                            </button>
+                        </div>
+                        <div class="stat-card" ref="reservationsDwellTime">
+                            <h3>Thời gian ở lại TB</h3>
+                            <p>{{ stats.current.dwellTime || 0 }} phút</p>
+                            <span class="trend"
+                                :class="getTrendClass(stats.current.dwellTime || 0, stats.previous.dwellTime || 0)">
+                                {{ getTrend(stats.current.dwellTime || 0, stats.previous.dwellTime || 0) }}
+                            </span>
+                            <button class="export-image-button"
+                                @click="exportSectionImage('reservationsDwellTime', 'ThoiGianOLaiTB')">
+                                <i class="fas fa-camera"></i> Xuất ảnh
+                            </button>
+                        </div>
                     </div>
-                    <div class="stat-card" ref="reservationsDwellTime">
-                        <h3>Thời gian ở lại TB</h3>
-                        <p>{{ stats.current.dwellTime || 0 }} phút</p>
-                        <span class="trend"
-                            :class="getTrendClass(stats.current.dwellTime || 0, stats.previous.dwellTime || 0)">
-                            {{ getTrend(stats.current.dwellTime || 0, stats.previous.dwellTime || 0) }}
-                        </span>
-                        <button class="export-image-button"
-                            @click="exportSectionImage('reservationsDwellTime', 'ThoiGianOLaiTB')">
-                            <i class="fas fa-camera"></i> Xuất ảnh
-                        </button>
-                    </div>
-                </div>
-                <div class="stats-group">
-                    <div class="stat-card" ref="reservationsServedCustomers">
-                        <h3>Số khách phục vụ</h3>
-                        <apexchart
-                            v-if="Array.isArray(stats.current.servedCustomersData) && stats.current.servedCustomersData.length"
-                            type="bar" height="300" :options="chartOptionsServed" :series="seriesServed">
-                        </apexchart>
-                        <p v-else class="no-data">Không có dữ liệu</p>
-                        <button class="export-image-button"
-                            @click="exportSectionImage('reservationsServedCustomers', 'SoKhachPhucVu')">
-                            <i class="fas fa-camera"></i> Xuất ảnh
-                        </button>
-                    </div>
-                    <div class="stat-card" ref="reservationsPopularTimes">
-                        <h3>Thời gian đặt bàn phổ biến</h3>
-                        <apexchart
-                            v-if="Array.isArray(stats.current.popularBookingTimes) && stats.current.popularBookingTimes.length"
-                            type="bar" height="300" :options="chartOptionsPopular" :series="seriesPopular">
-                        </apexchart>
-                        <p v-else class="no-data">Không có dữ liệu</p>
-                        <button class="export-image-button"
-                            @click="exportSectionImage('reservationsPopularTimes', 'ThoiGianDatBanPhoBien')">
-                            <i class="fas fa-camera"></i> Xuất ảnh
-                        </button>
+                    <div class="stats-group">
+                        <div class="stat-card" ref="reservationsServedCustomers">
+                            <h3>Số khách phục vụ</h3>
+                            <apexchart
+                                v-if="Array.isArray(stats.current.servedCustomersData) && stats.current.servedCustomersData.length"
+                                type="bar" height="300" :options="chartOptionsServed" :series="seriesServed">
+                            </apexchart>
+                            <p v-else class="no-data">Không có dữ liệu</p>
+                            <button class="export-image-button"
+                                @click="exportSectionImage('reservationsServedCustomers', 'SoKhachPhucVu')">
+                                <i class="fas fa-camera"></i> Xuất ảnh
+                            </button>
+                        </div>
+                        <div class="stat-card" ref="reservationsPopularTimes">
+                            <h3>Thời gian đặt bàn phổ biến</h3>
+                            <apexchart
+                                v-if="Array.isArray(stats.current.popularBookingTimes) && stats.current.popularBookingTimes.length"
+                                type="bar" height="300" :options="chartOptionsPopular" :series="seriesPopular">
+                            </apexchart>
+                            <p v-else class="no-data">Không có dữ liệu</p>
+                            <button class="export-image-button"
+                                @click="exportSectionImage('reservationsPopularTimes', 'ThoiGianDatBanPhoBien')">
+                                <i class="fas fa-camera"></i> Xuất ảnh
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1059,26 +1060,54 @@ export default defineComponent({
 .main-container {
     display: flex;
     min-height: 100vh;
-    background-color: #FFF8E7; /* Trắng kem */
+    background-color: #FFF8E7;
     font-family: 'Arial', sans-serif;
 }
 
 .dashboard {
     flex: 1;
-    padding: 2rem;
-    background-color: #FFF8E7; /* Trắng kem */
-    transition: margin-left 0.3s ease;
+    padding: 0;
+    background-color: #FFF8E7;
+    transition: all 0.3s ease;
+    position: relative;
+    margin-left: 280px; /* Khoảng cách cho sidebar */
 }
 
-.dashboard-header {
-    position: sticky;
+/* Header cố định */
+.dashboard-header.fixed-header {
+    position: fixed;
     top: 0;
-    background: linear-gradient(135deg, #8B5E3C, #6B4226); /* Gradient nâu */
-    z-index: 3;
+    left: 280px; /* Căn chỉnh theo sidebar */
+    right: 0;
+    z-index: 1000;
+    background: linear-gradient(135deg, #8B5E3C, #6B4226);
     padding: 1.5rem 2rem;
-    margin: -2rem -2rem 2rem -2rem;
-    border-bottom: 1px solid #E7C27D; /* Vàng nhạt */
-    box-shadow: 0 4px 15px rgba(107, 66, 38, 0.3); /* Bóng nâu */
+    border-bottom: 1px solid #E7C27D;
+    box-shadow: 0 4px 15px rgba(107, 66, 38, 0.3);
+    margin: 0;
+    transition: left 0.3s ease; /* Hiệu ứng chuyển động khi sidebar toggle */
+}
+
+/* Khi sidebar collapsed */
+.dashboard.sidebar-collapsed .dashboard-header.fixed-header {
+    left: 0;
+}
+
+.dashboard.sidebar-collapsed {
+    margin-left: 0;
+}
+
+/* Nội dung chính với padding-top để tránh bị header che */
+.container-content {
+    flex: 1;
+    margin: 0;
+    padding: 180px 0 0 0; /* Thêm padding-top để tránh bị header che */
+    background-color: #FFF8E7;
+    color: #3B2F2F;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    min-height: calc(100vh - 180px);
 }
 
 .header-top {
@@ -1090,10 +1119,10 @@ export default defineComponent({
 }
 
 .header-top h2 {
-    font-size: clamp(1.5rem, 4vw, 1.8rem); /* Responsive font size */
+    font-size: clamp(1.5rem, 4vw, 1.8rem);
     font-weight: 600;
-    color: #FFF8E7; /* Trắng kem */
-    text-shadow: 0 0 5px #E7C27D, 0 0 30px #E7C27D; /* Hiệu ứng vàng */
+    color: #FFF8E7;
+    text-shadow: 0 0 5px #E7C27D, 0 0 30px #E7C27D;
     margin: 0;
     flex: 1;
     min-width: 200px;
@@ -1101,8 +1130,8 @@ export default defineComponent({
 }
 
 .header-top span {
-    font-size: clamp(0.9rem, 2vw, 1rem); /* Responsive font size */
-    color: #F5E3B3; /* Be nhạt */
+    font-size: clamp(0.9rem, 2vw, 1rem);
+    color: #F5E3B3;
     opacity: 0.8;
     white-space: nowrap;
 }
@@ -1128,10 +1157,10 @@ export default defineComponent({
 .date-filter select,
 .date-filter input {
     padding: 0.5rem;
-    border: 1px solid #8B5E3C; /* Nâu gỗ */
+    border: 1px solid #8B5E3C;
     border-radius: 8px;
-    background: rgba(255, 248, 231, 0.8); /* Trắng kem trong suốt */
-    color: #3B2F2F; /* Đen nâu */
+    background: rgba(255, 248, 231, 0.8);
+    color: #3B2F2F;
     font-size: 0.9rem;
     transition: all 0.3s ease;
     font-weight: 500;
@@ -1141,9 +1170,9 @@ export default defineComponent({
 .filter-section select:focus,
 .date-filter select:focus,
 .date-filter input:focus {
-    border-color: #E7C27D; /* Vàng nhạt */
+    border-color: #E7C27D;
     outline: none;
-    background: #FFF8E7; /* Trắng kem */
+    background: #FFF8E7;
     box-shadow: 0 0 0 3px rgba(231, 194, 125, 0.3);
 }
 
@@ -1156,7 +1185,7 @@ export default defineComponent({
 
 .date-filter label {
     font-size: 0.9rem;
-    color: #FFF8E7; /* Trắng kem */
+    color: #FFF8E7;
     font-weight: 500;
     white-space: nowrap;
 }
@@ -1169,16 +1198,9 @@ export default defineComponent({
 }
 
 .custom-date-range span {
-    color: #F5E3B3; /* Be nhạt */
+    color: #F5E3B3;
     opacity: 0.8;
     white-space: nowrap;
-}
-
-.action-buttons {
-    display: flex;
-    gap: 0.5rem;
-    align-items: center;
-    flex-wrap: wrap;
 }
 
 .action-button {
@@ -1192,29 +1214,29 @@ export default defineComponent({
     gap: 0.5rem;
     transition: all 0.3s ease;
     font-weight: 600;
-    box-shadow: 0 2px 8px rgba(107, 66, 38, 0.3); /* Bóng nâu */
-    border: 1px solid #E7C27D; /* Viền vàng */
+    box-shadow: 0 2px 8px rgba(107, 66, 38, 0.3);
+    border: 1px solid #E7C27D;
     white-space: nowrap;
 }
 
 .refresh-button {
-    background: #8B5E3C; /* Nâu gỗ */
-    color: #FFF8E7; /* Trắng kem */
+    background: #8B5E3C;
+    color: #FFF8E7;
 }
 
 .refresh-button:hover {
-    background: #6B4226; /* Nâu đất */
+    background: #6B4226;
     transform: translateY(-2px);
     box-shadow: 0 4px 15px rgba(107, 66, 38, 0.4);
 }
 
 .export-button {
-    background: #E7C27D; /* Vàng nhạt */
-    color: #6B4226; /* Nâu đất */
+    background: #E7C27D;
+    color: #6B4226;
 }
 
 .export-button:hover {
-    background: #F5E3B3; /* Be nhạt */
+    background: #F5E3B3;
     transform: translateY(-2px);
     box-shadow: 0 4px 15px rgba(231, 194, 125, 0.4);
 }
@@ -1224,6 +1246,7 @@ export default defineComponent({
     display: flex;
     flex-direction: column;
     gap: 2rem;
+    padding: 0 20px;
 }
 
 .stats-group {
@@ -1237,13 +1260,13 @@ export default defineComponent({
 }
 
 .stat-card {
-    background: rgba(255, 248, 231, 0.5); /* Trắng kem trong suốt */
+    background: rgba(255, 248, 231, 0.5);
     padding: 1.5rem;
     border-radius: 12px;
     position: relative;
     transition: all 0.3s ease;
-    border: 1px solid rgba(231, 194, 125, 0.3); /* Vàng nhạt trong suốt */
-    box-shadow: 0 4px 15px rgba(107, 66, 38, 0.2); /* Bóng nâu */
+    border: 1px solid rgba(231, 194, 125, 0.3);
+    box-shadow: 0 4px 15px rgba(107, 66, 38, 0.2);
 }
 
 .stat-card:hover {
@@ -1255,14 +1278,14 @@ export default defineComponent({
 .stat-card h3 {
     font-size: 1.2rem;
     margin-bottom: 0.5rem;
-    color: #6B4226; /* Nâu đất */
+    color: #6B4226;
     font-weight: bold;
 }
 
 .stat-card p {
     font-size: 1.5rem;
     font-weight: 600;
-    color: #3B2F2F; /* Đen nâu */
+    color: #3B2F2F;
     margin: 0.5rem 0;
 }
 
@@ -1273,36 +1296,36 @@ export default defineComponent({
     font-size: 1.5rem;
     opacity: 0.7;
     z-index: 1;
-    color: #8B5E3C; /* Nâu gỗ */
+    color: #8B5E3C;
 }
 
 .revenue-icon {
-    color: #388E3C; /* Xanh lá */
+    color: #388E3C;
 }
 
 .booking-icon {
-    color: #1976D2; /* Xanh dương */
+    color: #1976D2;
 }
 
 .customer-icon {
-    color: #7B1FA2; /* Tím */
+    color: #7B1FA2;
 }
 
 .time-icon {
-    color: #F57C00; /* Cam */
+    color: #F57C00;
 }
 
 .serving-icon {
-    color: #D32F2F; /* Đỏ */
+    color: #D32F2F;
 }
 
 .cancel-icon {
-    color: #6B4226; /* Nâu đất */
+    color: #6B4226;
 }
 
 .sub-text {
     font-size: 0.9rem;
-    color: #3B2F2F; /* Đen nâu */
+    color: #3B2F2F;
     opacity: 0.8;
     margin-top: 0.3rem;
     display: block;
@@ -1317,21 +1340,21 @@ export default defineComponent({
 }
 
 .trend-up {
-    color: #388E3C; /* Xanh lá */
+    color: #388E3C;
 }
 
 .trend-down {
-    color: #D32F2F; /* Đỏ */
+    color: #D32F2F;
 }
 
 .trend-neutral {
-    color: #3B2F2F; /* Đen nâu */
+    color: #3B2F2F;
     opacity: 0.6;
 }
 
 .trend-text {
     font-size: 0.9rem;
-    color: #3B2F2F; /* Đen nâu */
+    color: #3B2F2F;
     opacity: 0.8;
     margin-top: 1rem;
     display: block;
@@ -1350,8 +1373,8 @@ export default defineComponent({
     padding: 0.5rem;
     border-radius: 8px;
     transition: all 0.3s ease;
-    background: rgba(255, 248, 231, 0.3); /* Trắng kem trong suốt */
-    border: 1px solid rgba(231, 194, 125, 0.3); /* Vàng nhạt trong suốt */
+    background: rgba(255, 248, 231, 0.3);
+    border: 1px solid rgba(231, 194, 125, 0.3);
 }
 
 .dish-image,
@@ -1361,7 +1384,7 @@ export default defineComponent({
     object-fit: cover;
     border-radius: 8px;
     margin-bottom: 0.5rem;
-    border: 2px solid #E7C27D; /* Vàng nhạt */
+    border: 2px solid #E7C27D;
 }
 
 .dish-image-small {
@@ -1371,14 +1394,14 @@ export default defineComponent({
 
 .dish-item span {
     font-size: 1rem;
-    color: #3B2F2F; /* Đen nâu */
+    color: #3B2F2F;
     display: block;
     margin-bottom: 0.3rem;
     font-weight: 500;
 }
 
 .dish-item.gold {
-    background: rgba(231, 194, 125, 0.4); /* Vàng nhạt trong suốt */
+    background: rgba(231, 194, 125, 0.4);
 }
 
 .dish-item.silver {
@@ -1397,7 +1420,7 @@ export default defineComponent({
 .avg-revenue,
 .sold-count {
     font-size: 0.9rem;
-    color: #3B2F2F; /* Đen nâu */
+    color: #3B2F2F;
     opacity: 0.8;
     font-weight: 500;
 }
@@ -1412,24 +1435,24 @@ export default defineComponent({
 
 .category-item span {
     font-size: 1rem;
-    color: #3B2F2F; /* Đen nâu */
+    color: #3B2F2F;
     font-weight: 500;
 }
 
 .category-item button {
-    background: rgba(255, 248, 231, 0.8); /* Trắng kem trong suốt */
-    border: 1px solid #8B5E3C; /* Nâu gỗ */
+    background: rgba(255, 248, 231, 0.8);
+    border: 1px solid #8B5E3C;
     padding: 0.5rem 1rem;
     border-radius: 8px;
-    color: #3B2F2F; /* Đen nâu */
+    color: #3B2F2F;
     cursor: pointer;
     transition: all 0.3s ease;
     font-weight: 500;
 }
 
 .category-item button:hover {
-    background: #FFF8E7; /* Trắng kem */
-    border-color: #E7C27D; /* Vàng nhạt */
+    background: #FFF8E7;
+    border-color: #E7C27D;
 }
 
 .category-table {
@@ -1439,8 +1462,8 @@ export default defineComponent({
     display: block;
     max-height: 300px;
     overflow-y: auto;
-    color: #3B2F2F; /* Đen nâu */
-    background: rgba(255, 248, 231, 0.5); /* Trắng kem trong suốt */
+    color: #3B2F2F;
+    background: rgba(255, 248, 231, 0.5);
     border-radius: 8px;
 }
 
@@ -1448,15 +1471,15 @@ export default defineComponent({
 .category-table td {
     padding: 0.5rem;
     text-align: left;
-    border-bottom: 1px solid rgba(231, 194, 125, 0.3); /* Vàng nhạt trong suốt */
+    border-bottom: 1px solid rgba(231, 194, 125, 0.3);
     word-wrap: break-word;
     min-width: 100px;
     font-weight: 500;
 }
 
 .category-table th {
-    background: rgba(139, 94, 60, 0.3); /* Nâu gỗ trong suốt */
-    color: #6B4226; /* Nâu đất */
+    background: rgba(139, 94, 60, 0.3);
+    color: #6B4226;
     position: sticky;
     top: 0;
     z-index: 1;
@@ -1470,12 +1493,12 @@ export default defineComponent({
     border-radius: 8px;
     margin: 0.5rem auto;
     display: block;
-    border: 2px solid #E7C27D; /* Vàng nhạt */
+    border: 2px solid #E7C27D;
 }
 
 .leastSoldDish .no-data {
     text-align: center;
-    color: #3B2F2F; /* Đen nâu */
+    color: #3B2F2F;
     opacity: 0.6;
     font-style: italic;
     padding: 1rem;
@@ -1496,13 +1519,13 @@ export default defineComponent({
     padding: 0.8rem;
     margin-bottom: 0.5rem;
     border-radius: 8px;
-    background: rgba(255, 248, 231, 0.3); /* Trắng kem trong suốt */
+    background: rgba(255, 248, 231, 0.3);
     transition: all 0.3s ease;
-    border: 1px solid rgba(231, 194, 125, 0.3); /* Vàng nhạt trong suốt */
+    border: 1px solid rgba(231, 194, 125, 0.3);
 }
 
 .customer-item.gold {
-    background: rgba(231, 194, 125, 0.4); /* Vàng nhạt trong suốt */
+    background: rgba(231, 194, 125, 0.4);
 }
 
 .customer-item.silver {
@@ -1521,7 +1544,7 @@ export default defineComponent({
 .customer-name {
     font-size: 1.1rem;
     font-weight: 500;
-    color: #3B2F2F; /* Đen nâu */
+    color: #3B2F2F;
     flex: 1 1 40%;
 }
 
@@ -1534,38 +1557,38 @@ export default defineComponent({
 
 .total-bill {
     font-size: 1rem;
-    color: #3B2F2F; /* Đen nâu */
+    color: #3B2F2F;
     font-weight: 600;
 }
 
 .visits {
     font-size: 1rem;
-    color: #3B2F2F; /* Đen nâu */
+    color: #3B2F2F;
     opacity: 0.8;
     font-weight: 400;
 }
 
 .details-button {
     padding: 0.3rem 0.8rem;
-    background: #8B5E3C; /* Nâu gỗ */
+    background: #8B5E3C;
     border: none;
     border-radius: 6px;
-    color: #FFF8E7; /* Trắng kem */
+    color: #FFF8E7;
     font-size: 0.9rem;
     cursor: pointer;
     transition: all 0.3s ease;
     font-weight: 500;
-    border: 1px solid #E7C27D; /* Viền vàng */
+    border: 1px solid #E7C27D;
 }
 
 .details-button:hover {
-    background: #6B4226; /* Nâu đất */
+    background: #6B4226;
     transform: scale(1.05);
 }
 
 .no-data {
     text-align: center;
-    color: #3B2F2F; /* Đen nâu */
+    color: #3B2F2F;
     opacity: 0.6;
     font-style: italic;
     padding: 1rem;
@@ -1578,7 +1601,7 @@ export default defineComponent({
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(107, 66, 38, 0.8); /* Nâu đất trong suốt */
+    background: rgba(107, 66, 38, 0.8);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -1586,7 +1609,7 @@ export default defineComponent({
 }
 
 .spinner {
-    border: 4px solid #E7C27D; /* Vàng nhạt */
+    border: 4px solid #E7C27D;
     border-top: 4px solid transparent;
     border-radius: 50%;
     width: 40px;
@@ -1605,8 +1628,8 @@ export default defineComponent({
 }
 
 .error-message {
-    background: #D32F2F; /* Đỏ */
-    color: #FFF8E7; /* Trắng kem */
+    background: #D32F2F;
+    color: #FFF8E7;
     padding: 1rem;
     border-radius: 8px;
     margin-bottom: 1rem;
@@ -1618,11 +1641,11 @@ export default defineComponent({
     position: absolute;
     top: 0.5rem;
     right: 0.5rem;
-    background: rgba(255, 248, 231, 0.8); /* Trắng kem trong suốt */
-    border: 1px solid #8B5E3C; /* Nâu gỗ */
+    background: rgba(255, 248, 231, 0.8);
+    border: 1px solid #8B5E3C;
     border-radius: 6px;
     padding: 0.3rem 0.6rem;
-    color: #3B2F2F; /* Đen nâu */
+    color: #3B2F2F;
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -1634,8 +1657,8 @@ export default defineComponent({
 }
 
 .export-image-button:hover {
-    background: #FFF8E7; /* Trắng kem */
-    border-color: #E7C27D; /* Vàng nhạt */
+    background: #FFF8E7;
+    border-color: #E7C27D;
     transform: translateY(-1px);
 }
 
@@ -1646,7 +1669,7 @@ export default defineComponent({
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(107, 66, 38, 0.8); /* Nâu đất trong suốt */
+    background: rgba(107, 66, 38, 0.8);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -1654,30 +1677,30 @@ export default defineComponent({
 }
 
 .modal-content {
-    background: linear-gradient(135deg, #FFF8E7, #F5E3B3); /* Gradient trắng kem đến be */
+    background: linear-gradient(135deg, #FFF8E7, #F5E3B3);
     padding: 2rem;
     border-radius: 12px;
-    color: #3B2F2F; /* Đen nâu */
+    color: #3B2F2F;
     text-align: center;
     width: 90%;
     max-width: 400px;
     max-height: 80vh;
     overflow-y: auto;
-    border: 2px solid #E7C27D; /* Viền vàng */
+    border: 2px solid #E7C27D;
     box-shadow: 0 10px 30px rgba(107, 66, 38, 0.4);
 }
 
 .modal-content h3 {
     font-size: 1.5rem;
     margin-bottom: 1rem;
-    color: #6B4226; /* Nâu đất */
+    color: #6B4226;
     font-weight: bold;
 }
 
 .modal-content p {
     font-size: 1rem;
     margin: 0.5rem 0;
-    color: #3B2F2F; /* Đen nâu */
+    color: #3B2F2F;
     font-weight: 500;
 }
 
@@ -1688,42 +1711,42 @@ export default defineComponent({
     border-radius: 8px;
     margin: 1rem auto;
     display: block;
-    border: 2px solid #E7C27D; /* Vàng nhạt */
+    border: 2px solid #E7C27D;
 }
 
 .modal-content input[type="file"] {
     margin: 1rem auto;
     display: block;
-    color: #3B2F2F; /* Đen nâu */
+    color: #3B2F2F;
 }
 
 .modal-content button {
     margin-top: 1rem;
     padding: 0.5rem 1rem;
-    background: #8B5E3C; /* Nâu gỗ */
+    background: #8B5E3C;
     border: none;
     border-radius: 8px;
-    color: #FFF8E7; /* Trắng kem */
+    color: #FFF8E7;
     cursor: pointer;
     transition: all 0.3s ease;
     font-weight: 600;
-    border: 1px solid #E7C27D; /* Viền vàng */
+    border: 1px solid #E7C27D;
 }
 
 .modal-content button:hover {
-    background: #6B4226; /* Nâu đất */
+    background: #6B4226;
 }
 
 .customer-details-modal .modal-content {
     width: 90%;
     max-width: 500px;
     padding: 2rem;
-    background: linear-gradient(135deg, #FFF8E7, #F5E3B3); /* Gradient trắng kem đến be */
+    background: linear-gradient(135deg, #FFF8E7, #F5E3B3);
     border-radius: 12px;
-    color: #3B2F2F; /* Đen nâu */
+    color: #3B2F2F;
     text-align: left;
     overflow-y: auto;
-    border: 2px solid #E7C27D; /* Viền vàng */
+    border: 2px solid #E7C27D;
 }
 
 .customer-details-modal .modal-content p {
@@ -1735,18 +1758,18 @@ export default defineComponent({
 .customer-details-modal .modal-content button {
     margin-top: 1.5rem;
     padding: 0.6rem 1.2rem;
-    background: #8B5E3C; /* Nâu gỗ */
+    background: #8B5E3C;
     border: none;
     border-radius: 8px;
-    color: #FFF8E7; /* Trắng kem */
+    color: #FFF8E7;
     cursor: pointer;
     transition: all 0.3s ease;
     font-weight: 600;
-    border: 1px solid #E7C27D; /* Viền vàng */
+    border: 1px solid #E7C27D;
 }
 
 .customer-details-modal .modal-content button:hover {
-    background: #6B4226; /* Nâu đất */
+    background: #6B4226;
 }
 
 .dish-details-modal .modal-content,
@@ -1766,17 +1789,17 @@ export default defineComponent({
 }
 
 .category-table::-webkit-scrollbar-thumb {
-    background: #E7C27D; /* Vàng nhạt */
+    background: #E7C27D;
     border-radius: 3px;
 }
 
 .category-table::-webkit-scrollbar-thumb:hover {
-    background: #8B5E3C; /* Nâu gỗ */
+    background: #8B5E3C;
 }
 
 /* Responsive adjustments */
 @media (max-width: 1024px) {
-    .dashboard-header {
+    .dashboard-header.fixed-header {
         padding: 1.5rem;
     }
     
@@ -1787,16 +1810,21 @@ export default defineComponent({
     .header-actions {
         min-width: 250px;
     }
+    
+    .container-content {
+        padding-top: 200px; /* Tăng padding-top cho tablet */
+    }
 }
 
 @media (max-width: 768px) {
     .dashboard {
-        padding: 1rem;
+        padding: 0;
+        margin-left: 0 !important;
     }
     
-    .dashboard-header {
+    .dashboard-header.fixed-header {
+        left: 0 !important;
         padding: 1rem;
-        margin: -1rem -1rem 1rem -1rem;
     }
     
     .header-top {
@@ -1864,10 +1892,14 @@ export default defineComponent({
         max-width: 400px;
         padding: 1.5rem;
     }
+    
+    .container-content {
+        padding-top: 220px; /* Tăng padding-top cho mobile */
+    }
 }
 
 @media (max-width: 480px) {
-    .dashboard-header {
+    .dashboard-header.fixed-header {
         padding: 0.8rem;
     }
     
@@ -1894,6 +1926,10 @@ export default defineComponent({
     .action-button {
         width: 100%;
         justify-content: center;
+    }
+    
+    .container-content {
+        padding-top: 240px; /* Tăng padding-top cho mobile nhỏ */
     }
 }
 </style>

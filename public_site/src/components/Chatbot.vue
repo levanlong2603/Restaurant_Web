@@ -74,12 +74,44 @@ export default {
       userInput: '',
       isChatOpen: false,
       loading: false,
+      hasSentWelcome: false, // Thêm flag để theo dõi đã gửi lời chào chưa
     };
   },
   methods: {
     toggleChat() {
       this.isChatOpen = !this.isChatOpen;
+      // Khi mở chat, tự động gửi lời chào nếu chưa gửi
+      if (this.isChatOpen && !this.hasSentWelcome && this.messages.length === 0) {
+        this.sendWelcomeMessage();
+      }
     },
+    
+    // Method gửi tin nhắn chào mừng tự động
+    async sendWelcomeMessage() {
+      this.hasSentWelcome = true;
+      this.loading = true;
+      
+      try {
+        const response = await axios.post('http://localhost:3000/chatbot/chat', {
+          message: 'Xin chào',
+        });
+        console.log('Welcome message response:', response.data);
+        this.messages.push({ role: 'bot', content: response.data });
+      } catch (error) {
+        console.error('Welcome message error:', error.message, error.response?.data);
+        this.messages.push({
+          role: 'bot',
+          content: {
+            message: error.response?.data?.message || this.$t('chatbot.error')
+          },
+        });
+      } finally {
+        this.loading = false;
+      }
+      
+      this.$nextTick(() => this.scrollToBottom());
+    },
+
     async sendMessage() {
       if (!this.userInput.trim()) return;
 
@@ -176,84 +208,85 @@ export default {
 </script>
 
 <style scoped>
+/* Giữ nguyên toàn bộ CSS như trước */
 .chatbot {
   position: fixed;
   bottom: 20px;
   right: 20px;
   z-index: 1000;
-  font-family: 'Arial', Tahoma, Geneva, Verdana, sans-serif; /* Đồng nhất font */
+  font-family: 'Arial', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .chat-toggle {
   width: 60px;
   height: 60px;
-  background: linear-gradient(135deg, #8B5E3C 0%, #6B4226 100%); /* Gradient nâu */
-  color: #FFF8E7; /* Trắng kem */
+  background: linear-gradient(135deg, #8B5E3C 0%, #6B4226 100%);
+  color: #FFF8E7;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  box-shadow: 0 4px 15px rgba(107, 66, 38, 0.3); /* Bóng nâu */
-  border: 2px solid #E7C27D; /* Viền vàng */
+  box-shadow: 0 4px 15px rgba(107, 66, 38, 0.3);
+  border: 2px solid #E7C27D;
   transition: all 0.3s ease;
-  font-family: inherit; /* Kế thừa font */
+  font-family: inherit;
 }
 
 .chat-toggle img {
   width: 25px;
   height: 25px;
-  filter: brightness(0) invert(1); /* Đảm bảo icon màu trắng */
+  filter: brightness(0) invert(1);
 }
 
 .chat-toggle:hover {
-  background: linear-gradient(135deg, #E7C27D 0%, #8B5E3C 100%); /* Gradient vàng đến nâu */
+  background: linear-gradient(135deg, #E7C27D 0%, #8B5E3C 100%);
   transform: scale(1.05);
   box-shadow: 0 6px 20px rgba(231, 194, 125, 0.4);
 }
 
 .chat-container {
   width: 320px;
-  background: #FFF8E7; /* Trắng kem */
+  background: #FFF8E7;
   border-radius: 12px;
-  box-shadow: 0 8px 25px rgba(107, 66, 38, 0.3); /* Bóng nâu */
+  box-shadow: 0 8px 25px rgba(107, 66, 38, 0.3);
   display: flex;
   flex-direction: column;
   margin-top: 10px;
-  border: 2px solid #E7C27D; /* Viền vàng */
-  font-family: inherit; /* Kế thừa font */
+  border: 2px solid #E7C27D;
+  font-family: inherit;
 }
 
 .chat-header {
-  background: linear-gradient(135deg, #6B4226 0%, #8B5E3C 100%); /* Gradient nâu */
-  color: #FFF8E7; /* Trắng kem */
+  background: linear-gradient(135deg, #6B4226 0%, #8B5E3C 100%);
+  color: #FFF8E7;
   padding: 15px;
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-family: inherit; /* Kế thừa font */
+  font-family: inherit;
 }
 
 .chat-header h3 {
   margin: 0;
   font-size: 16px;
   font-weight: bold;
-  font-family: inherit; /* Kế thừa font */
+  font-family: inherit;
 }
 
 .chat-header .close-button {
   font-size: 20px;
   cursor: pointer;
   padding: 5px;
-  color: #FFF8E7; /* Trắng kem */
+  color: #FFF8E7;
   transition: all 0.3s ease;
-  font-family: inherit; /* Kế thừa font */
+  font-family: inherit;
 }
 
 .chat-header .close-button:hover {
-  color: #E7C27D; /* Vàng nhạt */
+  color: #E7C27D;
   transform: scale(1.1);
 }
 
@@ -261,11 +294,10 @@ export default {
   height: 400px;
   overflow-y: auto;
   padding: 15px;
-  background: #FFF8E7; /* Trắng kem */
-  border-bottom: 1px solid rgba(139, 94, 60, 0.1); /* Viền nâu nhạt */
+  background: #FFF8E7;
+  border-bottom: 1px solid rgba(139, 94, 60, 0.1);
 }
 
-/* Custom scrollbar */
 .chat-window::-webkit-scrollbar {
   width: 6px;
 }
@@ -276,12 +308,12 @@ export default {
 }
 
 .chat-window::-webkit-scrollbar-thumb {
-  background: #E7C27D; /* Vàng nhạt */
+  background: #E7C27D;
   border-radius: 3px;
 }
 
 .chat-window::-webkit-scrollbar-thumb:hover {
-  background: #8B5E3C; /* Nâu gỗ */
+  background: #8B5E3C;
 }
 
 .user,
@@ -308,34 +340,34 @@ export default {
 }
 
 .user .message-bubble {
-  background: #8B5E3C; /* Nâu gỗ */
+  background: #8B5E3C;
   color: white;
   border-bottom-right-radius: 5px;
 }
 
 .bot .message-bubble {
-  background: rgba(231, 194, 125, 0.2); /* Vàng nhạt trong suốt */
-  color: #3B2F2F; /* Đen nâu */
+  background: rgba(231, 194, 125, 0.2);
+  color: #3B2F2F;
   border-bottom-left-radius: 5px;
   border: 1px solid rgba(231, 194, 125, 0.3);
   box-shadow: 0 2px 8px rgba(107, 66, 38, 0.1);
 }
 
 .bot .message-bubble a {
-  color: #8B5E3C; /* Nâu gỗ */
+  color: #8B5E3C;
   text-decoration: underline;
   font-weight: 600;
   transition: all 0.3s ease;
 }
 
 .bot .message-bubble a:hover {
-  color: #6B4226; /* Nâu đất */
+  color: #6B4226;
 }
 
 .bot .message-bubble img {
   margin-top: 5px;
   border-radius: 5px;
-  border: 1px solid #E7C27D; /* Viền vàng */
+  border: 1px solid #E7C27D;
 }
 
 .map-iframe {
@@ -348,8 +380,8 @@ export default {
 .input-container {
   display: flex;
   align-items: center;
-  border-top: 1px solid #E7C27D; /* Vàng nhạt */
-  background: #FFF8E7; /* Trắng kem */
+  border-top: 1px solid #E7C27D;
+  background: #FFF8E7;
   border-bottom-left-radius: 10px;
   border-bottom-right-radius: 10px;
 }
@@ -361,7 +393,7 @@ input {
   outline: none;
   font-size: 14px;
   background: transparent;
-  color: #3B2F2F; /* Đen nâu */
+  color: #3B2F2F;
 }
 
 .send-button {
@@ -371,8 +403,8 @@ input {
   width: 40px;
   height: 40px;
   margin-right: 8px;
-  background: #8B5E3C; /* Nâu gỗ */
-  color: #FFF8E7; /* Trắng kem */
+  background: #8B5E3C;
+  color: #FFF8E7;
   border: none;
   border-radius: 50%;
   cursor: pointer;
@@ -380,18 +412,17 @@ input {
 }
 
 .send-button:hover:not(:disabled) {
-  background: #6B4226; /* Nâu đất */
+  background: #6B4226;
   transform: scale(1.05);
 }
 
 .send-button:disabled {
-  background: rgba(139, 94, 60, 0.3); /* Nâu gỗ trong suốt */
-  color: rgba(255, 248, 231, 0.5); /* Trắng kem trong suốt */
+  background: rgba(139, 94, 60, 0.3);
+  color: rgba(255, 248, 231, 0.5);
   cursor: not-allowed;
   transform: none;
 }
 
-/* Animation */
 .fade-enter-active,
 .fade-leave-active {
   transition: all 0.3s ease;
@@ -403,12 +434,11 @@ input {
   transform: translateY(20px);
 }
 
-/* Spinner */
 .spinner {
   width: 28px;
   height: 28px;
-  border: 4px solid rgba(231, 194, 125, 0.3); /* Vàng nhạt trong suốt */
-  border-left-color: #8B5E3C; /* Nâu gỗ */
+  border: 4px solid rgba(231, 194, 125, 0.3);
+  border-left-color: #8B5E3C;
   border-radius: 50%;
   animation: spin 1s linear infinite;
   margin: 0 auto;
@@ -418,7 +448,6 @@ input {
   to { transform: rotate(360deg); }
 }
 
-/* Quick replies */
 .quick-replies {
   display: flex;
   flex-wrap: wrap;
@@ -427,8 +456,8 @@ input {
 }
 
 .quick-reply {
-  background: rgba(139, 94, 60, 0.1); /* Nâu gỗ trong suốt */
-  color: #6B4226; /* Nâu đất */
+  background: rgba(139, 94, 60, 0.1);
+  color: #6B4226;
   border: 1px solid rgba(139, 94, 60, 0.3);
   padding: 8px 12px;
   border-radius: 15px;
@@ -443,15 +472,13 @@ input {
   transform: translateY(-1px);
 }
 
-/* Timestamp */
 .message-time {
   font-size: 10px;
-  color: #8B5E3C; /* Nâu gỗ */
+  color: #8B5E3C;
   margin-top: 5px;
   opacity: 0.7;
 }
 
-/* Responsive */
 @media (max-width: 480px) {
   .chatbot {
     bottom: 10px;

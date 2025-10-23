@@ -545,8 +545,7 @@ exports.processChat = async (req, res) => {
           return res.status(400).json({ message: 'Vui lòng cung cấp đầy đủ số điện thoại, tên, thời gian và số người.' });
         }
 
-        // Realtime time validation
-        // Try direct ISO parse first, then Vietnamese natural language parser
+        // Enhanced time parsing with better Vietnamese natural language support
         let requestedTime = new Date(functionArgs.time);
         if (isNaN(requestedTime.getTime())) {
           const parsed = parseVietnameseDateTime(functionArgs.time);
@@ -555,32 +554,90 @@ exports.processChat = async (req, res) => {
           }
           requestedTime = parsed;
         }
+
         const now = new Date();
         console.log('Raw time input:', functionArgs.time);
         console.log('Parsed requestedTime:', requestedTime.toString(), requestedTime.toISOString());
         console.log('Server now:', now.toString(), now.toISOString());
 
         if (requestedTime.getTime() < now.getTime() - 5 * 60 * 1000) {
-          // If the parsed time is in the past, try to recover in multiple ways:
-          // 1) If the user's message contains relative words (mai, hôm nay), re-parse from the message.
-          // 2) Otherwise try a numeric day/month swap for ambiguous dates like 11/5.
-          // 3) As a last resort, bump +1 day.
+          // Enhanced time correction with better Vietnamese keyword detection
           const userLower = (typeof message === 'string') ? message.toLowerCase() : '';
-          const hasRelative = userLower.includes('mai') || userLower.includes('ngày mai') || userLower.includes('hôm nay');
+          
+          // Define comprehensive Vietnamese time keywords
+          const timeKeywords = {
+            today: ['hôm nay', 'hôm nay', 'bữa trưa nay', 'trưa nay', 'bữa chiều nay', 'chiều nay', 'bữa tối nay', 'tối nay'],
+            tomorrow: ['ngày mai', 'mai', 'trưa mai', 'chiều mai', 'tối mai', 'bữa trưa mai', 'bữa chiều mai', 'bữa tối mai'],
+            specificDays: ['thứ hai', 'thứ ba', 'thứ tư', 'thứ năm', 'thứ sáu', 'thứ bảy', 'chủ nhật']
+          };
 
-          if (hasRelative) {
-            console.log('Parsed time is past but user message contains relative words; re-parsing from user message:', message);
+          // Check for specific Vietnamese time patterns
+          const hasToday = timeKeywords.today.some(keyword => userLower.includes(keyword));
+          const hasTomorrow = timeKeywords.tomorrow.some(keyword => userLower.includes(keyword));
+          const hasSpecificDay = timeKeywords.specificDays.some(keyword => userLower.includes(keyword));
+
+          console.log('Time keyword detection - Today:', hasToday, 'Tomorrow:', hasTomorrow, 'Specific Day:', hasSpecificDay);
+
+          if (hasToday || hasTomorrow || hasSpecificDay) {
+            console.log('Detected Vietnamese time keywords in message, re-parsing from original message:', message);
             const parsedFromUser = parseVietnameseDateTime(message);
+            
             if (parsedFromUser && parsedFromUser.getTime() > now.getTime() - 5 * 60 * 1000) {
               requestedTime = parsedFromUser;
-              console.log('Re-parsed requestedTime from user message:', requestedTime.toString(), requestedTime.toISOString());
+              console.log('Successfully re-parsed from user message:', requestedTime.toString(), requestedTime.toISOString());
             } else {
-              console.log('Re-parsing failed or still past; attempting tolerant bump +1 day');
-              requestedTime.setDate(requestedTime.getDate() + 1);
-              console.log('Bumped requestedTime:', requestedTime.toString(), requestedTime.toISOString());
+              // Apply intelligent time correction based on detected keywords
+              if (hasToday) {
+                // For "today" references, set to today with reasonable meal times
+                if (userLower.includes('trưa') || userLower.includes('bữa trưa')) {
+                  requestedTime = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 12, 0, 0); // 12:00 for lunch
+                } else if (userLower.includes('chiều') || userLower.includes('bữa chiều')) {
+                  requestedTime = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 17, 0, 0); // 17:00 for dinner
+                } else if (userLower.includes('tối') || userLower.includes('bữa tối')) {
+                  requestedTime = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 19, 0, 0); // 19:00 for dinner
+                } else {
+                  // Default to evening for today
+                  requestedTime = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 19, 0, 0);
+                }
+                console.log('Applied today correction:', requestedTime.toString());
+              } else if (hasTomorrow) {
+                // For "tomorrow" references
+                const tomorrow = new Date(now);
+                tomorrow.setDate(now.getDate() + 1);
+                
+                if (userLower.includes('trưa') || userLower.includes('bữa trưa')) {
+                  requestedTime = new Date(tomorrow.getFullYear(), tomorrow.getMonth(), tomorrow.getDate(), 12, 0, 0);
+                } else if (userLower.includes('chiều') || userLower.includes('bữa chiều')) {
+                  requestedTime = new Date(tomorrow.getFullYear(), tomorrow.getMonth(), tomorrow.getDate(), 17, 0, 0);
+                } else if (userLower.includes('tối') || userLower.includes('bữa tối')) {
+                  requestedTime = new Date(tomorrow.getFullYear(), tomorrow.getMonth(), tomorrow.getDate(), 19, 0, 0);
+                } else {
+                  requestedTime = new Date(tomorrow.getFullYear(), tomorrow.getMonth(), tomorrow.getDate(), 19, 0, 0);
+                }
+                console.log('Applied tomorrow correction:', requestedTime.toString());
+              } else if (hasSpecificDay) {
+                // For specific days of week
+                const dayMap = {
+                  'thứ hai': 1, 'thứ ba': 2, 'thứ tư': 3, 'thứ năm': 4, 
+                  'thứ sáu': 5, 'thứ bảy': 6, 'chủ nhật': 0
+                };
+                
+                const targetDay = timeKeywords.specificDays.find(day => userLower.includes(day));
+                if (targetDay) {
+                  const targetDayNumber = dayMap[targetDay];
+                  const currentDay = now.getDay();
+                  let daysToAdd = (targetDayNumber - currentDay + 7) % 7;
+                  if (daysToAdd === 0) daysToAdd = 7; // Next week if same day
+                  
+                  const targetDate = new Date(now);
+                  targetDate.setDate(now.getDate() + daysToAdd);
+                  requestedTime = new Date(targetDate.getFullYear(), targetDate.getMonth(), targetDate.getDate(), 19, 0, 0);
+                  console.log('Applied specific day correction:', requestedTime.toString());
+                }
+              }
             }
           } else {
-            // Try numeric date swap fallback (e.g., user wrote "11/5" but parser treated it as 11 May while user meant 5 Nov)
+            // Fallback to numeric date swap for ambiguous formats
             const numericDateMatch = (typeof message === 'string') ? message.match(/(\b\d{1,2})[\/\-](\d{1,2})(?:[\/\-](\d{2,4}))?/) : null;
             if (numericDateMatch) {
               try {
@@ -592,27 +649,39 @@ exports.processChat = async (req, res) => {
                   if (yr < 100) yr += 2000;
                   y = yr;
                 }
-                // swapped: interpret message as day = b, month = a
-                const swapped = new Date(y, a - 1, b, requestedTime.getHours(), requestedTime.getMinutes(), 0);
-                console.log('Detected numeric date in message, attempting swapped date:', swapped.toString(), swapped.toISOString());
-                if (swapped.getTime() > now.getTime() - 5 * 60 * 1000) {
-                  requestedTime = swapped;
+                // Try both interpretations (day/month and month/day)
+                const interpretation1 = new Date(y, a - 1, b, requestedTime.getHours(), requestedTime.getMinutes(), 0);
+                const interpretation2 = new Date(y, b - 1, a, requestedTime.getHours(), requestedTime.getMinutes(), 0);
+                
+                console.log('Numeric date ambiguity - interpretation1:', interpretation1.toString(), 'interpretation2:', interpretation2.toString());
+                
+                // Choose the one that makes sense (future date)
+                if (interpretation1.getTime() > now.getTime() - 5 * 60 * 1000) {
+                  requestedTime = interpretation1;
+                } else if (interpretation2.getTime() > now.getTime() - 5 * 60 * 1000) {
+                  requestedTime = interpretation2;
                 } else {
-                  // as last resort, try bumping one day
-                  requestedTime.setDate(requestedTime.getDate() + 1);
+                  // Both interpretations are past, choose the closer future one
+                  const diff1 = Math.abs(interpretation1.getTime() - now.getTime());
+                  const diff2 = Math.abs(interpretation2.getTime() - now.getTime());
+                  requestedTime = diff1 < diff2 ? interpretation1 : interpretation2;
                 }
+                
+                console.log('Selected interpretation after numeric analysis:', requestedTime.toString());
               } catch (swapErr) {
-                console.warn('Error while attempting numeric date swap fallback:', swapErr.message || swapErr);
-                requestedTime.setDate(requestedTime.getDate() + 1);
+                console.warn('Error while attempting numeric date analysis:', swapErr.message || swapErr);
+                return res.status(400).json({ message: 'Thời gian đặt bàn không rõ ràng. Vui lòng cung cấp thời gian cụ thể hơn.' });
               }
             } else {
-              return res.status(400).json({ message: 'Thời gian đặt bàn phải là thời gian trong tương lai.' });
+              return res.status(400).json({ message: 'Thời gian đặt bàn phải là thời gian trong tương lai. Vui lòng kiểm tra lại.' });
             }
           }
 
-          // Final sanity check after fallback attempts
+          // Final sanity check after all corrections
           if (requestedTime.getTime() < now.getTime() - 5 * 60 * 1000) {
-            return res.status(400).json({ message: 'Thời gian đặt bàn phải là thời gian trong tương lai.' });
+            return res.status(400).json({ 
+              message: 'Thời gian đặt bàn phải là thời gian trong tương lai. Vui lòng cung cấp thời gian hợp lệ.' 
+            });
           }
         }
 
@@ -736,9 +805,9 @@ async function handleMenuRequest(functionArgs, res) {
       });
     }
 
-    // Chọn ngẫu nhiên tối đa 3 món
+    // Chọn ngẫu nhiên tối đa 5 món (đã tăng từ 3 lên 5)
     const shuffledItems = menuItems.sort(() => 0.5 - Math.random());
-    const selectedItems = shuffledItems.slice(0, Math.min(3, menuItems.length));
+    const selectedItems = shuffledItems.slice(0, Math.min(5, menuItems.length));
     const filterDesc = `${lightDish ? 'thanh đạm' : region ? `thuộc ${region}` : category ? `trong danh mục ${category}` : keyword ? `liên quan đến ${keyword}` : 'ăn'}`;
     const menuMessage = `Chúng tôi đề xuất cho quý khách một số món ${filterDesc}:\n` +
           selectedItems
@@ -785,9 +854,9 @@ async function handleDishSuggestion(functionArgs, res) {
             message: `Không có món nào ${filterDesc} để gợi ý.`,
         });
         }
-        // Chọn ngẫu nhiên tối đa 3 món
+        // Chọn ngẫu nhiên tối đa 5 món (đã tăng từ 3 lên 5)
         const shuffledItems = menuItems.sort(() => 0.5 - Math.random());
-        const selectedItems = shuffledItems.slice(0, Math.min(3, menuItems.length));
+        const selectedItems = shuffledItems.slice(0, Math.min(5, menuItems.length));
         const filterDesc = `${lightDish ? 'thanh đạm' : region ? `thuộc ${region}` : category ? `trong danh mục ${category}` : keyword ? `liên quan đến ${keyword}` : 'ăn'}`;
         const suggestionMessage = `Chúng tôi đề xuất cho quý khách một số món ${filterDesc}:\n` +
         selectedItems

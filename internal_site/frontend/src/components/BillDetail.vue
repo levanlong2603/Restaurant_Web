@@ -316,7 +316,7 @@ export default {
           <div class="invoice-container">
             <div class="invoice-header">
               <div class="restaurant-logo">
-                <img src="/Logo.png" alt="Logo Long Quân An" onerror="this.style.display='none'">
+                <img src="/Logo1.png" alt="Logo Long Quân An" onerror="this.style.display='none'">
               </div>
               <h1 class="restaurant-name">LONG QUÂN AN</h1>
               <p class="restaurant-tagline">ẨM THỰC TINH TÚY</p>
