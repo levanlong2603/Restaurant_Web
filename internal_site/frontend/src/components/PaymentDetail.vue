@@ -6,9 +6,6 @@
 
     <div v-if="errorMessage" class="error-message">
       {{ errorMessage }}
-      <button v-if="errorMessage.includes('thời gian chờ') || errorMessage.includes('khởi tạo thanh toán')" @click="retryPayment" class="btn-retry">
-        Thử lại
-      </button>
     </div>
 
     <div class="payment-container" v-else-if="billDetails">
@@ -18,22 +15,17 @@
         <h3>Chọn phương thức thanh toán</h3>
         <select v-model="paymentMethod">
           <option value="" disabled>Chọn phương thức</option>
-          <option value="bank_transfer">Quét mã QR</option>
+          <option value="bank_transfer">Chuyển khoản ngân hàng</option>
           <option value="cash">Tiền mặt</option>
           <option value="credit_card">Thẻ tín dụng</option>
         </select>
-        <p class="timeout-warning" v-if="paymentMethod === 'credit_card' || paymentMethod === 'bank_transfer'">
-          Lưu ý: Vui lòng hoàn tất thanh toán trong vòng 15 phút.
-        </p>
-        <!-- Hiển thị QR / thông tin chuyển khoản khi chọn Quét mã QR -->
+        
+        <!-- Hiển thị QR / thông tin chuyển khoản khi chọn ngân hàng -->
         <div class="qr-code" v-if="paymentMethod === 'bank_transfer'">
           <img src="/vietqr.png" alt="VietQR"/>
-          <div class="account-info">
-            <p><strong>Chủ tài khoản:</strong> LE VAN LONG</p>
-            <p><strong>Số tài khoản:</strong> <span id="acct">3388826032004</span></p>
-          </div>
         </div>
       </div>
+      
       <label class="checkbox-label" v-if="billDetails.status !== 'paid'">
         <input 
           type="checkbox" 
@@ -41,6 +33,7 @@
         />
         Khách rời đi
       </label>
+      
       <div class="payment-actions" v-if="billDetails.status !== 'paid'">
         <button 
           @click="processPayment" 
@@ -85,78 +78,21 @@ export default {
       customerLeft: true,
     };
   },
-  mounted() {
-    window.addEventListener('message', this.handlePaymentResult);
-  },
-  beforeDestroy() {
-    window.removeEventListener('message', this.handlePaymentResult);
-  },
   methods: {
     async processPayment() {
       try {
         this.errorMessage = '';
         
-        if (this.paymentMethod === 'bank_transfer') {
-          await this.initiatePayment();
-        } else {
-          // Xử lý thanh toán tiền mặt/thẻ
-          this.$emit('update:paymentStatus', {
-            method: this.paymentMethod,
-            status: this.customerLeft ? 'completed' : 'paid',
-          });
-        }
+        // Xử lý TẤT CẢ phương thức thanh toán giống nhau - không gọi VNPay
+        this.$emit('update:paymentStatus', {
+          method: this.paymentMethod,
+          status: this.customerLeft ? 'completed' : 'paid',
+        });
+        
       } catch (error) {
         console.error('Lỗi khi xử lý thanh toán:', error);
         this.errorMessage = `Lỗi khi xử lý thanh toán: ${error.response?.data?.message || error.message}`;
       }
-    },
-    
-    async initiatePayment() {
-      try {
-        this.errorMessage = '';
-        const token = localStorage.getItem('token');
-        if (!token) throw new Error('Vui lòng đăng nhập để tiếp tục');
-
-        if (!this.billDetails?.total_amount) throw new Error('Hóa đơn không hợp lệ hoặc số tiền bằng 0');
-
-        const reservationId = this.reservation.reservation_id || this.reservation;
-
-        const payload = {
-          amount: parseInt(this.billDetails.total_amount),
-          orderDescription: `Payment for reservation ${reservationId}`,
-          orderType: 'billpayment',
-          language: 'vn',
-          bankCode: '',
-          reservationId: reservationId,
-        };
-
-        const response = await axios.post(
-          'http://localhost:3000/payment/create_payment_url',
-          payload,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-
-        const paymentUrl = response.data.paymentUrl;
-        if (paymentUrl) {
-          window.open(paymentUrl, '_blank');
-        } else {
-          throw new Error('Không nhận được URL thanh toán');
-        }
-      } catch (error) {
-        const errorMsg = error.response?.data?.message || error.message;
-        this.errorMessage = errorMsg.includes('timeout')
-          ? 'Giao dịch đã quá thời gian chờ thanh toán. Vui lòng thực hiện lại giao dịch.'
-          : `Lỗi khi khởi tạo thanh toán: ${errorMsg}`;
-      }
-    },
-
-    retryPayment() {
-      this.errorMessage = '';
-      this.initiatePayment();
     },
 
     async customerLeave() {
@@ -172,26 +108,6 @@ export default {
       } catch (error) {
         console.error('Lỗi khi cập nhật trạng thái khách rời đi:', error);
         alert(error.response?.data?.message || 'Không thể cập nhật trạng thái. Vui lòng thử lại.');
-      }
-    },
-
-    handlePaymentResult(event) {
-      if (event.data.type === 'PAYMENT_COMPLETED') {
-        const { success, transactionId } = event.data;
-        
-        if (success) {
-          this.$emit('update:paymentStatus', {
-            method: this.paymentMethod,
-            status: this.customerLeft ? 'completed' : 'paid',
-          });
-          alert('Thanh toán thành công! Mã giao dịch: ' + transactionId);
-          
-          if (this.customerLeft) {
-            this.customerLeave();
-          }
-        } else {
-          this.errorMessage = 'Thanh toán thất bại. Vui lòng thử lại.';
-        }
       }
     },
   },

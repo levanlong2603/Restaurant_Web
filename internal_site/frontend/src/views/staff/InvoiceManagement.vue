@@ -6,7 +6,7 @@
       <div class="dashboard-header fixed-header">
         <div class="header-main">
           <div class="header-title-section">
-            <h1>DANH SÁCH HÓA ĐƠN</h1>
+            <h1>HÓA ĐƠN</h1>
           </div>
           <div class="header-controls-section">
             <span class="current-time">{{ currentDateTime }}</span>
