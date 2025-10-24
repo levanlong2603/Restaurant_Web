@@ -4,30 +4,24 @@
     <section class="dashboard" :class="{ 'sidebar-collapsed': isSidebarCollapsed }">
       <!-- Header cố định -->
       <div class="dashboard-header fixed-header">
-        <div class="header-main">
-          <div class="header-title-section">
-            <h1>QUẢN LÝ MENU</h1>
-          </div>
-          <div class="header-controls-section">
-            <span class="current-time">{{ currentDateTime }}</span>
-            <div class="controls-group">
-              <div class="filter-controls">
-                <select v-model="selectedCategory" class="status-filter" @change="fetchMenu">
-                  <option value="">Tất cả danh mục</option>
-                  <option value="appetizer">Khai vị</option>
-                  <option value="main_dish">Món chính</option>
-                  <option value="side_dish">Món ăn kèm</option>
-                  <option value="regional_specialty">Đặc sản vùng miền</option>
-                  <option value="vegetarian">Món chay</option>
-                  <option value="dessert">Tráng miệng</option>
-                  <option value="beverage">Đồ uống</option>
-                </select>
-                <input type="text" v-model="searchQuery" placeholder="Tìm kiếm món..." class="search-input" @input="debouncedFetchMenu" />
-              </div>
-              <button class="refresh-button" @click="refreshPage">
-                <i class="fas fa-sync-alt"></i> Làm mới
-              </button>
+        <div class="header-content">
+          <div class="header-controls">
+            <div class="filter-controls">
+              <select v-model="selectedCategory" class="status-filter" @change="fetchMenu">
+                <option value="">Tất cả danh mục</option>
+                <option value="appetizer">Khai vị</option>
+                <option value="main_dish">Món chính</option>
+                <option value="side_dish">Món ăn kèm</option>
+                <option value="regional_specialty">Đặc sản vùng miền</option>
+                <option value="vegetarian">Món chay</option>
+                <option value="dessert">Tráng miệng</option>
+                <option value="beverage">Đồ uống</option>
+              </select>
+              <input type="text" v-model="searchQuery" placeholder="Tìm kiếm món..." class="search-input" @input="debouncedFetchMenu" />
             </div>
+            <button class="refresh-button" @click="refreshPage">
+              <i class="fas fa-sync-alt"></i> Làm mới
+            </button>
           </div>
         </div>
       </div>
@@ -584,6 +578,7 @@ export default {
 </script>
 
 <style scoped>
+
 .main-container {
   display: flex;
   min-height: 100vh;
@@ -597,22 +592,23 @@ export default {
   background-color: #FFF8E7;
   transition: all 0.3s ease;
   position: relative;
-  margin-left: 280px; /* Khoảng cách cho sidebar */
+  margin-left: 280px;
 }
 
-/* Header cố định */
+/* Header cố định - ĐÃ SỬA: Trong suốt và căn phải */
 .dashboard-header.fixed-header {
   position: fixed;
   top: 0;
-  left: 280px; /* Căn chỉnh theo sidebar */
+  left: 280px;
   right: 0;
   z-index: 1000;
-  background: linear-gradient(135deg, #8B5E3C, #6B4226);
-  padding: 1.5rem 2rem;
-  border-bottom: 1px solid #E7C27D;
-  box-shadow: 0 4px 15px rgba(107, 66, 38, 0.3);
+  background: rgba(255, 248, 231, 0.85); /* Nền trong suốt */
+  backdrop-filter: blur(12px); /* Hiệu ứng làm mờ */
+  padding: 1rem 2rem;
+  border-bottom: 1px solid rgba(231, 194, 125, 0.3);
+  box-shadow: 0 4px 15px rgba(107, 66, 38, 0.15);
   margin: 0;
-  transition: left 0.3s ease; /* Hiệu ứng chuyển động khi sidebar toggle */
+  transition: left 0.3s ease;
 }
 
 /* Khi sidebar collapsed */
@@ -624,74 +620,56 @@ export default {
   margin-left: 0;
 }
 
-.header-main {
+/* Header content - ĐÃ SỬA: Các phần tử trên cùng một hàng, căn phải */
+.header-content {
   display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
+  justify-content: flex-end; /* Căn toàn bộ về bên phải */
+  align-items: center;
   gap: 2rem;
+  width: 100%;
 }
 
-.header-title-section {
-  flex: 1;
-}
-
-.header-title-section h1 {
-  font-size: 2rem;
-  font-weight: 700;
-  color: #FFF8E7;
-  text-shadow: 0 0 5px #E7C27D, 0 0 30px #E7C27D;
-  margin: 0;
-  letter-spacing: 0.5px;
-  margin-left: 1cm;
-}
-
-.header-controls-section {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 1rem;
-  min-width: 600px;
-}
-
+/* Thời gian */
 .current-time {
-  font-size: 1rem;
+  font-size: 0.95rem;
   color: #F5E3B3;
   font-weight: 500;
   white-space: nowrap;
+  margin-right: auto; /* Đẩy các phần tử còn lại về bên phải */
 }
 
-.controls-group {
+/* Header controls - ĐÃ SỬA: Các phần tử trên cùng hàng */
+.header-controls {
   display: flex;
   align-items: center;
-  gap: 1rem;
-  width: 100%;
-  justify-content: flex-end;
+  gap: 1.5rem;
 }
 
+/* Filter controls - ĐÃ SỬA: Các phần tử trên cùng hàng */
 .filter-controls {
   display: flex;
-  gap: 0.8rem;
+  gap: 1rem;
   align-items: center;
-  flex: 1;
-  justify-content: flex-end;
 }
 
+/* Input và select */
 .search-input,
 .status-filter {
   padding: 0.6rem 0.8rem;
-  border: 1px solid #8B5E3C;
+  border: 1px solid rgba(139, 94, 60, 0.6);
   border-radius: 8px;
-  background: rgba(255, 248, 231, 0.95);
+  background: rgba(255, 248, 231, 0.9);
   color: #3B2F2F;
   font-size: 0.9rem;
   transition: all 0.3s ease;
   font-weight: 500;
   min-height: 40px;
   box-sizing: border-box;
+  backdrop-filter: blur(5px);
 }
 
 .search-input {
-  width: 200px;
+  width: 220px;
 }
 
 .status-filter {
@@ -702,10 +680,11 @@ export default {
 .status-filter:focus {
   border-color: #E7C27D;
   outline: none;
-  background: #FFF8E7;
-  box-shadow: 0 0 0 3px rgba(231, 194, 125, 0.3);
+  background: rgba(255, 248, 231, 0.95);
+  box-shadow: 0 0 0 3px rgba(231, 194, 125, 0.25);
 }
 
+/* Nút làm mới */
 .refresh-button {
   padding: 0.6rem 1.2rem;
   border: none;
@@ -717,31 +696,134 @@ export default {
   gap: 0.5rem;
   transition: all 0.3s ease;
   font-weight: 600;
-  box-shadow: 0 2px 8px rgba(107, 66, 38, 0.3);
-  border: 1px solid #E7C27D;
-  background: #E7C27D;
+  box-shadow: 0 2px 8px rgba(107, 66, 38, 0.2);
+  border: 1px solid rgba(231, 194, 125, 0.5);
+  background: rgba(231, 194, 125, 0.8);
   color: #6B4226;
   white-space: nowrap;
   min-height: 40px;
+  backdrop-filter: blur(5px);
 }
 
 .refresh-button:hover {
-  background: #F5E3B3;
+  background: rgba(245, 227, 179, 0.9);
   transform: translateY(-2px);
-  box-shadow: 0 4px 15px rgba(231, 194, 125, 0.4);
+  box-shadow: 0 4px 15px rgba(231, 194, 125, 0.3);
 }
 
 /* Nội dung chính với padding-top để tránh bị header che */
 .container-reservation {
   flex: 1;
   margin: 0;
-  padding: 140px 0 0 0;
+  padding: 100px 0 0 0; /* Giảm padding-top do header đã được tối ưu */
   background-color: #FFF8E7;
   color: #3B2F2F;
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  min-height: calc(100vh - 140px);
+  min-height: calc(100vh - 100px);
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+  .header-content {
+    gap: 1.5rem;
+  }
+  
+  .search-input {
+    width: 200px;
+  }
+  
+  .status-filter {
+    width: 160px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .dashboard-header.fixed-header {
+    left: 0 !important;
+    padding: 1rem;
+  }
+  
+  .dashboard {
+    margin-left: 0 !important;
+  }
+  
+  .header-content {
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+  
+  .current-time {
+    margin-right: 0;
+    order: 1;
+  }
+  
+  .header-controls {
+    order: 2;
+    flex: 1;
+    justify-content: flex-end;
+  }
+  
+  .container-reservation {
+    padding-top: 120px;
+  }
+}
+
+@media (max-width: 768px) {
+  .dashboard-header.fixed-header {
+    padding: 0.8rem;
+  }
+  
+  .header-content {
+    flex-direction: column;
+    gap: 1rem;
+    align-items: stretch;
+  }
+  
+  .current-time {
+    text-align: center;
+    order: 1;
+  }
+  
+  .header-controls {
+    order: 2;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .filter-controls {
+    flex-direction: column;
+    width: 100%;
+  }
+  
+  .search-input,
+  .status-filter {
+    width: 100%;
+  }
+  
+  .refresh-button {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .container-reservation {
+    padding-top: 140px;
+  }
+}
+
+@media (max-width: 480px) {
+  .dashboard-header.fixed-header {
+    padding: 0.6rem;
+  }
+  
+  .current-time {
+    font-size: 0.9rem;
+  }
+  
+  .container-reservation {
+    padding-top: 150px;
+  }
 }
 
 .menu-management {

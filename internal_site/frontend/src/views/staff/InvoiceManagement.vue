@@ -20,7 +20,6 @@
                 <option value="paid">Đã thanh toán</option>
                 <option value="completed">Hoàn thành</option>
               </select>
-              <span class="current-time">{{ currentDateTime }}</span>
               <button class="refresh-button" @click="refresh">
                 <i class="fas fa-sync-alt"></i> Làm mới
               </button>

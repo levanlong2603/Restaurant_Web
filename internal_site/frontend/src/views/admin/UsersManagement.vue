@@ -4,11 +4,7 @@
         <section class="dashboard" :class="{ 'sidebar-collapsed': isSidebarCollapsed }">
             <!-- Header cố định -->
             <div class="dashboard-header fixed-header" ref="dashboardHeader">
-                <div class="header-top">
-                    <h2>QUẢN LÝ TÀI KHOẢN NHÂN VIÊN</h2>
-                    <span>{{ currentDateTime }}</span>
-                </div>
-                <div class="header-actions">
+                <div class="header-right-group">
                     <div class="filter-section">
                         <input type="text" v-model="searchQuery" placeholder="Tìm kiếm..." class="search-input" ref="searchInput" />
                         <select v-model="roleFilter" class="role-filter">
@@ -34,7 +30,6 @@
             <!-- Nội dung chính với padding-top -->
             <div class="container-user">
                 <section class="users-management">
-                    <!-- Danh sách người dùng chờ duyệt -->
                     <div class="users-list" v-if="!showDeletedUsers && pendingUsers.length > 0">
                         <h2>Yêu cầu đăng ký ({{ pendingUsers.length }})</h2>
                         <div class="table-header">
@@ -836,18 +831,19 @@ export default {
   margin-left: 0;
 }
 
-/* Header cố định */
+/* Header cố định - Trong suốt */
 .dashboard-header.fixed-header {
   position: fixed;
   top: 0;
   left: 280px;
   right: 0;
-  background: linear-gradient(135deg, #8B5E3C, #6B4226);
+  background: rgba(255, 248, 231, 0.85);
+  backdrop-filter: blur(10px);
   z-index: 999;
-  padding: 1.5rem 2rem;
+  padding: 1rem 2rem;
   margin: 0;
-  border-bottom: 1px solid #E7C27D;
-  box-shadow: 0 4px 15px rgba(107, 66, 38, 0.3);
+  border-bottom: 1px solid rgba(231, 194, 125, 0.5);
+  box-shadow: 0 4px 15px rgba(107, 66, 38, 0.1);
   transition: left 0.3s ease;
 }
 
@@ -855,62 +851,42 @@ export default {
   left: 0;
 }
 
-.header-top {
+.header-right-group {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  flex-wrap: wrap;
-  gap: 1rem;
-}
-
-.header-top h2 {
-  font-size: clamp(1.5rem, 4vw, 1.8rem);
-  font-weight: 600;
-  color: #FFF8E7;
-  text-shadow: 0 0 5px #E7C27D, 0 0 30px #E7C27D;
-  margin: 0;
-  flex: 1;
-  min-width: 200px;
-  margin-left: 1cm;
-}
-
-.header-top span {
-  font-size: clamp(0.9rem, 2vw, 1rem);
-  color: #F5E3B3;
-  opacity: 0.8;
-  white-space: nowrap;
-}
-
-.header-actions {
-  display: flex;
-  gap: 1rem;
-  align-items: center;
-  flex-wrap: wrap;
+  gap: 1.5rem;
   justify-content: flex-end;
-  flex: 2;
-  min-width: 300px;
+  width: 100%;
+  flex-wrap: wrap;
 }
 
 .filter-section {
   display: flex;
-  gap: 0.5rem;
+  gap: 0.8rem;
   align-items: center;
   flex-wrap: wrap;
 }
 
 .search-input,
 .role-filter {
-  padding: clamp(0.5rem, 1.5vw, 0.6rem);
-  border: 1px solid #8B5E3C;
+  padding: 0.6rem 0.8rem;
+  border: 1px solid rgba(139, 94, 60, 0.5);
   border-radius: 8px;
-  background: rgba(255, 248, 231, 0.8);
+  background: rgba(255, 248, 231, 0.9);
   color: #3B2F2F;
-  font-size: clamp(0.85rem, 2vw, 0.9rem);
+  font-size: 0.9rem;
   transition: all 0.3s ease;
   font-weight: 500;
-  min-width: 120px;
   min-height: 40px;
   box-sizing: border-box;
+}
+
+.search-input {
+  width: 200px;
+}
+
+.role-filter {
+  width: 160px;
 }
 
 .search-input:focus,
@@ -921,15 +897,26 @@ export default {
   box-shadow: 0 0 0 3px rgba(231, 194, 125, 0.3);
 }
 
+.current-time {
+  font-size: 1rem;
+  color: #6B4226;
+  font-weight: 600;
+  white-space: nowrap;
+  background: rgba(231, 194, 125, 0.3);
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  border: 1px solid rgba(139, 94, 60, 0.2);
+}
+
 .action-buttons {
   display: flex;
-  gap: 0.5rem;
+  gap: 0.8rem;
   align-items: center;
   flex-wrap: wrap;
 }
 
 .action-button {
-  padding: 0.5rem 1rem;
+  padding: 0.6rem 1.2rem;
   border: none;
   border-radius: 8px;
   font-size: 0.9rem;
@@ -939,9 +926,10 @@ export default {
   gap: 0.5rem;
   transition: all 0.3s ease;
   font-weight: 600;
-  box-shadow: 0 2px 8px rgba(107, 66, 38, 0.3);
+  box-shadow: 0 2px 8px rgba(107, 66, 38, 0.2);
   border: 1px solid #E7C27D;
   white-space: nowrap;
+  min-height: 40px;
 }
 
 .add-user-btn {
@@ -980,13 +968,13 @@ export default {
 .container-user {
   flex: 1;
   margin: 0;
-  padding: 160px 0 0 0;
+  padding: 100px 0 0 0;
   background-color: #FFF8E7;
   color: #3B2F2F;
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  min-height: calc(100vh - 160px);
+  min-height: calc(100vh - 100px);
 }
 
 .users-management {
@@ -996,6 +984,20 @@ export default {
   width: 100%;
   margin: 0 auto;
   z-index: 1;
+}
+
+.page-title {
+  text-align: center;
+  margin-bottom: 2rem;
+  padding: 1rem;
+}
+
+.page-title h2 {
+  font-size: clamp(1.5rem, 4vw, 2rem);
+  font-weight: 700;
+  color: #6B4226;
+  text-shadow: 0 0 5px #E7C27D, 0 0 30px #E7C27D;
+  margin: 0;
 }
 
 .users-list {
@@ -1668,52 +1670,21 @@ export default {
   font-weight: 500;
 }
 
-/* Scrollbar Styling */
-.edit-form::-webkit-scrollbar,
-.modal-content::-webkit-scrollbar,
-.profile-modal::-webkit-scrollbar {
-  width: 6px;
-}
-
-.edit-form::-webkit-scrollbar-track,
-.modal-content::-webkit-scrollbar-track,
-.profile-modal::-webkit-scrollbar-track {
-  background: rgba(231, 194, 125, 0.1);
-  border-radius: 3px;
-}
-
-.edit-form::-webkit-scrollbar-thumb,
-.modal-content::-webkit-scrollbar-thumb,
-.profile-modal::-webkit-scrollbar-thumb {
-  background: #E7C27D;
-  border-radius: 3px;
-}
-
-.edit-form::-webkit-scrollbar-thumb:hover,
-.modal-content::-webkit-scrollbar-thumb:hover,
-.profile-modal::-webkit-scrollbar-thumb:hover {
-  background: #8B5E3C;
-}
-
-/* Global Scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: rgba(231, 194, 125, 0.1);
-}
-
-::-webkit-scrollbar-thumb {
-  background: #E7C27D;
-  border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #8B5E3C;
-}
-
 /* Responsive Design */
+@media (max-width: 1200px) {
+  .header-right-group {
+    gap: 1rem;
+  }
+  
+  .search-input {
+    width: 180px;
+  }
+  
+  .role-filter {
+    width: 140px;
+  }
+}
+
 @media (max-width: 1024px) {
   .dashboard {
     margin-left: 240px;
@@ -1724,21 +1695,12 @@ export default {
   }
   
   .container-user {
-    padding-top: 150px;
-    min-height: calc(100vh - 150px);
+    padding-top: 140px;
+    min-height: calc(100vh - 140px);
   }
 }
 
 @media (max-width: 768px) {
-  .sidebar-fixed {
-    transform: translateX(-100%);
-    transition: transform 0.3s ease;
-  }
-  
-  .sidebar-fixed.mobile-open {
-    transform: translateX(0);
-  }
-  
   .dashboard {
     margin-left: 0 !important;
   }
@@ -1748,37 +1710,29 @@ export default {
     padding: 1rem;
   }
   
-  .container-user {
-    padding-top: 140px;
-    min-height: calc(100vh - 140px);
-  }
-  
-  .header-top {
+  .header-right-group {
     flex-direction: column;
     align-items: flex-start;
     gap: 1rem;
   }
   
-  .header-top h2 {
-    min-width: auto;
-    text-align: center;
-    width: 100%;
-  }
-  
-  .header-actions {
-    min-width: auto;
-    width: 100%;
-    justify-content: center;
-  }
-  
   .filter-section {
-    justify-content: center;
+    width: 100%;
+  }
+  
+  .search-input,
+  .role-filter {
     width: 100%;
   }
   
   .action-buttons {
-    justify-content: center;
     width: 100%;
+    justify-content: flex-start;
+  }
+  
+  .container-user {
+    padding-top: 180px;
+    min-height: calc(100vh - 180px);
   }
   
   .table-header,
@@ -1804,8 +1758,7 @@ export default {
 }
 
 @media (max-width: 480px) {
-  .header-actions {
-    flex-direction: column;
+  .header-right-group {
     gap: 0.8rem;
   }
   
@@ -1825,8 +1778,8 @@ export default {
   }
   
   .container-user {
-    padding-top: 180px;
-    min-height: calc(100vh - 180px);
+    padding-top: 200px;
+    min-height: calc(100vh - 200px);
   }
   
   .modal-content,

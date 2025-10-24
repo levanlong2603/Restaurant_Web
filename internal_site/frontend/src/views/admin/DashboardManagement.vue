@@ -5,39 +5,39 @@
             <!-- Header cố định -->
             <div class="dashboard-header fixed-header">
                 <div class="header-top">
-                    <h2>TRANG THỐNG KÊ NHÀ HÀNG</h2>
-                    <span>{{ currentDateTime }}</span>
-                </div>
-                <div class="header-actions">
-                    <div class="filter-section">
-                        <select v-model="filterCategory" @change="fetchStats">
-                            <option value="tong-quan">Tổng quan</option>
-                            <option value="doanh-thu">Doanh thu</option>
-                            <option value="mon-an">Theo món ăn</option>
-                            <option value="khach-hang">Theo khách hàng</option>
-                            <option value="dat-ban">Đặt bàn</option>
-                        </select>
-                    </div>
-                    <div class="date-filter">
-                        <label>Thời gian: </label>
-                        <select v-model="dateFilterType" @change="resetDateFilters">
-                            <option value="month">Theo tháng</option>
-                            <option value="custom">Tùy chỉnh</option>
-                        </select>
-                        <input v-if="dateFilterType === 'month'" type="month" v-model="selectedMonthYear"
-                            @change="fetchStats" />
-                        <div v-else class="custom-date-range">
-                            <input type="date" v-model="startDate" @change="fetchStats" />
-                            <span>-</span>
-                            <input type="date" v-model="endDate" @change="fetchStats" />
+                    <div class="header-actions">
+                        <div class="filter-section">
+                            <select v-model="filterCategory" @change="fetchStats">
+                                <option value="tong-quan">Tổng quan</option>
+                                <option value="doanh-thu">Doanh thu</option>
+                                <option value="mon-an">Theo món ăn</option>
+                                <option value="khach-hang">Theo khách hàng</option>
+                                <option value="dat-ban">Đặt bàn</option>
+                            </select>
+                        </div>
+                        <div class="date-filter">
+                            <label>Thời gian: </label>
+                            <select v-model="dateFilterType" @change="resetDateFilters">
+                                <option value="month">Theo tháng</option>
+                                <option value="custom">Tùy chỉnh</option>
+                            </select>
+                            <input v-if="dateFilterType === 'month'" type="month" v-model="selectedMonthYear"
+                                @change="fetchStats" />
+                            <div v-else class="custom-date-range">
+                                <input type="date" v-model="startDate" @change="fetchStats" />
+                                <span>-</span>
+                                <input type="date" v-model="endDate" @change="fetchStats" />
+                            </div>
+                        </div>
+                        <div class="action-buttons">
+                            <button class="action-button refresh-button" @click="fetchStats">
+                                <i class="fas fa-sync-alt"></i> Làm mới
+                            </button>
+                            <button class="action-button export-button" @click="exportReport">
+                                <i class="fas fa-download"></i> Xuất báo cáo
+                            </button>
                         </div>
                     </div>
-                    <button class="action-button refresh-button" @click="fetchStats">
-                        <i class="fas fa-sync-alt"></i> Làm mới
-                    </button>
-                    <button class="action-button export-button" @click="exportReport">
-                        <i class="fas fa-download"></i> Xuất báo cáo
-                    </button>
                 </div>
             </div>
 
@@ -1073,19 +1073,20 @@ export default defineComponent({
     margin-left: 280px; /* Khoảng cách cho sidebar */
 }
 
-/* Header cố định */
+/* Header cố định - ĐÃ SỬA: Trong suốt và căn phải */
 .dashboard-header.fixed-header {
     position: fixed;
     top: 0;
     left: 280px; /* Căn chỉnh theo sidebar */
     right: 0;
     z-index: 1000;
-    background: linear-gradient(135deg, #8B5E3C, #6B4226);
-    padding: 1.5rem 2rem;
-    border-bottom: 1px solid #E7C27D;
-    box-shadow: 0 4px 15px rgba(107, 66, 38, 0.3);
+    background: rgba(255, 248, 231, 0.85); /* Trong suốt với opacity 90% */
+    backdrop-filter: blur(10px); /* Hiệu ứng làm mờ nền */
+    padding: 1rem 2rem;
+    border-bottom: 1px solid rgba(231, 194, 125, 0.3);
+    box-shadow: 0 4px 15px rgba(107, 66, 38, 0.2);
     margin: 0;
-    transition: left 0.3s ease; /* Hiệu ứng chuyển động khi sidebar toggle */
+    transition: left 0.3s ease;
 }
 
 /* Khi sidebar collapsed */
@@ -1097,53 +1098,46 @@ export default defineComponent({
     margin-left: 0;
 }
 
-/* Nội dung chính với padding-top để tránh bị header che */
-.container-content {
-    flex: 1;
-    margin: 0;
-    padding: 180px 0 0 0; /* Thêm padding-top để tránh bị header che */
-    background-color: #FFF8E7;
-    color: #3B2F2F;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    min-height: calc(100vh - 180px);
-}
-
+/* Header top - ĐÃ SỬA: Căn chỉnh các phần tử về bên phải */
 .header-top {
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-end; /* Căn phải toàn bộ nội dung */
     align-items: center;
     flex-wrap: wrap;
     gap: 1rem;
-}
-
-.header-top h2 {
-    font-size: clamp(1.5rem, 4vw, 1.8rem);
-    font-weight: 600;
-    color: #FFF8E7;
-    text-shadow: 0 0 5px #E7C27D, 0 0 30px #E7C27D;
-    margin: 0;
-    flex: 1;
-    min-width: 200px;
-    margin-left: 1cm;
+    width: 100%;
 }
 
 .header-top span {
     font-size: clamp(0.9rem, 2vw, 1rem);
     color: #F5E3B3;
-    opacity: 0.8;
+    opacity: 0.9;
     white-space: nowrap;
+    order: 1;
 }
 
+/* Header actions - ĐÃ SỬA: Căn phải toàn bộ */
 .header-actions {
     display: flex;
     gap: 1rem;
     align-items: center;
     flex-wrap: wrap;
-    justify-content: flex-end;
-    flex: 2;
-    min-width: 300px;
+    justify-content: flex-end; /* Căn phải tất cả phần tử */
+    width: 100%;
+    order: 2;
+}
+
+/* Nội dung chính với padding-top để tránh bị header che - ĐÃ SỬA: Giảm padding */
+.container-content {
+    flex: 1;
+    margin: 0;
+    padding: 120px 0 0 0; /* Giảm padding-top do header đã được tối ưu */
+    background-color: #FFF8E7;
+    color: #3B2F2F;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    min-height: calc(100vh - 120px);
 }
 
 .filter-section {
@@ -1201,6 +1195,13 @@ export default defineComponent({
     color: #F5E3B3;
     opacity: 0.8;
     white-space: nowrap;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    flex-wrap: wrap;
 }
 
 .action-button {
@@ -1797,34 +1798,29 @@ export default defineComponent({
     background: #8B5E3C;
 }
 
-/* Responsive adjustments */
+/* Responsive adjustments - ĐÃ SỬA */
 @media (max-width: 1024px) {
     .dashboard-header.fixed-header {
-        padding: 1.5rem;
+        padding: 1rem;
+        left: 0 !important; /* Trên tablet, header chiếm toàn bộ chiều rộng */
+    }
+    
+    .dashboard {
+        margin-left: 0 !important;
     }
     
     .header-top {
-        gap: 0.8rem;
-    }
-    
-    .header-actions {
-        min-width: 250px;
+        justify-content: space-between;
     }
     
     .container-content {
-        padding-top: 200px; /* Tăng padding-top cho tablet */
+        padding-top: 140px;
     }
 }
 
 @media (max-width: 768px) {
-    .dashboard {
-        padding: 0;
-        margin-left: 0 !important;
-    }
-    
     .dashboard-header.fixed-header {
-        left: 0 !important;
-        padding: 1rem;
+        padding: 0.8rem;
     }
     
     .header-top {
@@ -1833,16 +1829,10 @@ export default defineComponent({
         gap: 1rem;
     }
     
-    .header-top h2 {
-        min-width: auto;
-        text-align: center;
-        width: 100%;
-    }
-    
     .header-actions {
         min-width: auto;
         width: 100%;
-        justify-content: center;
+        justify-content: space-between;
     }
     
     .filter-section {
@@ -1894,13 +1884,13 @@ export default defineComponent({
     }
     
     .container-content {
-        padding-top: 220px; /* Tăng padding-top cho mobile */
+        padding-top: 160px;
     }
 }
 
 @media (max-width: 480px) {
     .dashboard-header.fixed-header {
-        padding: 0.8rem;
+        padding: 0.6rem;
     }
     
     .header-actions {
@@ -1929,7 +1919,7 @@ export default defineComponent({
     }
     
     .container-content {
-        padding-top: 240px; /* Tăng padding-top cho mobile nhỏ */
+        padding-top: 180px;
     }
 }
 </style>
