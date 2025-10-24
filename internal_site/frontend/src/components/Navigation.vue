@@ -63,7 +63,7 @@
             <li :class="{ active: isActiveRoute('/invoicemanagement') }">
               <router-link to="/invoicemanagement" class="nav-link" @click="handleNavigation">
                 <i class="fas fa-receipt"></i>
-                <span class="nav-text">Hóa đơn</span>
+                <span class="nav-text">Lịch sử thanh toán</span>
               </router-link>
             </li>
           </template>

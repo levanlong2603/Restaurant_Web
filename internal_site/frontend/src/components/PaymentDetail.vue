@@ -15,7 +15,7 @@
         <h3>Chọn phương thức thanh toán</h3>
         <select v-model="paymentMethod">
           <option value="" disabled>Chọn phương thức</option>
-          <option value="bank_transfer">Chuyển khoản ngân hàng</option>
+          <option value="bank_transfer">Quét mã QR</option>
           <option value="cash">Tiền mặt</option>
           <option value="credit_card">Thẻ tín dụng</option>
         </select>
