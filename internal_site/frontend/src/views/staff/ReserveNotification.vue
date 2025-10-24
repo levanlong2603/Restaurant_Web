@@ -61,35 +61,35 @@
                       class="action-btn approve-btn"
                       @click="goToDetail(reservation)"
                     >
-                      <i class="fas fa-check"></i> Duyệt
+                      Duyệt
                     </button>
                     <button
                       v-if="reservation.status === 'preparing'"
                       class="action-btn checkin-btn"
                       @click="checkin(reservation)"
                     >
-                      <i class="fas fa-sign-in-alt"></i> Check in
+                      Nhận khách
                     </button>
                     <button
                       v-if="reservation.status === 'pending' || reservation.status === 'preparing'"
                       class="action-btn cancel-btn"
                       @click="cancel(reservation)"
                     >
-                      <i class="fas fa-times"></i> Hủy
+                      Hủy
                     </button>
                     <button
                       v-if="reservation.status === 'serving'"
                       class="action-btn order-btn"
                       @click="order(reservation)"
                     >
-                      <i class="fas fa-utensils"></i> Gọi món
+                      Gọi món
                     </button>
                     <button
                       v-if="reservation.status === 'serving' || reservation.status === 'paid'"
                       class="action-btn checkout-btn"
                       @click="checkout(reservation)"
                     >
-                      <i class="fas fa-sign-out-alt"></i> Check out
+                      Thanh toán
                     </button>
                   </td>
                 </tr>
