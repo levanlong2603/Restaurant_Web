@@ -140,7 +140,7 @@ export default {
         '/reserve': 'Đặt bàn',
         '/order': 'Gọi món',
         '/checkout': 'Thanh toán',
-        '/invoicemanagement': 'Hóa đơn',
+        '/invoicemanagement': 'Lịch sử thanh toán',
       };
       return routeNames[this.$route.path] || 'Trang chủ';
     },
