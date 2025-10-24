@@ -6,8 +6,12 @@
     "contact": "CONTACT"
   },
   "hero": {
-    "title": "Vietnamese Essence Restaurant",
+    "title": "Long Quân An",
     "subtitle": "Traditional Flavors - Culinary Excellence"
+    ,"cta": {
+      "reserve": "Reserve a table",
+      "menu": "See menu"
+    }
   },
   "heroSlides": {
     "slide1": { "title": "Long Quân An", "subtitle": "Vietnamese Essence - Taste of home" },

@@ -6,8 +6,12 @@
     "contact": "LIÊN HỆ"
   },
   "hero": {
-    "title": "Nhà Hàng Long Quân An",
+    "title": "Long Quân An",
     "subtitle": "Hương vị truyền thống - Tinh hoa ẩm thực"
+    ,"cta": {
+      "reserve": "Đặt bàn ngay",
+      "menu": "Xem thực đơn"
+    }
   },
   "heroSlides": {
     "slide1": { "title": "Long Quân An", "subtitle": "Dấu ấn Việt - Tròn vị quê hương" },

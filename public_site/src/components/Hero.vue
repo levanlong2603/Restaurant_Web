@@ -14,19 +14,25 @@
     
     <!-- Nội dung hero -->
     <div class="hero-content">
+      <!-- Language toggle -->
+      <div class="lang-toggle">
+        <button @click="setLanguage('en')" :aria-pressed="currentLang === 'en'">EN</button>
+        <button @click="setLanguage('vi')" :aria-pressed="currentLang === 'vi'">VI</button>
+      </div>
+
       <div class="content-wrapper">
         <div class="text-content">
-          <h1 class="hero-title">{{ currentContent.title }}</h1>
-          <h2 class="hero-subtitle">{{ currentContent.subtitle }}</h2>
+          <h1 class="hero-title">{{ $t('hero.title') }}</h1>
+          <h2 class="hero-subtitle">{{ $t(`heroSlides.slide${currentIndex + 1}.subtitle`) || $t('hero.subtitle') }}</h2>
         </div>
         
         <!-- Nút CTA với router-link -->
         <div class="hero-actions">
           <router-link to="/reservation" class="btn btn-primary">
-            Đặt bàn ngay
+            {{ $t('hero.cta.reserve') }}
           </router-link>
           <router-link to="/menu" class="btn btn-secondary">
-            Xem thực đơn
+            {{ $t('hero.cta.menu') }}
           </router-link>
         </div>
       </div>
@@ -69,34 +75,33 @@ export default {
   data() {
     return {
       images: [
-        { 
-          url: hero1, 
-          title: 'LONG QUÂN AN', 
-          subtitle: 'Tinh Hoa Ẩm Thực Việt'
-        },
-        { 
-          url: hero2, 
-          title: 'LONG QUÂN AN', 
-          subtitle: 'Hương Vị Quê Hương'
-        },
-        { 
-          url: hero3, 
-          title: 'LONG QUÂN AN', 
-          subtitle: 'Bữa Cơm Gia Đình'
-        }
+        { url: hero1 },
+        { url: hero2 },
+        { url: hero3 }
       ],
       currentIndex: 0,
       autoPlayInterval: null,
       touchStartX: 0,
-      touchEndX: 0
+      touchEndX: 0,
+      currentLang: localStorage.getItem('lang') || 'vi'
     };
   },
   computed: {
-    currentContent() {
-      return this.images[this.currentIndex];
-    }
+    // nothing here for now - translations are used directly in the template
   },
   methods: {
+    setLanguage(lang) {
+      this.currentLang = lang;
+      // Dispatch the global event main.js listens for to change i18n locale and persist
+      try {
+        window.dispatchEvent(new CustomEvent('lang-changed', { detail: lang }));
+      } catch (err) {
+        // fallback for older browsers
+        const ev = document.createEvent('CustomEvent');
+        ev.initCustomEvent('lang-changed', true, true, lang);
+        window.dispatchEvent(ev);
+      }
+    },
     nextSlide() {
       this.currentIndex = (this.currentIndex + 1) % this.images.length;
       this.resetAutoPlay();
@@ -146,7 +151,7 @@ export default {
     this.$el.addEventListener('touchstart', this.handleTouchStart, { passive: true });
     this.$el.addEventListener('touchend', this.handleTouchEnd, { passive: true });
   },
-  beforeDestroy() {
+  beforeUnmount() {
     clearInterval(this.autoPlayInterval);
     // Xóa sự kiện touch khi component bị hủy
     this.$el.removeEventListener('touchstart', this.handleTouchStart);
@@ -230,6 +235,29 @@ export default {
   text-shadow: 2px 2px 4px rgba(107, 66, 38, 0.8);
   letter-spacing: 3px;
   line-height: 1.1; /* Cải thiện khả năng đọc trên mobile */
+}
+
+/* Language toggle */
+.lang-toggle {
+  position: absolute;
+  top: 1.25rem;
+  right: 1.25rem;
+  z-index: 4;
+  display: flex;
+  gap: 0.5rem;
+}
+.lang-toggle button {
+  background: rgba(231, 194, 125, 0.12);
+  color: #FFF8E7;
+  border: 1px solid rgba(231, 194, 125, 0.25);
+  padding: 0.35rem 0.6rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 700;
+}
+.lang-toggle button[aria-pressed="true"] {
+  background: #E7C27D;
+  color: #6B4226;
 }
 
 .hero-subtitle {

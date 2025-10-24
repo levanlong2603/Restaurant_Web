@@ -26,7 +26,6 @@
 import ReservationBox from '../../components/ReservationBox.vue';
 import ReservationForm from '../../components/ReservationForm.vue';
 import Table from '../../components/Table.vue';
-// import Manager from '../admin/Manager.vue';
 import Navigation from '../../components/Navigation.vue';
 
 export default {
@@ -46,7 +45,7 @@ export default {
       selected_tables: [],
       newSelectedTables: [],
       updateTableStatus: [],
-      isSidebarCollapsed: false, // Khởi tạo giá trị mặc định
+      isSidebarCollapsed: false,
     };
   },
   methods: {
@@ -84,7 +83,7 @@ export default {
 <style scoped>
 .main-container {
   display: flex;
-  background: #FFF8E7; /* Trắng kem */
+  background: #FFF8E7;
   min-height: 100vh;
 }
 
@@ -92,18 +91,19 @@ export default {
   flex: 1;
   margin: 0;
   padding: 0;
-  background-color: #FFF8E7; /* Trắng kem */
-  color: #3B2F2F; /* Đen nâu */
+  background-color: #FFF8E7;
+  color: #3B2F2F;
   display: flex;
   flex-direction: column;
   overflow: hidden;
   padding-right: 20px;
-  transition: margin-left 0.3s ease;
-  margin-top: 60px; /* Thêm khoảng cách để tránh bị che bởi sidebar cố định */
+  transition: all 0.3s ease;
+  margin-top: 60px;
+  margin-left: 250px; /* Để sidebar có đủ không gian */
 }
 
 .reservation-management.sidebar-collapsed {
-  margin-left: 10px;
+  margin-left: 70px; /* Khi sidebar thu gọn */
 }
 
 .container {
@@ -117,6 +117,7 @@ export default {
   display: flex;
   gap: 30px;
   align-items: flex-start;
+  width: 100%;
 }
 
 .table-layout {
@@ -136,6 +137,12 @@ export default {
 
 /* Responsive design */
 @media (max-width: 768px) {
+  .reservation-management {
+    margin-left: 0 !important; /* Trên mobile, sidebar thường sẽ ẩn hoặc chiếm toàn bộ chiều rộng */
+    margin-top: 50px;
+    padding-right: 10px;
+  }
+  
   .container {
     margin: 20px 10px;
   }
@@ -148,11 +155,6 @@ export default {
   
   .reservation-list {
     width: 100%;
-  }
-  
-  .reservation-management {
-    margin-top: 50px; /* Điều chỉnh cho mobile */
-    padding-right: 10px;
   }
 }
 
@@ -167,7 +169,7 @@ export default {
   
   .reservation-management {
     padding-right: 10px;
-    margin-top: 45px; /* Điều chỉnh cho mobile nhỏ */
+    margin-top: 45px;
   }
 }
 </style>

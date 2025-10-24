@@ -5,24 +5,19 @@
       <!-- Header cố định -->
       <div class="dashboard-header fixed-header">
         <div class="header-main">
-          <div class="header-title-section">
-            <h1>QUẢN LÝ ĐẶT BÀN</h1>
-          </div>
           <div class="header-controls-section">
-            <span class="current-time">{{ currentDateTime }}</span>
-            <div class="controls-group">
-              <div class="filter-controls">
-                <input type="text" v-model="searchQuery" placeholder="Tìm kiếm..." class="search-input" />
-                <select v-model="selectedStatus" class="status-filter" @change="filterByStatus">
-                  <option value="">Tất cả trạng thái</option>
-                  <option value="pending">Chờ duyệt</option>
-                  <option value="preparing">Đặt trước</option>
-                  <option value="serving">Đang phục vụ</option>
-                  <option value="completed">Hoàn thành</option>
-                  <option value="cancelled">Đã hủy</option>
-                </select>
-                <input type="date" v-model="selectedDate" class="date-filter" @change="fetchReservations" />
-              </div>
+            <div class="header-right-group">
+              <input type="text" v-model="searchQuery" placeholder="Tìm kiếm..." class="search-input" />
+              <select v-model="selectedStatus" class="status-filter" @change="filterByStatus">
+                <option value="">Tất cả trạng thái</option>
+                <option value="pending">Chờ duyệt</option>
+                <option value="preparing">Đặt trước</option>
+                <option value="serving">Đang phục vụ</option>
+                <option value="completed">Hoàn thành</option>
+                <option value="cancelled">Đã hủy</option>
+              </select>
+              <input type="date" v-model="selectedDate" class="date-filter" @change="fetchReservations" />
+              <span class="current-time">{{ currentDateTime }}</span>
               <button class="refresh-button" @click="refresh">
                 <i class="fas fa-sync-alt"></i> Làm mới
               </button>
@@ -356,19 +351,20 @@ export default {
   margin-left: 280px; /* Khoảng cách cho sidebar */
 }
 
-/* Header cố định */
+/* Header cố định - Trong suốt */
 .dashboard-header.fixed-header {
   position: fixed;
   top: 0;
   left: 280px; /* Căn chỉnh theo sidebar */
   right: 0;
   z-index: 1000;
-  background: linear-gradient(135deg, #8B5E3C, #6B4226);
-  padding: 1.5rem 2rem;
-  border-bottom: 1px solid #E7C27D;
-  box-shadow: 0 4px 15px rgba(107, 66, 38, 0.3);
+  background: rgba(255, 248, 231, 0.85); /* Trong suốt */
+  backdrop-filter: blur(10px); /* Hiệu ứng blur cho nền trong suốt */
+  padding: 1rem 2rem;
+  border-bottom: 1px solid rgba(231, 194, 125, 0.5);
+  box-shadow: 0 4px 15px rgba(107, 66, 38, 0.1);
   margin: 0;
-  transition: left 0.3s ease; /* Hiệu ứng chuyển động khi sidebar toggle */
+  transition: left 0.3s ease;
 }
 
 /* Khi sidebar collapsed */
@@ -382,63 +378,41 @@ export default {
 
 .header-main {
   display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 2rem;
-}
-
-.header-title-section {
-  flex: 1;
-}
-
-.header-title-section h1 {
-  font-size: 2rem;
-  font-weight: 700;
-  color: #FFF8E7;
-  text-shadow: 0 0 5px #E7C27D, 0 0 30px #E7C27D;
-  margin: 0;
-  letter-spacing: 0.5px;
-  margin-left: 1cm;
+  justify-content: flex-end;
+  align-items: center;
+  width: 100%;
 }
 
 .header-controls-section {
   display: flex;
-  flex-direction: column;
-  align-items: flex-end;
+  justify-content: flex-end;
+  width: 100%;
+}
+
+.header-right-group {
+  display: flex;
+  align-items: center;
   gap: 1rem;
-  min-width: 600px;
 }
 
 .current-time {
   font-size: 1rem;
-  color: #F5E3B3;
-  font-weight: 500;
+  color: #6B4226;
+  font-weight: 600;
   white-space: nowrap;
-}
-
-.controls-group {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  width: 100%;
-  justify-content: flex-end;
-}
-
-.filter-controls {
-  display: flex;
-  gap: 0.8rem;
-  align-items: center;
-  flex: 1;
-  justify-content: flex-end;
+  background: rgba(231, 194, 125, 0.3);
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  border: 1px solid rgba(139, 94, 60, 0.2);
 }
 
 .search-input,
 .status-filter,
 .date-filter {
   padding: 0.6rem 0.8rem;
-  border: 1px solid #8B5E3C;
+  border: 1px solid rgba(139, 94, 60, 0.5);
   border-radius: 8px;
-  background: rgba(255, 248, 231, 0.95);
+  background: rgba(255, 248, 231, 0.9);
   color: #3B2F2F;
   font-size: 0.9rem;
   transition: all 0.3s ease;
@@ -479,7 +453,7 @@ export default {
   gap: 0.5rem;
   transition: all 0.3s ease;
   font-weight: 600;
-  box-shadow: 0 2px 8px rgba(107, 66, 38, 0.3);
+  box-shadow: 0 2px 8px rgba(107, 66, 38, 0.2);
   border: 1px solid #E7C27D;
   background: #E7C27D;
   color: #6B4226;
@@ -496,13 +470,13 @@ export default {
 .container-reservation {
   flex: 1;
   margin: 0;
-  padding: 140px 0 0 0; /* Thêm padding-top để tránh bị header che */
+  padding: 100px 0 0 0; /* Giảm padding-top vì header đã gọn hơn */
   background-color: #FFF8E7;
   color: #3B2F2F;
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  min-height: calc(100vh - 140px);
+  min-height: calc(100vh - 100px);
 }
 
 .reservation-management {
@@ -760,8 +734,8 @@ export default {
 
 /* Responsive design */
 @media (max-width: 1200px) {
-  .header-controls-section {
-    min-width: 500px;
+  .header-right-group {
+    gap: 0.8rem;
   }
   
   .search-input {
@@ -778,56 +752,48 @@ export default {
 }
 
 @media (max-width: 1024px) {
-  .header-main {
-    flex-direction: column;
+  .header-right-group {
+    flex-wrap: wrap;
+    justify-content: flex-end;
     gap: 1rem;
   }
   
-  .header-controls-section {
-    min-width: auto;
-    width: 100%;
-    align-items: flex-start;
-  }
-  
-  .controls-group {
-    justify-content: flex-start;
-  }
-  
   .container-reservation {
-    padding-top: 160px; /* Tăng padding-top cho responsive */
+    padding-top: 140px;
   }
 }
 
 @media (max-width: 768px) {
   .dashboard {
     padding: 0;
-    margin-left: 0 !important; /* Trên mobile, không có margin */
+    margin-left: 0 !important;
   }
   
   .dashboard-header.fixed-header {
-    left: 0 !important; /* Trên mobile, header chiếm toàn bộ chiều rộng */
+    left: 0 !important;
     padding: 1rem;
   }
   
-  .header-title-section h1 {
-    font-size: 1.6rem;
-    margin-left: 0.5cm;
-  }
-  
-  .controls-group {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-  
-  .filter-controls {
+  .header-right-group {
     flex-direction: column;
     width: 100%;
+    gap: 0.8rem;
   }
   
   .search-input,
   .status-filter,
   .date-filter {
     width: 100%;
+  }
+  
+  .current-time {
+    width: 100%;
+    text-align: center;
+  }
+  
+  .refresh-button {
+    width: 100%;
+    justify-content: center;
   }
   
   .reservation-list-wrapper {
@@ -844,16 +810,11 @@ export default {
   }
   
   .container-reservation {
-    padding-top: 180px; /* Tăng padding-top cho mobile */
+    padding-top: 180px;
   }
 }
 
 @media (max-width: 480px) {
-  .header-title-section h1 {
-    font-size: 1.4rem;
-    margin-left: 0.3cm;
-  }
-  
   .current-time {
     font-size: 0.9rem;
   }
@@ -873,7 +834,7 @@ export default {
   }
   
   .container-reservation {
-    padding-top: 190px; /* Tăng padding-top cho mobile nhỏ */
+    padding-top: 200px;
   }
 }
 </style>
